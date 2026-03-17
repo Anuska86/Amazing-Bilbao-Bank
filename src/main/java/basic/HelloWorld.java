@@ -18,7 +18,7 @@ public class HelloWorld {
 
 		myAccount.setOwner("Anuska");
 
-		System.out.println("The account belongs to:" + "Anuska");
+		System.out.println("The account belongs to:" + myAccount.getOwner());
 
 	}
 

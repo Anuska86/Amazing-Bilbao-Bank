@@ -13,4 +13,8 @@ public class Account {
 		owner = name;
 	}
 
+	public String getOwner() {
+		return owner;
+	}
+
 }
