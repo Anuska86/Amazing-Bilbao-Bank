@@ -25,6 +25,9 @@ public class HelloWorld {
 		myAccount.deposit(500.0);
 		System.out.println("New balance after deposit: " + myAccount.getBalance() + "€");
 
+		myAccount.withdraw(150.0);
+		System.out.println("Final balance: " + myAccount.getBalance() + "€");
+
 	}
 
 }

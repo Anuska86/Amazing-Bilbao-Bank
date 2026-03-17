@@ -13,6 +13,14 @@ public class Account {
 		balance += amount;
 	}
 
+	public void withdraw(double amount) {
+		if (amount <= balance) {
+			balance = balance - amount;
+		} else {
+			System.out.println("Error: Insufficient funds!");
+		}
+	}
+
 	// SETTERS
 
 	public void setOwner(String name) {
