@@ -4,30 +4,19 @@ public class HelloWorld {
 
 	public static void main(String[] args) {
 
-		// creating an account Instance
+		// Creating Accounts
 
-		Account myAccount = new Account("Anuska", 1500.50);
+		Account acc1 = new Account("Anuska", 1500.50);
+		Account acc2 = new Account("Jon", 5300.30);
 
-		System.out.println(myAccount);
+		// Creating the Bank and adding the accounts
 
-		myAccount.deposit(500.0);
-		System.out.println("New balance after deposit: " + myAccount.getBalanceWithCurrency());
+		Bank myBank = new Bank("Amazing Bilbao Bank");
+		myBank.addAccounts(acc1, acc2);
 
-		myAccount.withdraw(150.0);
-		System.out.println("Final balance: " + myAccount.getBalanceWithCurrency());
+		// Showing all the accounts
 
-		// creating a second account
-
-		Account friendAccount = new Account("Jon", 5300.30);
-
-		System.out.println("The balance in the friend account is: " + friendAccount.getBalanceWithCurrency());
-
-		// Jon sends money to Anuska
-
-		myAccount.transfer(300, myAccount);
-
-		System.out.println(myAccount);
-		System.out.println(friendAccount);
+		myBank.showStatus();
 
 	}
 
