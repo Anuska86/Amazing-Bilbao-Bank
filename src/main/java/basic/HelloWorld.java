@@ -19,8 +19,15 @@ public class HelloWorld {
 		// creating a second account
 
 		Account friendAccount = new Account("Jon", 5300.30);
-		friendAccount.withdraw(300.00);
+
 		System.out.println("The balance in the friend account is: " + friendAccount.getBalanceWithCurrency());
+
+		// Jon sends money to Anuska
+
+		myAccount.transfer(300, myAccount);
+
+		System.out.println(myAccount);
+		System.out.println(friendAccount);
 
 	}
 

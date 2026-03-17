@@ -9,9 +9,9 @@ public class Account {
 
 	// CONSTRUCTOR
 
-	public Account(String initialOwner, double initialBalance) {
-		owner = initialOwner;
-		balance = initialBalance;
+	public Account(String owner, double balance) {
+		this.owner = owner;
+		this.balance = balance;
 	}
 
 	// Methods (Actions)
@@ -30,6 +30,16 @@ public class Account {
 
 	public String toString() {
 		return "Account Owner: " + owner + " | Balance " + balance + "€";
+	}
+
+	public void transfer(double amount, Account destinationAccount) {
+		if (amount <= balance) {
+			this.withdraw(amount);
+			destinationAccount.deposit(amount);
+			System.out.println("Transfer successful!");
+		} else {
+			System.out.println("Transfer failed, put in contact with your bank ");
+		}
 	}
 
 	// SETTERS & GETTERS
