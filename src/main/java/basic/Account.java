@@ -21,6 +21,14 @@ public class Account {
 		}
 	}
 
+	public String getBalanceWithCurrency() {
+		return balance + "€";
+	}
+
+	public String toString() {
+		return "Account Owner: " + owner + " | Balance " + balance + "€";
+	}
+
 	// SETTERS
 
 	public void setOwner(String name) {

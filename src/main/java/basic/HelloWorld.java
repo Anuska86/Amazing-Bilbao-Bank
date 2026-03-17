@@ -19,14 +19,13 @@ public class HelloWorld {
 		myAccount.setOwner("Anuska");
 		myAccount.setBalance(1500.50);
 
-		System.out.println("Owner:" + myAccount.getOwner());
-		System.out.println("Start balance: " + myAccount.getBalance() + "€");
+		System.out.println(myAccount);
 
 		myAccount.deposit(500.0);
-		System.out.println("New balance after deposit: " + myAccount.getBalance() + "€");
+		System.out.println("New balance after deposit: " + myAccount.getBalanceWithCurrency());
 
 		myAccount.withdraw(150.0);
-		System.out.println("Final balance: " + myAccount.getBalance() + "€");
+		System.out.println("Final balance: " + myAccount.getBalanceWithCurrency());
 
 	}
 
