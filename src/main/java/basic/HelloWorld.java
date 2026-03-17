@@ -20,7 +20,10 @@ public class HelloWorld {
 		myAccount.setBalance(1500.50);
 
 		System.out.println("Owner:" + myAccount.getOwner());
-		System.out.println("Balance: " + myAccount.getBalance() + "€");
+		System.out.println("Start balance: " + myAccount.getBalance() + "€");
+
+		myAccount.deposit(500.0);
+		System.out.println("New balance after deposit: " + myAccount.getBalance() + "€");
 
 	}
 

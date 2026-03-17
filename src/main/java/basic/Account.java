@@ -9,6 +9,10 @@ public class Account {
 
 	// Methods (Actions)
 
+	public void deposit(double amount) {
+		balance += amount;
+	}
+
 	// SETTERS
 
 	public void setOwner(String name) {
