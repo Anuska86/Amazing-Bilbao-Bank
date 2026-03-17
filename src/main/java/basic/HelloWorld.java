@@ -1,23 +1,12 @@
 package basic;
 
-import java.util.Date;
-
 public class HelloWorld {
 
 	public static void main(String[] args) {
 
-		// hello + date
-
-		Date date = new Date();
-
-		System.out.println("Hello world! Today is " + date);
-
 		// creating an account Instance
 
-		Account myAccount = new Account();
-
-		myAccount.setOwner("Anuska");
-		myAccount.setBalance(1500.50);
+		Account myAccount = new Account("Anuska", 1500.50);
 
 		System.out.println(myAccount);
 
@@ -26,6 +15,12 @@ public class HelloWorld {
 
 		myAccount.withdraw(150.0);
 		System.out.println("Final balance: " + myAccount.getBalanceWithCurrency());
+
+		// creating a second account
+
+		Account friendAccount = new Account("Jon", 5300.30);
+		friendAccount.withdraw(300.00);
+		System.out.println("The balance in the friend account is: " + friendAccount.getBalanceWithCurrency());
 
 	}
 

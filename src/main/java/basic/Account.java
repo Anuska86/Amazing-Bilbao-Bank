@@ -7,6 +7,13 @@ public class Account {
 	private String owner;
 	private double balance;
 
+	// CONSTRUCTOR
+
+	public Account(String initialOwner, double initialBalance) {
+		owner = initialOwner;
+		balance = initialBalance;
+	}
+
 	// Methods (Actions)
 
 	public void deposit(double amount) {
@@ -15,38 +22,40 @@ public class Account {
 
 	public void withdraw(double amount) {
 		if (amount <= balance) {
-			balance = balance - amount;
+			balance -= amount;
 		} else {
 			System.out.println("Error: Insufficient funds!");
 		}
-	}
-
-	public String getBalanceWithCurrency() {
-		return balance + "€";
 	}
 
 	public String toString() {
 		return "Account Owner: " + owner + " | Balance " + balance + "€";
 	}
 
-	// SETTERS
+	// SETTERS & GETTERS
 
+	// Owner group
 	public void setOwner(String name) {
 		owner = name;
-	}
 
-	public void setBalance(double amount) {
-		balance = amount;
 	}
-
-	// GETTERS
 
 	public String getOwner() {
 		return owner;
 	}
 
+	// Balance group
+	public void setBalance(double amount) {
+		balance = amount;
+	}
+
 	public double getBalance() {
 		return balance;
+	}
+
+	// Balance with currency
+	public String getBalanceWithCurrency() {
+		return balance + "€";
 	}
 
 }
