@@ -17,8 +17,10 @@ public class HelloWorld {
 		Account myAccount = new Account();
 
 		myAccount.setOwner("Anuska");
+		myAccount.setBalance(1500.50);
 
-		System.out.println("The account belongs to:" + myAccount.getOwner());
+		System.out.println("Owner:" + myAccount.getOwner());
+		System.out.println("Balance: " + myAccount.getBalance() + "€");
 
 	}
 

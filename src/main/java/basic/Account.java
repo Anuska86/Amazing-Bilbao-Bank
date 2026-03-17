@@ -9,12 +9,24 @@ public class Account {
 
 	// Methods (Actions)
 
+	// SETTERS
+
 	public void setOwner(String name) {
 		owner = name;
 	}
 
+	public void setBalance(double amount) {
+		balance = amount;
+	}
+
+	// GETTERS
+
 	public String getOwner() {
 		return owner;
+	}
+
+	public double getBalance() {
+		return balance;
 	}
 
 }
