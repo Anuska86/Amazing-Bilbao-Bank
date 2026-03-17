@@ -18,6 +18,12 @@ public class HelloWorld {
 
 		myBank.showStatus();
 
+		// Jon transfers money to Anuska
+
+		acc2.transfer(500, acc1);
+		System.out.println("\nAfter Transfer:");
+		myBank.showStatus();
+
 	}
 
 }
