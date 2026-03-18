@@ -4,26 +4,13 @@ public class HelloWorld {
 
 	public static void main(String[] args) {
 
-		// Creating Accounts
+		SavingsAccount mySavings = new SavingsAccount("Anuska", 1000.0, 5.0);
 
-		Account acc1 = new Account("Anuska", 1500.50);
-		Account acc2 = new Account("Jon", 5300.30);
+		mySavings.deposit(500.0);
 
-		// Creating the Bank and adding the accounts
+		mySavings.applyInterest();
 
-		Bank myBank = new Bank("Amazing Bilbao Bank");
-		myBank.addAccounts(acc1, acc2);
-
-		// Showing all the accounts
-
-		myBank.showStatus();
-
-		// Jon transfers money to Anuska
-
-		acc2.transfer(500, acc1);
-		System.out.println("\nAfter Transfer:");
-		myBank.showStatus();
+		System.out.println(mySavings);
 
 	}
-
 }
