@@ -1,27 +1,35 @@
 package basic;
 
+import java.util.ArrayList;
+
 public class Bank {
 	private String bankName;
-	private Account account1;
-	private Account account2;
+	private ArrayList<Account> accounts;
 
 //Constructor
 
 	public Bank(String name) {
 		this.bankName = name;
+		this.accounts = new ArrayList<>();
+
 	}
 
-//Method open accounts
+//Method to open accounts
 
-	public void addAccounts(Account acc1, Account acc2) {
-		this.account1 = acc1;
-		this.account2 = acc2;
+	public void addAccounts(Account acc) {
+		this.accounts.add(acc);
+
 	}
+
+	// Method to show the accounts
 
 	public void showStatus() {
 		System.out.println("--- Welcome to " + bankName + "---");
-		System.out.println(account1);
-		System.out.println(account2);
+
+		for (Account a : accounts) {
+			System.out.println(a);
+		}
+
 		System.out.println("-------------------------------------");
 	}
 
