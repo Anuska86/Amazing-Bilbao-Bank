@@ -12,6 +12,18 @@ public class SavingsAccount extends Account {
 		this.interestRate = interestRate;
 	}
 
+	@Override
+	public void withdraw(double amount) {
+		double totalWithFee = amount + 2.0;
+
+		if (totalWithFee <= getBalance()) {
+			super.withdraw(totalWithFee);
+			System.out.println("Note: A 2€ saving fee was applied");
+		} else {
+			System.out.println("Error: Not enough funds to cover the withdrawal");
+		}
+	}
+
 	// a new method ONLY for savings accounts
 
 	public void applyInterest() {
