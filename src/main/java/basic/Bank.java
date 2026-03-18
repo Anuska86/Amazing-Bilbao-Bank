@@ -26,8 +26,12 @@ public class Bank {
 	public void showStatus() {
 		System.out.println("--- Welcome to " + bankName + "---");
 
-		for (Account a : accounts) {
-			System.out.println(a);
+		if (accounts.isEmpty()) {
+			System.out.println("The bank doesn't have active accounts.");
+		} else {
+			for (Account a : accounts) {
+				System.out.println(a);
+			}
 		}
 
 		System.out.println("-------------------------------------");
