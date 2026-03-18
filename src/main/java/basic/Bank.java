@@ -1,6 +1,7 @@
 package basic;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Bank {
 	private String bankName;
@@ -62,5 +63,25 @@ public class Bank {
 			System.out.println("ERROR: Could not find an account for " + nameToClose);
 		}
 	}
+
+	// Method to compare the money quantity
+
+	public void sortAccountsByBalance() {
+		accounts.sort(new Comparator<Account>() {
+
+			@Override
+			public int compare(Account a1, Account a2) {
+				return Double.compare(a2.getBalance(), a1.getBalance());
+			}
+
+		});
+
+		System.out.println("Accounts have been sorted by balance (highest first");
+	}
+
+	/*
+	 * public void sortAccountsByBalance() { accounts.sort((a1, a2) ->
+	 * Double.compare(a2.getBalance(), a1.getBalance())); }
+	 */
 
 }

@@ -13,7 +13,7 @@ public class HelloWorld {
 
 		myBank.showStatus();
 
-		myBank.closeAccount("Jon");
+		myBank.sortAccountsByBalance();
 
 		myBank.showStatus();
 
