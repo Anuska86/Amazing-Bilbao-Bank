@@ -45,4 +45,18 @@ public class Bank {
 		return null;
 	}
 
+	// Method to delete an account
+
+	public void closeAccount(String nameToClose)
+
+	{
+		boolean removedAcc = accounts.removeIf(acc -> acc.getOwner().equals(nameToClose));
+
+		if (removedAcc) {
+			System.out.println("SUCCESS: Account for " + nameToClose + " has been closed.");
+		} else {
+			System.out.println("ERROR: Could not find an account for " + nameToClose);
+		}
+	}
+
 }

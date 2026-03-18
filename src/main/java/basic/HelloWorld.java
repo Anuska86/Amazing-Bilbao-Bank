@@ -13,12 +13,9 @@ public class HelloWorld {
 
 		myBank.showStatus();
 
-		Account foundAcc = myBank.findAccount("Lauren");
+		myBank.closeAccount("Jon");
 
-		if (foundAcc != null) {
-			foundAcc.deposit(50.0);
-			System.out.println("Bonus of 50€ applied to " + foundAcc.getOwner());
-		}
+		myBank.showStatus();
 
 	}
 }
