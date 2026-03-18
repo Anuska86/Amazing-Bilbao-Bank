@@ -33,4 +33,16 @@ public class Bank {
 		System.out.println("-------------------------------------");
 	}
 
+	// Method to search an account
+
+	public Account findAccount(String nameToFind) {
+		for (Account acc : accounts) {
+			if (acc.getOwner().equals(nameToFind)) {
+				return acc;
+			}
+		}
+		System.out.println("Error: Account for " + nameToFind + "not found.");
+		return null;
+	}
+
 }
