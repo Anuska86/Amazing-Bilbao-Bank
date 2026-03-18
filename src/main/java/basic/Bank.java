@@ -37,7 +37,7 @@ public class Bank {
 
 	public Account findAccount(String nameToFind) {
 		for (Account acc : accounts) {
-			if (acc.getOwner().equals(nameToFind)) {
+			if (acc.getOwner().equalsIgnoreCase(nameToFind)) {
 				return acc;
 			}
 		}
@@ -50,7 +50,7 @@ public class Bank {
 	public void closeAccount(String nameToClose)
 
 	{
-		boolean removedAcc = accounts.removeIf(acc -> acc.getOwner().equals(nameToClose));
+		boolean removedAcc = accounts.removeIf(acc -> acc.getOwner().equalsIgnoreCase(nameToClose));
 
 		if (removedAcc) {
 			System.out.println("SUCCESS: Account for " + nameToClose + " has been closed.");
