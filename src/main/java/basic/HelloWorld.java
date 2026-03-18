@@ -1,16 +1,21 @@
 package basic;
 
+import java.util.Arrays;
+
 public class HelloWorld {
 
 	public static void main(String[] args) {
 
-		Account regularAccount = new Account("Regular User", 1500.0);
-		regularAccount.withdraw(500.0);
-		System.out.println(regularAccount);
+		Account[] myBankAccounts = new Account[2];
 
-		SavingsAccount mySavingsAccount = new SavingsAccount("Anuska", 1000.0, 5.0);
-		mySavingsAccount.withdraw(200.0);
-		System.out.println(mySavingsAccount);
+		myBankAccounts[0] = new Account("Anuska", 1000.0);
+		myBankAccounts[1] = new SavingsAccount("Jon", 2000.0, 5.0);
+
+		for (Account acc : myBankAccounts) {
+			acc.withdraw(100.0);
+		}
+
+		System.out.println(Arrays.toString(myBankAccounts));
 
 	}
 }

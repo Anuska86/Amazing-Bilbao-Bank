@@ -4,6 +4,8 @@ public class SavingsAccount extends Account {
 
 	private double interestRate;
 
+	// CONSTRUCTOR
+
 	public SavingsAccount(String owner, double balance, double interestRate) {
 
 		// super calls the contructor of Account (parent)
@@ -11,6 +13,8 @@ public class SavingsAccount extends Account {
 		// TODO Auto-generated constructor stub
 		this.interestRate = interestRate;
 	}
+
+	// OVERRIDES
 
 	@Override
 	public void withdraw(double amount) {
@@ -23,6 +27,14 @@ public class SavingsAccount extends Account {
 			System.out.println("Error: Not enough funds to cover the withdrawal");
 		}
 	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "| Interest Rate: " + interestRate + "%";
+
+	}
+
+	// NEW METHODS
 
 	// a new method ONLY for savings accounts
 
