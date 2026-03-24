@@ -1,5 +1,7 @@
 package basic;
 
+import java.util.List;
+
 public class HelloWorld {
 
 	public static void main(String[] args) {
@@ -21,5 +23,11 @@ public class HelloWorld {
 		}
 
 		myBank.showStatus();
+
+		List<String> vips = myBank.getVIPCustomers();
+
+		System.out.println("--- Our VIP Customers ---");
+		vips.forEach(name -> System.out.println("⭐ " + name));
 	}
+
 }

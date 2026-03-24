@@ -2,6 +2,7 @@ package basic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Bank {
 	private String bankName;
@@ -9,14 +10,14 @@ public class Bank {
 	// Key is String (Name), Value is Account (The Object)
 	private HashMap<String, Account> accountsMap;
 
-//Constructor
+	// Constructor
 
 	public Bank(String name) {
 		this.bankName = name;
 		this.accountsMap = new HashMap<>();
 	}
 
-//Method to open accounts
+	// Method to open accounts
 
 	public void addAccounts(Account acc) {
 		accountsMap.put(acc.getOwner().toLowerCase(), acc);
@@ -81,5 +82,13 @@ public class Bank {
 	 * public void sortAccountsByBalance() { accounts.sort((a1, a2) ->
 	 * Double.compare(a2.getBalance(), a1.getBalance())); }
 	 */
+
+	// SEGMENTING THE COSTUMERS
+
+	// Method to get the VIPS clients
+
+	public List<String> getVIPCustomers() {
+		return accountsMap.values().stream().filter(acc -> acc.getBalance() > 5000).map(acc -> acc.getOwner()).toList();
+	}
 
 }
