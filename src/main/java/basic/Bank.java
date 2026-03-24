@@ -1,38 +1,35 @@
 package basic;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.HashMap;
 
 public class Bank {
 	private String bankName;
-	private ArrayList<Account> accounts;
+
+	// Key is String (Name), Value is Account (The Object)
+	private HashMap<String, Account> accountsMap;
 
 //Constructor
 
 	public Bank(String name) {
 		this.bankName = name;
-		this.accounts = new ArrayList<>();
-
+		this.accountsMap = new HashMap<>();
 	}
 
 //Method to open accounts
 
 	public void addAccounts(Account acc) {
-		this.accounts.add(acc);
+		accountsMap.put(acc.getOwner().toLowerCase(), acc);
 
 	}
 
 	// Method to show the accounts
 
 	public void showStatus() {
-		System.out.println("--- Welcome to " + bankName + "---");
+		System.out.println("--- " + bankName + " Status ---");
 
-		if (accounts.isEmpty()) {
-			System.out.println("The bank doesn't have active accounts.");
-		} else {
-			for (Account a : accounts) {
-				System.out.println(a);
-			}
+		for (Account acc : accountsMap.values()) {
+			System.out.println(acc);
 		}
 
 		System.out.println("-------------------------------------");
@@ -41,13 +38,14 @@ public class Bank {
 	// Method to search an account
 
 	public Account findAccount(String nameToFind) {
-		for (Account acc : accounts) {
-			if (acc.getOwner().equalsIgnoreCase(nameToFind)) {
-				return acc;
-			}
+
+		Account acc = accountsMap.get(nameToFind.toLowerCase());
+
+		if (acc == null) {
+			System.out.println("Error: Account for " + nameToFind + " not found");
+
 		}
-		System.out.println("Error: Account for " + nameToFind + "not found.");
-		return null;
+		return acc;
 	}
 
 	// Method to delete an account
@@ -55,28 +53,28 @@ public class Bank {
 	public void closeAccount(String nameToClose)
 
 	{
-		boolean removedAcc = accounts.removeIf(acc -> acc.getOwner().equalsIgnoreCase(nameToClose));
 
-		if (removedAcc) {
-			System.out.println("SUCCESS: Account for " + nameToClose + " has been closed.");
+		Account removedAcc = accountsMap.remove(nameToClose);
+
+		if (removedAcc != null) {
+			System.out.println("SUCCESS: Account for " + nameToClose + "has been closed");
 		} else {
 			System.out.println("ERROR: Could not find an account for " + nameToClose);
 		}
+
 	}
 
 	// Method to compare the money quantity
 
 	public void sortAccountsByBalance() {
-		accounts.sort(new Comparator<Account>() {
+		ArrayList<Account> sortedList = new ArrayList<>(accountsMap.values());
 
-			@Override
-			public int compare(Account a1, Account a2) {
-				return Double.compare(a2.getBalance(), a1.getBalance());
-			}
+		sortedList.sort((a1, a2) -> Double.compare(a2.getBalance(), a1.getBalance()));
 
-		});
-
-		System.out.println("Accounts have been sorted by balance (highest first");
+		System.out.println("--- Accounts Sorted by Balance (Highest First) ---");
+		for (Account acc : sortedList) {
+			System.out.println(acc);
+		}
 	}
 
 	/*
