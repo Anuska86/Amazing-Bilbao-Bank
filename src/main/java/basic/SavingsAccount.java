@@ -17,6 +17,16 @@ public class SavingsAccount extends Account {
 	// OVERRIDES
 
 	@Override
+
+	public void printMonthlyReport() {
+		System.out.println("--- SAVINGS ACCOUNT REPORT ---");
+		System.out.println("Owner: " + getOwner());
+		System.out.println("Current Balance: " + getBalanceWithCurrency());
+		System.out.println("Interest Rate: " + interestRate + "%");
+		System.out.println("------------------------------");
+	}
+
+	@Override
 	public void withdraw(double amount) {
 		double totalWithFee = amount + 2.0;
 

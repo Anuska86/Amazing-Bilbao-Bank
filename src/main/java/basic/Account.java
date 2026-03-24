@@ -1,6 +1,6 @@
 package basic;
 
-public class Account {
+public abstract class Account {
 
 	// Variables (Attributes)
 
@@ -15,6 +15,8 @@ public class Account {
 	}
 
 	// Methods (Actions)
+
+	public abstract void printMonthlyReport();
 
 	public void deposit(double amount) {
 		balance += amount;
