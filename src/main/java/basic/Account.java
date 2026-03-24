@@ -29,9 +29,14 @@ public abstract class Account {
 
 	// Other Methods
 
-	public void deposit(double amount) {
-		balance += amount;
-		transactionHistory.add(getTimestamp() + "Deposited: " + amount + "€");
+	public boolean deposit(double amount) {
+		if (amount <= 0) {
+			System.out.println("❌ Error: Deposit amount must be positive.");
+			return false;
+		}
+		this.balance += amount;
+		this.transactionHistory.add(String.format("Deposited: %.2f€", amount));
+		return true;
 	}
 
 	public boolean withdraw(double amount) {
@@ -64,6 +69,11 @@ public abstract class Account {
 		for (String record : transactionHistory) {
 			System.out.println("- " + record);
 		}
+		System.out.printf("Current Balance: %.2f€%n", balance);
+	}
+
+	public double getInterestRate() {
+		return 0.0;
 	}
 
 	// SETTERS & GETTERS

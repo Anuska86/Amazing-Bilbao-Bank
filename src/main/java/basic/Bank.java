@@ -30,7 +30,8 @@ public class Bank {
 		System.out.println("--- " + bankName + " Status ---");
 
 		for (Account acc : accountsMap.values()) {
-			System.out.println(acc);
+			System.out.printf("Owner: %-10s | Balance: %8.2f€ | Rate: %.1f%%%n", acc.getOwner(), acc.getBalance(),
+					acc.getInterestRate());
 		}
 
 		System.out.println("-------------------------------------");
@@ -43,7 +44,6 @@ public class Bank {
 		Account acc = accountsMap.get(nameToFind.toLowerCase());
 
 		if (acc == null) {
-			System.out.println("Error: Account for " + nameToFind + " not found");
 
 		}
 		return acc;

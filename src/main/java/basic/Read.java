@@ -12,10 +12,16 @@ public class Read {
 				System.out.print(message);
 				double value = scanner.nextDouble();
 				scanner.nextLine();
-				return value;
+
+				if (value >= 0) {
+					return value;
+				} else {
+					System.out.println("❌ Error: Amount cannot be negative.");
+				}
+
 			} catch (InputMismatchException e) {
 				// TODO: handle exception
-				System.out.println("❌ Error: You have to write a number (e.g:10.5)");
+				System.out.println("❌ Error: You must enter a valid number.");
 				scanner.nextLine(); // CRITICAL: This delete the bad input out of the memory
 			}
 		}
@@ -38,8 +44,14 @@ public class Read {
 
 	public static String readString(String message) {
 
-		System.out.println(message);
-		return scanner.nextLine();
+		while (true) {
+			System.out.println(message);
+			String input = scanner.nextLine().trim();
+			if (!input.isEmpty()) {
+				return input;
+			}
+			System.out.println("❌ Error: You must enter a name.");
+		}
 
 	}
 

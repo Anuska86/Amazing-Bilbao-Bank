@@ -41,14 +41,17 @@ public class HelloWorld {
 			case 3:
 
 				String nameToDeposit = Read.readString("Enter account owner name: ");
+				Account accDep = myBank.findAccount(nameToDeposit);
+
+				if (accDep == null) {
+					System.out.println("❌ Account '" + nameToDeposit + "' not found.");
+					break;
+				}
+
 				double depAmount = Read.readDouble("Enter amount to deposit: ");
 
-				Account accDep = myBank.findAccount(nameToDeposit);
-				if (accDep != null) {
-					accDep.deposit(depAmount);
+				if (accDep.deposit(depAmount)) {
 					System.out.println(" ✅ Deposit successful!");
-				} else {
-					System.out.println("❌ Account '" + nameToDeposit + "' not found.");
 				}
 
 				break;
@@ -56,19 +59,19 @@ public class HelloWorld {
 			case 4:
 
 				String nameWithdraw = Read.readString("Enter account owner name: ");
-				double amountWithdraw = Read.readDouble("Enter amount to withdraw");
 				Account accWithdraw = myBank.findAccount(nameWithdraw);
 
-				if (accWithdraw != null) {
+				if (accWithdraw == null) {
+					System.out.println("❌ Error: Account '" + nameWithdraw + "' does not exist.");
+					break;
+				}
 
-					if (accWithdraw.withdraw(amountWithdraw)) {
-						System.out.println("✅ Please take your cash.");
-					} else {
-						System.out.println("⚠️ Transaction failed. Check your balance and try again.");
-					}
+				double amountWithdraw = Read.readDouble("Enter amount to withdraw: ");
 
+				if (accWithdraw.withdraw(amountWithdraw)) {
+					System.out.println("✅ Please take your cash.");
 				} else {
-					System.out.println("❌ Account not found.");
+					System.out.println("⚠️ Transaction failed. Check your balance and try again.");
 				}
 
 				break;
