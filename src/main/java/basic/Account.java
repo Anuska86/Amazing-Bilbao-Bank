@@ -1,32 +1,45 @@
 package basic;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
 public abstract class Account {
 
 	// Variables (Attributes)
 
 	private String owner;
 	private double balance;
+	private ArrayList<String> transactionHistory;
 
 	// CONSTRUCTOR
 
 	public Account(String owner, double balance) {
 		this.owner = owner;
 		this.balance = balance;
+		this.transactionHistory = new ArrayList<>();
+		transactionHistory.add("Account created with " + balance + "€");
 	}
 
 	// Methods (Actions)
 
+	// Abstract Methods
+
 	public abstract void printMonthlyReport();
+
+	// Other Methods
 
 	public void deposit(double amount) {
 		balance += amount;
+		transactionHistory.add(getTimestamp() + "Deposited: " + amount + "€");
 	}
 
 	public void withdraw(double amount) {
 		if (amount <= balance) {
 			balance -= amount;
+			transactionHistory.add(getTimestamp() + "Withdraw: " + amount + "€");
 		} else {
-			System.out.println("Error: Insufficient funds!");
+			System.out.println("FAILED Withdrawal: " + amount + "€ (Insufficient funds)");
 		}
 	}
 
@@ -41,6 +54,13 @@ public abstract class Account {
 			System.out.println("Transfer successful!");
 		} else {
 			System.out.println("Transfer failed, put in contact with your bank ");
+		}
+	}
+
+	public void printHistory() {
+		System.out.println("--- Transaction History for " + owner + " ---");
+		for (String record : transactionHistory) {
+			System.out.println("- " + record);
 		}
 	}
 
@@ -68,6 +88,14 @@ public abstract class Account {
 	// Balance with currency
 	public String getBalanceWithCurrency() {
 		return balance + "€";
+	}
+
+	// HELPERS
+
+	private String getTimestamp() {
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+		return "[" + now.format(formatter) + "]";
 	}
 
 }

@@ -54,7 +54,7 @@ public class Bank {
 
 	{
 
-		Account removedAcc = accountsMap.remove(nameToClose);
+		Account removedAcc = accountsMap.remove(nameToClose.toLowerCase());
 
 		if (removedAcc != null) {
 			System.out.println("SUCCESS: Account for " + nameToClose + "has been closed");
