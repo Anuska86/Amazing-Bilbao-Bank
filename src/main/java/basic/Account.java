@@ -34,12 +34,14 @@ public abstract class Account {
 		transactionHistory.add(getTimestamp() + "Deposited: " + amount + "€");
 	}
 
-	public void withdraw(double amount) {
-		if (amount <= balance) {
+	public boolean withdraw(double amount) {
+		if (amount > 0 && amount <= balance) {
 			balance -= amount;
 			transactionHistory.add(getTimestamp() + "Withdraw: " + amount + "€");
+			return true;
 		} else {
 			System.out.println("FAILED Withdrawal: " + amount + "€ (Insufficient funds)");
+			return false;
 		}
 	}
 

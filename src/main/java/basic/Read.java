@@ -36,4 +36,11 @@ public class Read {
 		}
 	}
 
+	public static String readString(String message) {
+
+		System.out.println(message);
+		return scanner.nextLine();
+
+	}
+
 }

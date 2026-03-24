@@ -1,7 +1,5 @@
 package basic;
 
-import java.util.List;
-
 public class HelloWorld {
 
 	public static void main(String[] args) {
@@ -14,27 +12,77 @@ public class HelloWorld {
 		myBank.addAccounts(new SavingsAccount("Anuska", 5000.0, 3.0));
 		myBank.addAccounts(new SavingsAccount("Jon", 9800.0, 5));
 
-		// DISPLAYING THE INFO
+		// USER's INTERFACE
 
-		myBank.showStatus();
+		boolean running = true;
 
-		List<String> vips = myBank.getVIPCustomers();
+		while (running) {
+			System.out.println("\n--- BANK MAIN MENU ---");
+			System.out.println("1. Show All Accounts");
+			System.out.println("2. Show VIP Customers");
+			System.out.println("3. Deposit Money");
+			System.out.println("4. Withdraw Money");
+			System.out.println("5. Exit");
 
-		System.out.println("--- Our VIP Customers ---");
-		vips.forEach(name -> System.out.println("⭐ " + name));
+			int choice = Read.readInt("Choose an option: ");
 
-		// INTERACTION
+			switch (choice) {
+			case 1:
 
-		double money = Read.readDouble("How much you want to deposit? ");
+				myBank.showStatus();
+				break;
 
-		// UPDATE
+			case 2:
 
-		Account acc = myBank.findAccount("Anuska");
+				System.out.println("--- VIP List ---");
+				myBank.getVIPCustomers().forEach(name -> System.out.println("⭐ " + name));
+				break;
 
-		if (acc != null) {
-			acc.deposit(money);
-			acc.printHistory();
+			case 3:
+
+				String nameToDeposit = Read.readString("Enter account owner name: ");
+				double depAmount = Read.readDouble("Enter amount to deposit: ");
+
+				Account accDep = myBank.findAccount(nameToDeposit);
+				if (accDep != null) {
+					accDep.deposit(depAmount);
+					System.out.println(" ✅ Deposit successful!");
+				} else {
+					System.out.println("❌ Account '" + nameToDeposit + "' not found.");
+				}
+
+				break;
+
+			case 4:
+
+				String nameWithdraw = Read.readString("Enter account owner name: ");
+				double amountWithdraw = Read.readDouble("Enter amount to withdraw");
+				Account accWithdraw = myBank.findAccount(nameWithdraw);
+
+				if (accWithdraw != null) {
+
+					if (accWithdraw.withdraw(amountWithdraw)) {
+						System.out.println("✅ Please take your cash.");
+					} else {
+						System.out.println("⚠️ Transaction failed. Check your balance and try again.");
+					}
+
+				} else {
+					System.out.println("❌ Account not found.");
+				}
+
+				break;
+			case 5:
+
+				System.out.println("Thank you for using Amazing Bilbao Bank. Have a nice day! Agur!");
+				running = false;
+				break;
+
+			default:
+				System.out.println("Invalid option. Try again.");
+			}
 		}
+
 	}
 
 }
