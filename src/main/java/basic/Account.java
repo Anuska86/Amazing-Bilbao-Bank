@@ -10,7 +10,7 @@ public abstract class Account {
 
 	private String owner;
 	private double balance;
-	private ArrayList<String> transactionHistory;
+	protected ArrayList<String> transactionHistory;
 
 	// CONSTRUCTOR
 
