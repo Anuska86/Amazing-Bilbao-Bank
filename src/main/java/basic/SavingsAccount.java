@@ -14,6 +14,13 @@ public class SavingsAccount extends Account implements InterestBearing {
 		this.interestRate = interestRate;
 	}
 
+	// 2nd CONSTRUCTOR
+
+	public SavingsAccount(String owner, double balance) {
+		super(owner, balance);
+		this.interestRate = 2.0;
+	}
+
 	// OVERRIDES
 
 	// Interface method

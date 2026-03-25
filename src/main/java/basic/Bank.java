@@ -3,6 +3,7 @@ package basic;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,12 +72,23 @@ public class Bank {
 
 	public Account findAccount(String nameToFind) {
 
-		Account acc = accountsMap.get(nameToFind.toLowerCase());
+		String sql = "SELECT * FROM accounts WHERE LOWER(owner_name) = ?";
 
-		if (acc == null) {
+		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, nameToFind.toLowerCase());
+			ResultSet rs = pstmt.executeQuery();
 
+			if (rs.next()) {
+				String name = rs.getString("owner_name");
+				double balance = rs.getDouble("balance");
+
+				return new SavingsAccount(name, balance);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		return acc;
+		return null;
 	}
 
 	// Method to delete an account
