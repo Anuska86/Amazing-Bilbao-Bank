@@ -1,5 +1,9 @@
 package basic;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,10 +23,34 @@ public class Bank {
 		this.accountsMap = new HashMap<>();
 	}
 
+	// METHODS
+
+	// MySQL CONNECTION
+
+	private Connection connect() throws SQLException {
+		String url = "jdbc:mysql://localhost:3306/amazing_bilbao_bank";
+		String user = "root";
+		String password = System.getenv("DB_PASSWORD");
+		return DriverManager.getConnection(url, user, password);
+	}
+
 	// Method to open accounts
 
 	public void addAccounts(Account acc) {
-		accountsMap.put(acc.getOwner().toLowerCase(), acc);
+		String sql = "INSERT INTO accounts (owner_name, balance, account_type) VALUES (?, ?, ?)";
+
+		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setString(1, acc.getOwner());
+			pstmt.setDouble(2, acc.getBalance());
+			pstmt.setString(3, acc.getClass().getSimpleName());
+
+			pstmt.executeUpdate();
+			System.out.println("✅ Account saved to Database!");
+		} catch (SQLException e) {
+			System.out.println("❌ Error saving to database");
+			e.printStackTrace();
+		}
 
 	}
 
