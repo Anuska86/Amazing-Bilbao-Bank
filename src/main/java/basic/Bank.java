@@ -91,6 +91,25 @@ public class Bank {
 		return null;
 	}
 
+	// Method to update the balance
+
+	public void updateBalanceInDB(Account acc) {
+		String sql = "UPDATE accounts SET balance = ? WHERE LOWERowner_name = ?";
+
+		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setDouble(1, acc.getBalance());
+			pstmt.setString(2, acc.getOwner().toLowerCase());
+
+			pstmt.executeUpdate();
+			System.out.println("💾 Database updated: New balance is " + acc.getBalance() + "€");
+
+		} catch (SQLException e) {
+			System.out.println("❌ Database update failed!");
+			e.printStackTrace();
+		}
+	}
+
 	// Method to delete an account
 
 	public void closeAccount(String nameToClose)

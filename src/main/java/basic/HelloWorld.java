@@ -4,6 +4,8 @@ public class HelloWorld {
 
 	public static void main(String[] args) {
 
+		System.out.println("DEBUG: Password found? " + (System.getenv("DB_PASSWORD") != null));
+
 		// SETUP
 
 		Bank myBank = new Bank("International Java Bank");
@@ -54,6 +56,7 @@ public class HelloWorld {
 				double depAmount = Read.readDouble("Enter amount to deposit: ");
 
 				if (accDep.deposit(depAmount)) {
+					myBank.updateBalanceInDB(accDep);
 					System.out.println(" ✅ Deposit successful!");
 				}
 
