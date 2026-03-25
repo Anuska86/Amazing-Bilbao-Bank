@@ -72,7 +72,7 @@ public class Bank {
 
 	public Account findAccount(String nameToFind) {
 
-		String sql = "SELECT * FROM accounts WHERE LOWER(owner_name) = ?";
+		String sql = "SELECT * FROM accounts WHERE owner_name = ?";
 
 		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, nameToFind.toLowerCase());
@@ -97,12 +97,21 @@ public class Bank {
 
 	{
 
-		Account removedAcc = accountsMap.remove(nameToClose.toLowerCase());
+		String sql = "DELETE FROM accounts WHERE LOWER(owner_name) = ?";
 
-		if (removedAcc != null) {
-			System.out.println("SUCCESS: Account for " + nameToClose + "has been closed");
-		} else {
-			System.out.println("ERROR: Could not find an account for " + nameToClose);
+		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setString(1, nameToClose.toLowerCase());
+			int rowsDeleted = pstmt.executeUpdate();
+
+			if (rowsDeleted > 0) {
+				System.out.println("✅ SUCCESS: Account for " + nameToClose + " has been closed.");
+			} else {
+				System.out.println("⚠️ ERROR: Could not find an account for " + nameToClose);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 
 	}

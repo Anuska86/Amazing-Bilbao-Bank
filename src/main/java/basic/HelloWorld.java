@@ -8,9 +8,12 @@ public class HelloWorld {
 
 		Bank myBank = new Bank("International Java Bank");
 
-		myBank.addAccounts(new SavingsAccount("Lauren", 1200.0, 2.5));
-		myBank.addAccounts(new SavingsAccount("Anuska", 5000.0, 3.0));
-		myBank.addAccounts(new SavingsAccount("Jon", 9800.0, 5));
+		/*
+		 * myBank.addAccounts(new SavingsAccount("Lauren", 1200.0, 2.5));
+		 * myBank.addAccounts(new SavingsAccount("Anuska", 5000.0, 3.0));
+		 * myBank.addAccounts(new SavingsAccount("Jon", 9800.0, 5));
+		 * 
+		 */
 
 		// USER's INTERFACE
 
