@@ -3,12 +3,14 @@ package basic;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Bank {
 	private String bankName;
 
 	// Key is String (Name), Value is Account (The Object)
-	private HashMap<String, Account> accountsMap;
+	private Map<String, Account> accountsMap = new TreeMap<>();
 
 	// Constructor
 
