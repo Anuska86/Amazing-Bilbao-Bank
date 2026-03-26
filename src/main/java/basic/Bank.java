@@ -90,10 +90,10 @@ public class Bank {
 
 	public Account findAccount(String nameToFind) {
 
-		String sql = "SELECT * FROM accounts WHERE owner_name = ?";
+		String sql = "SELECT * FROM accounts WHERE LOWER (owner_name) = ?";
 
 		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, nameToFind.toLowerCase());
+			pstmt.setString(1, nameToFind);
 			ResultSet rs = pstmt.executeQuery();
 
 			if (rs.next()) {
@@ -112,7 +112,7 @@ public class Bank {
 	// Method to update the balance
 
 	public void updateBalanceInDB(Account acc) {
-		String sql = "UPDATE accounts SET balance = ? WHERE LOWER owner_name = ?";
+		String sql = "UPDATE accounts SET balance = ? WHERE LOWER (owner_name) = ?";
 
 		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
