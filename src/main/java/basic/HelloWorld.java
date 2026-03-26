@@ -29,7 +29,7 @@ public class HelloWorld {
 			System.out.println("2. Show VIP Customers");
 			System.out.println("3. Deposit Money");
 			System.out.println("4. Withdraw Money");
-			System.out.println("5. VIP Costumers");
+			System.out.println("5. Close account");
 			System.out.println("6. Exit");
 
 			int choice = Read.readInt("Choose an option: ");
@@ -42,8 +42,15 @@ public class HelloWorld {
 
 			case 2:
 
-				System.out.println("--- VIP List ---");
-				myBank.getVIPCustomers().forEach(name -> System.out.println("⭐ " + name));
+				List<String> vips = myBank.getVIPCustomers();
+				System.out.println("--- ⭐ VIP CUSTOMERS (>100000€) ---");
+
+				if (vips.isEmpty()) {
+					System.out.println("No VIPs found. Time to find richer friends!");
+				} else {
+					vips.forEach(name -> System.out.println("💎 " + name));
+				}
+
 				break;
 
 			case 3:
@@ -84,15 +91,27 @@ public class HelloWorld {
 				}
 
 				break;
+
 			case 5:
 
-				List<String> vips = myBank.getVIPCustomers();
-				System.out.println("--- ⭐ VIP CUSTOMERS (>5000€) ---");
+				String nameClose = Read.readString("Enter account owner name: ");
+				Account accClose = myBank.findAccount(nameClose);
 
-				if (vips.isEmpty()) {
-					System.out.println("No VIPs found. Time to find richer friends!");
+				if (accClose != null) {
+					System.out.println("⚠️ Account Found!");
+					System.out.println("Owner: " + accClose.getOwner());
+					System.out.println("Balance: " + accClose.getBalance() + "€");
+
+					String confirm = Read.readString("Are you SURE you want to close this account?");
+
+					if (confirm.equalsIgnoreCase("y")) {
+						myBank.closeAccount(nameClose);
+					} else {
+						System.out.println("❌ Operation cancelled. The account remains open.");
+					}
+
 				} else {
-					vips.forEach(name -> System.out.println("💎 " + name));
+					System.out.println("⚠️ Error: No account found for '" + nameClose + "'");
 				}
 
 				break;

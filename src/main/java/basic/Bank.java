@@ -178,7 +178,7 @@ public class Bank {
 	public List<String> getVIPCustomers() {
 		List<String> vips = new ArrayList<>();
 
-		String sql = "SELECT owner_name FROM accounts WHERE balance >5000";
+		String sql = "SELECT owner_name FROM accounts WHERE balance >100000";
 
 		try (Connection conn = connect();
 				PreparedStatement pstmt = conn.prepareStatement(sql);
