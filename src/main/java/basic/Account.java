@@ -40,6 +40,13 @@ public abstract class Account {
 	}
 
 	public boolean withdraw(double amount) {
+
+		if (this.getClass().getSimpleName().equals("Fixed-Term Deposit")) {
+			System.out
+					.println("❌ ERROR: Access Denied. Fixed-Term Deposits cannot be withdrawn until the term expires!");
+			return false;
+		}
+
 		if (amount > 0 && amount <= balance) {
 			balance -= amount;
 			transactionHistory.add(getTimestamp() + "Withdraw: " + amount + "€");
