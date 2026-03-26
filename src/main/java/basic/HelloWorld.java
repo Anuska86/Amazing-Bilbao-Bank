@@ -29,7 +29,7 @@ public class HelloWorld {
 			System.out.println("2. Show VIP Customers");
 			System.out.println("3. Deposit Money");
 			System.out.println("4. Withdraw Money");
-			System.out.println("5. Apen account");
+			System.out.println("5. 0pen account");
 			System.out.println("6. Close account");
 			System.out.println("7. Exit");
 
