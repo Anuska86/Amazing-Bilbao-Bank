@@ -29,8 +29,9 @@ public class HelloWorld {
 			System.out.println("2. Show VIP Customers");
 			System.out.println("3. Deposit Money");
 			System.out.println("4. Withdraw Money");
-			System.out.println("5. Close account");
-			System.out.println("6. Exit");
+			System.out.println("5. Apen account");
+			System.out.println("6. Close account");
+			System.out.println("7. Exit");
 
 			int choice = Read.readInt("Choose an option: ");
 
@@ -94,6 +95,19 @@ public class HelloWorld {
 
 			case 5:
 
+				String nameAdd = Read.readString("Enter new account name: ");
+				double initialBalance = Read.readDouble("Enter initial deposit: ");
+
+				Account newAcc = new SavingsAccount(nameAdd, initialBalance);
+
+				myBank.addAccounts(newAcc);
+
+				System.out.println("🎊 Welcome to the bank, " + nameAdd + "!");
+
+				break;
+
+			case 6:
+
 				String nameClose = Read.readString("Enter account owner name: ");
 				Account accClose = myBank.findAccount(nameClose);
 
@@ -124,7 +138,7 @@ public class HelloWorld {
 
 				break;
 
-			case 6:
+			case 7:
 
 				System.out.println("Thank you for using Amazing Bilbao Bank. Have a nice day! Agur!");
 				running = false;
