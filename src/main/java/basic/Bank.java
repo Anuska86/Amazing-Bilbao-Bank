@@ -78,20 +78,11 @@ public class Bank {
 				System.out.printf("%-15s | %10.2f€ | %-10s\n", name, balance, type);
 			}
 
-		}
-	}catch(
+		} catch (
 
-	SQLException e)
-	{
+		SQLException e) {
 			System.out.println("❌ Error loading accounts: " + e.getMessage());
 		}
-
-	for(
-	Account acc:accountsMap.values())
-	{
-		System.out.printf("Owner: %-10s | Balance: %8.2f€ | Rate: %.1f%%%n", acc.getOwner(), acc.getBalance(),
-				acc.getInterestRate());
-	}
 
 	}
 
@@ -121,7 +112,7 @@ public class Bank {
 	// Method to update the balance
 
 	public void updateBalanceInDB(Account acc) {
-		String sql = "UPDATE accounts SET balance = ? WHERE LOWERowner_name = ?";
+		String sql = "UPDATE accounts SET balance = ? WHERE LOWER owner_name = ?";
 
 		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
