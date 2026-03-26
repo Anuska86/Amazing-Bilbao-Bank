@@ -60,12 +60,39 @@ public class Bank {
 	public void showStatus() {
 		System.out.println("--- " + bankName + " Status ---");
 
-		for (Account acc : accountsMap.values()) {
-			System.out.printf("Owner: %-10s | Balance: %8.2f€ | Rate: %.1f%%%n", acc.getOwner(), acc.getBalance(),
-					acc.getInterestRate());
-		}
+		System.out.printf("%-15s | %-12s | %-10s\n", "OWNER", "BALANCE", "TYPE");
 
 		System.out.println("-------------------------------------");
+
+		String sql = "SELECT * FROM accounts";
+
+		try (Connection conn = connect();
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				ResultSet rs = pstmt.executeQuery()) {
+
+			while (rs.next()) {
+				String name = rs.getString("owner_name");
+				double balance = rs.getDouble("balance");
+				String type = "Savings";
+
+				System.out.printf("%-15s | %10.2f€ | %-10s\n", name, balance, type);
+			}
+
+		}
+	}catch(
+
+	SQLException e)
+	{
+			System.out.println("❌ Error loading accounts: " + e.getMessage());
+		}
+
+	for(
+	Account acc:accountsMap.values())
+	{
+		System.out.printf("Owner: %-10s | Balance: %8.2f€ | Rate: %.1f%%%n", acc.getOwner(), acc.getBalance(),
+				acc.getInterestRate());
+	}
+
 	}
 
 	// Method to search an account
