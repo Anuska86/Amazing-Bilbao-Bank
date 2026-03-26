@@ -44,12 +44,34 @@ public class Bank {
 
 			pstmt.setString(1, acc.getOwner());
 			pstmt.setDouble(2, acc.getBalance());
-			pstmt.setString(3, acc.getClass().getSimpleName());
+			String type = acc.getClass().getSimpleName().replace("Account", "");
+			pstmt.setString(3, type);
 
 			pstmt.executeUpdate();
 			System.out.println("✅ Account saved to Database!");
 		} catch (SQLException e) {
 			System.out.println("❌ Error saving to database");
+			e.printStackTrace();
+		}
+
+	}
+
+	// Method to open accounts with type
+
+	public void addAccountWithSpecificType(String name, double balance, String type) {
+		String sql = "INSERT INTO accounts (owner_name, balance, account_type) VALUES (?, ?, ?)";
+
+		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setString(1, name);
+			pstmt.setDouble(2, balance);
+			pstmt.setString(3, type);
+
+			pstmt.executeUpdate();
+			System.out.println("✅ " + type + " account created for " + name);
+
+		} catch (SQLException e) {
+			System.out.println("❌ Error: Could not create account.");
 			e.printStackTrace();
 		}
 

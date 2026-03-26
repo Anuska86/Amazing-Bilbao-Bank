@@ -98,9 +98,24 @@ public class HelloWorld {
 				String nameAdd = Read.readString("Enter new account name: ");
 				double initialBalance = Read.readDouble("Enter initial deposit: ");
 
-				Account newAcc = new SavingsAccount(nameAdd, initialBalance);
+				System.out.println("Choose account type:");
+				System.out.println("1. Checking");
+				System.out.println("2. Savings");
+				System.out.println("3. Fixed-Term Deposit");
 
-				myBank.addAccounts(newAcc);
+				int typeChoice = Read.readInt("Select (1-2-3: ");
+
+				String typeStr;
+
+				if (typeChoice == 1) {
+					typeStr = "Checking";
+				} else if (typeChoice == 2) {
+					typeStr = "Savings";
+				} else {
+					typeStr = "Fixed-Term Deposit";
+				}
+
+				myBank.addAccountWithSpecificType(nameAdd, initialBalance, typeStr);
 
 				System.out.println("🎊 Welcome to the bank, " + nameAdd + "!");
 
