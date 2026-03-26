@@ -176,7 +176,24 @@ public class Bank {
 	// Method to get the VIPS clients
 
 	public List<String> getVIPCustomers() {
-		return accountsMap.values().stream().filter(acc -> acc.getBalance() > 5000).map(acc -> acc.getOwner()).toList();
+		List<String> vips = new ArrayList<>();
+
+		String sql = "SELECT owner_name FROM accounts WHERE balance >5000";
+
+		try (Connection conn = connect();
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				ResultSet rs = pstmt.executeQuery()) {
+
+			while (rs.next()) {
+				vips.add(rs.getString("owner_name"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return vips;
 	}
 
 }
