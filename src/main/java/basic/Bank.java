@@ -130,7 +130,7 @@ public class Bank {
 
 	// Method to delete an account
 
-	public void closeAccount(String nameToClose)
+	public boolean closeAccount(String nameToClose)
 
 	{
 
@@ -139,18 +139,18 @@ public class Bank {
 		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			pstmt.setString(1, nameToClose.toLowerCase());
+
 			int rowsDeleted = pstmt.executeUpdate();
 
 			if (rowsDeleted > 0) {
 				System.out.println("✅ SUCCESS: Account for " + nameToClose + " has been closed.");
-			} else {
-				System.out.println("⚠️ ERROR: Could not find an account for " + nameToClose);
+				return true;
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		return false;
 	}
 
 	// Method to compare the money quantity

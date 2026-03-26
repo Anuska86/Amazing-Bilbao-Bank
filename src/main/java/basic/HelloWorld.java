@@ -105,7 +105,15 @@ public class HelloWorld {
 					String confirm = Read.readString("Are you SURE you want to close this account?");
 
 					if (confirm.equalsIgnoreCase("y")) {
-						myBank.closeAccount(nameClose);
+
+						boolean success = myBank.closeAccount(nameClose);
+
+						if (success) {
+							System.out.println("👋 Goodbye, " + nameClose + "!");
+						} else {
+							System.out.println("❌ Something went wrong with the database deletion.");
+						}
+
 					} else {
 						System.out.println("❌ Operation cancelled. The account remains open.");
 					}
