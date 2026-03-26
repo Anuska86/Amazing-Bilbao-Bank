@@ -103,7 +103,7 @@ public class HelloWorld {
 				System.out.println("2. Savings");
 				System.out.println("3. Fixed-Term Deposit");
 
-				int typeChoice = Read.readInt("Select (1-2-3: ");
+				int typeChoice = Read.readInt("Select (1-2-3:)");
 
 				String typeStr;
 
