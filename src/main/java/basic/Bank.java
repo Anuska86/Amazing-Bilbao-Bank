@@ -95,9 +95,9 @@ public class Bank {
 			while (rs.next()) {
 				String name = rs.getString("owner_name");
 				double balance = rs.getDouble("balance");
-				String type = "Savings";
+				String typeFromDB = rs.getString("account_type");
 
-				System.out.printf("%-15s | %10.2f€ | %-10s\n", name, balance, type);
+				System.out.printf("%-15s | %10.2f€ | %-10s\n", name, balance, typeFromDB);
 			}
 
 		} catch (
