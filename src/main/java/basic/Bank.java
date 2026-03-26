@@ -93,7 +93,7 @@ public class Bank {
 		String sql = "SELECT * FROM accounts WHERE LOWER (owner_name) = ?";
 
 		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, nameToFind);
+			pstmt.setString(1, nameToFind.toLowerCase());
 			ResultSet rs = pstmt.executeQuery();
 
 			if (rs.next()) {
