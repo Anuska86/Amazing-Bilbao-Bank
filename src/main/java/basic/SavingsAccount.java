@@ -35,6 +35,8 @@ public class SavingsAccount extends Account implements InterestBearing {
 
 	}
 
+	// Abstract method
+
 	@Override
 
 	public void printMonthlyReport() {
@@ -45,13 +47,13 @@ public class SavingsAccount extends Account implements InterestBearing {
 		System.out.println("------------------------------");
 	}
 
+	// Standard method
+
 	@Override
 
 	public double getInterestRate() {
 		return this.interestRate;
 	}
-
-	// Abstract method
 
 	@Override
 	public boolean withdraw(double amount) {
