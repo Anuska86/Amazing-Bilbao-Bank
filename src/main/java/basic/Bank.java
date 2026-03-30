@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -180,6 +181,22 @@ public class Bank {
 
 	}
 
+	// Method update balance and year DB
+
+	public void updateBalanceAndYearInDB(String name, double newBalance, int year) {
+		String sql = "UPDATE accounts SET balance = ?, last_interest_year = ? WHERE owner_name = ?";
+
+		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setDouble(1, newBalance);
+			pstmt.setInt(2, year);
+			pstmt.setString(3, name);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	// Method to delete an account
 
 	public boolean closeAccount(String nameToClose)
@@ -227,6 +244,8 @@ public class Bank {
 
 	public void applyAnnualInterest() {
 
+		int currentYear = LocalDate.now().getYear();
+
 		String selectSql = "SELECT * FROM accounts";
 
 		try (Connection conn = connect();
@@ -235,8 +254,14 @@ public class Bank {
 
 			while (rs.next()) {
 				String name = rs.getString("owner_name");
-				double currentBalance = rs.getDouble("balance");
+				int lastYear = rs.getInt("last_interest_year");
 
+				if (lastYear >= currentYear) {
+					System.out.println("ℹ️ Skipping \" + name + \": Interest already applied for \" + currentYear");
+					continue;
+				}
+
+				double currentBalance = rs.getDouble("balance");
 				Account acc = findAccount(name);
 
 				if (acc != null) {
@@ -244,7 +269,7 @@ public class Bank {
 					double interestEarned = currentBalance * (rate / 100);
 					double newBalance = currentBalance + interestEarned;
 
-					updateBalanceInDB(name, newBalance);
+					updateBalanceAndYearInDB(name, newBalance, currentYear);
 
 					System.out.printf("💰 %s earned %.2f€ interest (New Total: %.2f€)\n", name, interestEarned,
 							newBalance);
