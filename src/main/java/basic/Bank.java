@@ -127,8 +127,10 @@ public class Bank {
 					return new FixedTermDeposit(name, balance);
 				} else if (typeFromDB.equalsIgnoreCase("Savings")) {
 					return new SavingsAccount(name, balance);
+				} else if (typeFromDB.equalsIgnoreCase("Checking")) {
+					return new CheckingAccount(name, balance);
 				} else {
-					return new SavingsAccount(name, balance);
+					return new CheckingAccount(name, balance);
 				}
 
 			}
