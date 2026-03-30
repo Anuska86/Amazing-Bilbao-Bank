@@ -158,6 +158,26 @@ public class Bank {
 		}
 	}
 
+	// Method to update the balance for calculate annual interest
+
+	public void updateBalanceInDB(String name, double newBalance) {
+
+		String sql = "UPDATE accounts SET balance = ? WHERE LOWER owner_name =?";
+
+		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setDouble(1, newBalance);
+			pstmt.setString(2, name);
+
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			System.out.println("❌ Database Error: Could not update balance for " + name);
+			e.printStackTrace();
+		}
+
+	}
+
 	// Method to delete an account
 
 	public boolean closeAccount(String nameToClose)
@@ -200,6 +220,42 @@ public class Bank {
 	 * public void sortAccountsByBalance() { accounts.sort((a1, a2) ->
 	 * Double.compare(a2.getBalance(), a1.getBalance())); }
 	 */
+
+	// Method to calculate the specific interest
+
+	public void applyAnnualInterest() {
+
+		String selectSql = "SELECT * FROM accounts";
+
+		try (Connection conn = connect();
+				PreparedStatement selectStmt = conn.prepareStatement(selectSql);
+				ResultSet rs = selectStmt.executeQuery()) {
+
+			while (rs.next()) {
+				String name = rs.getString("owner_name");
+				double currentBalance = rs.getDouble("balance");
+
+				Account acc = findAccount(name);
+
+				if (acc != null) {
+					double rate = acc.getInterestRate();
+					double interestEarned = currentBalance * (rate / 100);
+					double newBalance = currentBalance + interestEarned;
+
+					updateBalanceInDB(name, newBalance);
+
+					System.out.printf("💰 %s earned %.2f€ interest (New Total: %.2f€)\\n", name, interestEarned,
+							newBalance);
+				}
+
+			}
+
+			System.out.println("All accounts updated for the year!");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
 
 	// SEGMENTING THE COSTUMERS
 
