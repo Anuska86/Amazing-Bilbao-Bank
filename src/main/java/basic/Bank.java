@@ -203,32 +203,38 @@ public class Bank {
 		Account sender = findAccount(fromName);
 		Account receiver = findAccount(toName);
 
-		if (sender == null || receiver == null) {
-			System.out.println("❌ Error: One or both accounts do not exist.");
-			return;
-		}
+		if (sender != null && receiver != null && sender.withdraw(amount)) {
 
-		if (amount <= 0) {
-			System.out.println("❌ Error: Transfer amount must be positive.");
-			return;
-		}
-
-		System.out.println("⏳ Processing transfer of \" + amount + \"€...");
-
-		boolean withdrawSuccess = sender.withdraw(amount);
-
-		if (withdrawSuccess) {
 			receiver.deposit(amount);
 
 			updateBalanceInDB(sender);
 			updateBalanceInDB(receiver);
 
-			System.out.println("✅ Transfer Successful! \" + fromName + \" ➡️ \" + toName");
+			logTransaction(fromName, "Transfer to " + toName, -amount);
+			logTransaction(toName, "Transfer from " + fromName, amount);
 
-		} else {
-			System.out.println("⚠️ Transfer Failed. Check sender's balance or account restrictions.");
+			System.out.println("✅ Transfer completed and logged to history!");
 		}
 
+	}
+
+	// Method to log the transactions
+
+	public void logTransaction(String name, String type, double amount) {
+		String sql = "INSERT INTO transactions (owner_name, type, amount) VALUES (?, ?, ?)";
+
+		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setString(1, name);
+			pstmt.setString(2, type);
+			pstmt.setDouble(3, amount);
+
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			System.out.println("⚠️ Warning: Could not save transaction history for " + name);
+			e.printStackTrace();
+		}
 	}
 
 	// Method to delete an account
