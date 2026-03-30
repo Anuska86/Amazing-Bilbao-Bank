@@ -69,6 +69,7 @@ public class HelloWorld {
 
 				if (accDep.deposit(depAmount)) {
 					myBank.updateBalanceInDB(accDep);
+					myBank.logTransaction(nameToDeposit, "Deposit", depAmount);
 					System.out.println(" ✅ Deposit successful!");
 				}
 
@@ -167,7 +168,6 @@ public class HelloWorld {
 				String to = Read.readString("Enter receiver name: ");
 
 				double transferAmount = Read.readDouble("Enter amount to transfer: ");
-
 				myBank.transferMoney(from, to, transferAmount);
 
 				break;
