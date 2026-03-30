@@ -244,7 +244,7 @@ public class Bank {
 
 					updateBalanceInDB(name, newBalance);
 
-					System.out.printf("💰 %s earned %.2f€ interest (New Total: %.2f€)\\n", name, interestEarned,
+					System.out.printf("💰 %s earned %.2f€ interest (New Total: %.2f€)\n", name, interestEarned,
 							newBalance);
 				}
 
