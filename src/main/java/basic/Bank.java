@@ -297,7 +297,7 @@ public class Bank {
 				int lastYear = rs.getInt("last_interest_year");
 
 				if (lastYear >= currentYear) {
-					System.out.println("ℹ️ Skipping \" + name + \": Interest already applied for \" + currentYear");
+					System.out.println("ℹ️ Skipping " + name + ": Interest already applied for " + currentYear);
 					continue;
 				}
 

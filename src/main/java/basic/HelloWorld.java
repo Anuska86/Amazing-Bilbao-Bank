@@ -88,6 +88,8 @@ public class HelloWorld {
 				double amountWithdraw = Read.readDouble("Enter amount to withdraw: ");
 
 				if (accWithdraw.withdraw(amountWithdraw)) {
+					myBank.updateBalanceInDB(accWithdraw);
+					myBank.logTransaction(nameWithdraw, "Withdrawal", -amountWithdraw);
 					System.out.println("✅ Please take your cash.");
 				} else {
 					System.out.println("⚠️ Transaction failed. Check your balance and try again.");
