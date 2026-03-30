@@ -32,6 +32,7 @@ public class HelloWorld {
 			System.out.println("5. 0pen account");
 			System.out.println("7. Run Annual Interest (Year-End)");
 			System.out.println("8. Transfer Money");
+			System.out.println("9. View Account Statement");
 			System.out.println("0. Exit");
 
 			int choice = Read.readInt("Choose an option: ");
@@ -172,6 +173,12 @@ public class HelloWorld {
 				double transferAmount = Read.readDouble("Enter amount to transfer: ");
 				myBank.transferMoney(from, to, transferAmount);
 
+				break;
+
+			case 9:
+
+				String statementName = Read.readString("Enter account owner name for statement:");
+				myBank.printStatement(statementName);
 				break;
 
 			case 0:

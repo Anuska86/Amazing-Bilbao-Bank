@@ -237,6 +237,41 @@ public class Bank {
 		}
 	}
 
+	// Method to print the account statement
+
+	public void printStatement(String name) {
+		System.out.println("\n--- 🧾 OFFICIAL STATEMENT FOR " + name.toUpperCase() + " ---");
+		System.out.printf("%-20s | %-15s | %-10s\n", "DATE", "TYPE", "AMOUNT");
+		System.out.println("-------------------------------------------------------------");
+
+		String sql = "SELECT * FROM transactions WHERE LOWER(owner_name) = ? ORDER BY transaction_date DESC";
+
+		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, name.toLowerCase());
+			ResultSet rs = pstmt.executeQuery();
+
+			boolean found = false;
+			while (rs.next()) {
+				found = true;
+				String date = rs.getString("transaction_date");
+				String type = rs.getString("type");
+				double amount = rs.getDouble("amount");
+
+				System.out.printf("%-20s | %-15s | %10.2f€\n", date, type, amount);
+			}
+
+			if (!found) {
+				System.out.println("No transactions found for this account.");
+			}
+			System.out.println("-------------------------------------------------------------");
+
+		} catch (SQLException e) {
+			System.out.println("❌ Error retrieving statement.");
+			e.printStackTrace();
+		}
+
+	}
+
 	// Method to delete an account
 
 	public boolean closeAccount(String nameToClose)
