@@ -197,6 +197,40 @@ public class Bank {
 
 	}
 
+	// Method to transfer money
+
+	public void transferMoney(String fromName, String toName, double amount) {
+		Account sender = findAccount(fromName);
+		Account receiver = findAccount(toName);
+
+		if (sender == null || receiver == null) {
+			System.out.println("❌ Error: One or both accounts do not exist.");
+			return;
+		}
+
+		if (amount <= 0) {
+			System.out.println("❌ Error: Transfer amount must be positive.");
+			return;
+		}
+
+		System.out.println("⏳ Processing transfer of \" + amount + \"€...");
+
+		boolean withdrawSuccess = sender.withdraw(amount);
+
+		if (withdrawSuccess) {
+			receiver.deposit(amount);
+
+			updateBalanceInDB(sender);
+			updateBalanceInDB(receiver);
+
+			System.out.println("✅ Transfer Successful! \" + fromName + \" ➡️ \" + toName");
+
+		} else {
+			System.out.println("⚠️ Transfer Failed. Check sender's balance or account restrictions.");
+		}
+
+	}
+
 	// Method to delete an account
 
 	public boolean closeAccount(String nameToClose)
