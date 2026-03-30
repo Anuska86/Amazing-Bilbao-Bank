@@ -30,8 +30,8 @@ public class HelloWorld {
 			System.out.println("3. Deposit Money");
 			System.out.println("4. Withdraw Money");
 			System.out.println("5. 0pen account");
-			System.out.println("6. Close account");
-			System.out.println("7. Exit");
+			System.out.println("7. Run Annual Interest (Year-End)");
+			System.out.println("0. Exit");
 
 			int choice = Read.readInt("Choose an option: ");
 
@@ -154,6 +154,12 @@ public class HelloWorld {
 				break;
 
 			case 7:
+
+				System.out.println("⏳ Calculating interest for all accounts...");
+				myBank.applyAnnualInterest();
+				break;
+
+			case 0:
 
 				System.out.println("Thank you for using Amazing Bilbao Bank. Have a nice day! Agur!");
 				running = false;

@@ -45,6 +45,12 @@ public class SavingsAccount extends Account implements InterestBearing {
 		System.out.println("------------------------------");
 	}
 
+	@Override
+
+	public double getInterestRate() {
+		return this.interestRate;
+	}
+
 	// Abstract method
 
 	@Override

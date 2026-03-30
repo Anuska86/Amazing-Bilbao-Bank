@@ -162,7 +162,7 @@ public class Bank {
 
 	public void updateBalanceInDB(String name, double newBalance) {
 
-		String sql = "UPDATE accounts SET balance = ? WHERE LOWER owner_name =?";
+		String sql = "UPDATE accounts SET balance = ? WHERE owner_name = ?";
 
 		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
