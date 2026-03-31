@@ -50,7 +50,7 @@ public class Read {
 			if (!input.isEmpty()) {
 				return input;
 			}
-			System.out.println("❌ Error: You must enter a name.");
+			System.out.println("❌ Error: Input cannot be empty.");
 		}
 
 	}

@@ -112,13 +112,12 @@ public class HelloWorld {
 
 				String nameAdd = Read.readString("Enter new account name: ");
 				double initialBalance = Read.readDouble("Enter initial deposit: ");
+				String newPassword = Read.readString("Create a secure password: ");
 
 				System.out.println("Choose account type:");
-				System.out.println("1. Checking");
-				System.out.println("2. Savings");
-				System.out.println("3. Fixed-Term Deposit");
+				System.out.println("1. Checking | 2. Savings | 3. Fixed-Term");
 
-				int typeChoice = Read.readInt("Select (1-2-3:)");
+				int typeChoice = Read.readInt("Select: ");
 
 				String typeStr;
 
@@ -130,7 +129,7 @@ public class HelloWorld {
 					typeStr = "Fixed-Term Deposit";
 				}
 
-				myBank.addAccountWithSpecificType(nameAdd, initialBalance, typeStr);
+				myBank.addAccountWithSpecificType(nameAdd, initialBalance, typeStr, newPassword);
 
 				System.out.println("🎊 Welcome to the bank, " + nameAdd + "!");
 

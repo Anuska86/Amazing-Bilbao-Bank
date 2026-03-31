@@ -64,7 +64,7 @@ public class Bank {
 
 	// Method to open accounts with type
 
-	public void addAccountWithSpecificType(String name, double balance, String type) {
+	public void addAccountWithSpecificType(String name, double balance, String type, String password) {
 		String sql = "INSERT INTO accounts (owner_name, balance, account_type, password) VALUES (?, ?, ?, ?)";
 
 		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -72,7 +72,7 @@ public class Bank {
 			pstmt.setString(1, name);
 			pstmt.setDouble(2, balance);
 			pstmt.setString(3, type);
-			pstmt.setString(4, "1234");
+			pstmt.setString(4, password);
 
 			pstmt.executeUpdate();
 			System.out.println("✅ " + type + " account created for " + name);
@@ -209,15 +209,15 @@ public class Bank {
 	public void transferMoney(String fromName, String toName, double amount, String password) {
 		Account sender = findAccount(fromName);
 		Account receiver = findAccount(toName);
-		
-		if(sender == null || receiver == null) {
+
+		if (sender == null || receiver == null) {
 			System.out.println("❌ Error: One or both accounts not found.");
-			return; 
+			return;
 		}
-		
-		if(!sender.verifyPassword(password)) {
+
+		if (!sender.verifyPassword(password)) {
 			System.out.println("❌ Error: Incorrect password for sender " + fromName);
-	        return;
+			return;
 		}
 
 		if (sender.withdraw(amount)) {
