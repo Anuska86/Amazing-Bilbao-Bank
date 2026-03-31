@@ -129,7 +129,26 @@ public class HelloWorld {
 
 				String nameAdd = Read.readString("Enter new account name: ");
 				double initialBalance = Read.readDouble("Enter initial deposit: ");
-				String newPassword = Read.readString("Create a secure password: ");
+
+				String newPassword = "";
+				boolean passwordValid = false;
+
+				while (!passwordValid) {
+					newPassword = Read.readString("Create a secure password: ");
+
+					if (newPassword == null || newPassword.trim().isEmpty()) {
+						System.out.println("❌ Error: Password cannot be empty or just spaces!");
+						continue;
+					}
+
+					String confirmPassword = Read.readString("Repeat password: ");
+
+					if (newPassword.equals(confirmPassword)) {
+						passwordValid = true;
+					} else {
+						System.out.println("❌ Error: Passwords do not match. Please try again.");
+					}
+				}
 
 				System.out.println("Choose account type:");
 				System.out.println("1. Checking | 2. Savings | 3. Fixed-Term");
