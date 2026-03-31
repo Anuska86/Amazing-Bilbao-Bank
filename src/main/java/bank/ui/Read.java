@@ -45,7 +45,7 @@ public class Read {
 	public static String readString(String message) {
 
 		while (true) {
-			System.out.println(message);
+			System.out.print(message);
 			String input = scanner.nextLine().trim();
 			if (!input.isEmpty()) {
 				return input;
