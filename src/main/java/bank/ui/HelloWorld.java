@@ -197,7 +197,7 @@ public class HelloWorld {
 
 			case 10:
 
-				String nameChange = Read.readString("Enter account name");
+				String nameChange = Read.readString("Enter account name: ");
 				Account accChange = myBank.findAccount(nameChange);
 
 				if (accChange != null) {
