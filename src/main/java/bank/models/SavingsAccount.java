@@ -1,4 +1,6 @@
-package basic;
+package bank.models;
+
+import bank.logic.InterestBearing;
 
 public class SavingsAccount extends Account implements InterestBearing {
 

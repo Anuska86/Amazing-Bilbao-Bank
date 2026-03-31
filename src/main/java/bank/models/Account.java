@@ -1,4 +1,4 @@
-package basic;
+package bank.models;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

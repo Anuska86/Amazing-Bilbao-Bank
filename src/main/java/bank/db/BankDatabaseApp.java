@@ -1,4 +1,7 @@
-package basic;
+package bank.db;
+
+import bank.logic.Bank;
+import bank.models.Account;
 
 public class BankDatabaseApp {
 

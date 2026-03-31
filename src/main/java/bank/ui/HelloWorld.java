@@ -1,6 +1,9 @@
-package basic;
+package bank.ui;
 
 import java.util.List;
+
+import bank.logic.Bank;
+import bank.models.Account;
 
 public class HelloWorld {
 

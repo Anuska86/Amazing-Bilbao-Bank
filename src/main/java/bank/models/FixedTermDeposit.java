@@ -1,4 +1,4 @@
-package basic;
+package bank.models;
 
 public class FixedTermDeposit extends Account {
 	public FixedTermDeposit(String owner, double balance, String password) {
