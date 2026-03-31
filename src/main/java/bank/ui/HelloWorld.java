@@ -33,9 +33,11 @@ public class HelloWorld {
 			System.out.println("3. Deposit Money");
 			System.out.println("4. Withdraw Money");
 			System.out.println("5. 0pen account");
+			System.out.println("6. Close account");
 			System.out.println("7. Run Annual Interest (Year-End)");
 			System.out.println("8. Transfer Money");
 			System.out.println("9. View Account Statement");
+			System.out.println("10. Change Password");
 			System.out.println("0. Exit");
 
 			int choice = Read.readInt("Choose an option: ");
@@ -191,6 +193,35 @@ public class HelloWorld {
 
 				String statementName = Read.readString("Enter account owner name for statement:");
 				myBank.printStatement(statementName);
+				break;
+
+			case 10:
+
+				String nameChange = Read.readString("Enter account name");
+				Account accChange = myBank.findAccount(nameChange);
+
+				if (accChange != null) {
+					String currentPass = Read.readString("Enter current password: ");
+
+					if (accChange.verifyPassword(currentPass)) {
+						String newPass = Read.readString("Enter new password: ");
+						String confirmPass = Read.readString("Confirm new password: ");
+
+						if (newPass.equals(confirmPass)) {
+							accChange.setPassword(newPass);
+							myBank.updatePasswordInDB(accChange, newPass);
+							System.out.println("Password changed!");
+						} else {
+							System.out.println("❌ Passwords do not match.");
+						}
+					} else {
+						System.out.println("❌ Incorrect password.");
+					}
+
+				} else {
+					System.out.println("❌ Account not found.");
+				}
+
 				break;
 
 			case 0:
