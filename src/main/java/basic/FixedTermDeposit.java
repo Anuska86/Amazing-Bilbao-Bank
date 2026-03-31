@@ -1,8 +1,8 @@
 package basic;
 
 public class FixedTermDeposit extends Account {
-	public FixedTermDeposit(String owner, double balance) {
-		super(owner, balance);
+	public FixedTermDeposit(String owner, double balance, String password) {
+		super(owner, balance, password);
 	}
 
 	@Override

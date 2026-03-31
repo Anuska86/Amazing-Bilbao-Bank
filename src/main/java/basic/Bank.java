@@ -123,15 +123,16 @@ public class Bank {
 				String name = rs.getString("owner_name");
 				double balance = rs.getDouble("balance");
 				String typeFromDB = rs.getString("account_type");
+				String passFromDB = rs.getString("password");
 
 				if (typeFromDB.equalsIgnoreCase("Fixed-Term Deposit")) {
-					return new FixedTermDeposit(name, balance);
+					return new FixedTermDeposit(name, balance, passFromDB);
 				} else if (typeFromDB.equalsIgnoreCase("Savings")) {
-					return new SavingsAccount(name, balance);
+					return new SavingsAccount(name, balance, passFromDB);
 				} else if (typeFromDB.equalsIgnoreCase("Checking")) {
-					return new CheckingAccount(name, balance);
+					return new CheckingAccount(name, balance, passFromDB);
 				} else {
-					return new CheckingAccount(name, balance);
+					return new CheckingAccount(name, balance, passFromDB);
 				}
 
 			}

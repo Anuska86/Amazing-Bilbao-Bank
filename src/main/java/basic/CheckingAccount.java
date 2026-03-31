@@ -2,8 +2,8 @@ package basic;
 
 public class CheckingAccount extends Account {
 
-	public CheckingAccount(String owner, double balance) {
-		super(owner, balance);
+	public CheckingAccount(String owner, double balance, String password) {
+		super(owner, balance, password);
 	}
 
 	@Override

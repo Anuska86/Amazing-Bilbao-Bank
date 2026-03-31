@@ -10,13 +10,15 @@ public abstract class Account {
 
 	private String owner;
 	private double balance;
+	private String password;
 	protected ArrayList<String> transactionHistory;
 
 	// CONSTRUCTOR
 
-	public Account(String owner, double balance) {
+	public Account(String owner, double balance, String password) {
 		this.owner = owner;
 		this.balance = balance;
+		this.password = password;
 		this.transactionHistory = new ArrayList<>();
 		transactionHistory.add("Account created with " + balance + "€");
 	}
@@ -81,6 +83,13 @@ public abstract class Account {
 
 	public double getInterestRate() {
 		return 0.0;
+	}
+
+	public boolean verifyPassword(String input) {
+		if (input == null)
+			return false;
+
+		return this.password.equals(input);
 	}
 
 	// SETTERS & GETTERS
