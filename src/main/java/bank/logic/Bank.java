@@ -206,11 +206,21 @@ public class Bank {
 
 	// Method to transfer money
 
-	public void transferMoney(String fromName, String toName, double amount) {
+	public void transferMoney(String fromName, String toName, double amount, String password) {
 		Account sender = findAccount(fromName);
 		Account receiver = findAccount(toName);
 
-		if (sender != null && receiver != null && sender.withdraw(amount)) {
+		if (sender == null || receiver == null) {
+			System.out.println("❌ Error: One or both accounts not found.");
+			return;
+		}
+
+		if (!sender.verifyPassword(password)) {
+			System.out.println("❌ Error: Incorrect password for sender " + fromName);
+			return;
+		}
+
+		if (sender.withdraw(amount)) {
 
 			receiver.deposit(amount);
 
