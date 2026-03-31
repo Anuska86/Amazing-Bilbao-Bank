@@ -4,6 +4,7 @@ import java.util.List;
 
 import bank.logic.Bank;
 import bank.models.Account;
+import bank.models.AccountType;
 
 public class HelloWorld {
 
@@ -135,17 +136,17 @@ public class HelloWorld {
 
 				int typeChoice = Read.readInt("Select: ");
 
-				String typeStr;
+				AccountType type;
 
 				if (typeChoice == 1) {
-					typeStr = "Checking";
+					type = AccountType.CHECKING;
 				} else if (typeChoice == 2) {
-					typeStr = "Savings";
+					type = AccountType.SAVINGS;
 				} else {
-					typeStr = "Fixed-Term Deposit";
+					type = AccountType.FIXED_TERM;
 				}
 
-				myBank.addAccountWithSpecificType(nameAdd, initialBalance, typeStr, newPassword);
+				myBank.addAccountWithSpecificType(nameAdd, initialBalance, type, newPassword);
 
 				System.out.println("🎊 Welcome to the bank, " + nameAdd + "!");
 

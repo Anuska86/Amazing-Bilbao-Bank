@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import bank.models.Account;
+import bank.models.AccountType;
 import bank.models.CheckingAccount;
 import bank.models.FixedTermDeposit;
 import bank.models.SavingsAccount;
@@ -64,14 +65,14 @@ public class Bank {
 
 	// Method to open accounts with type
 
-	public void addAccountWithSpecificType(String name, double balance, String type, String password) {
+	public void addAccountWithSpecificType(String name, double balance, AccountType type, String password) {
 		String sql = "INSERT INTO accounts (owner_name, balance, account_type, password) VALUES (?, ?, ?, ?)";
 
 		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			pstmt.setString(1, name);
 			pstmt.setDouble(2, balance);
-			pstmt.setString(3, type);
+			pstmt.setString(3, type.name());
 			pstmt.setString(4, password);
 
 			pstmt.executeUpdate();
