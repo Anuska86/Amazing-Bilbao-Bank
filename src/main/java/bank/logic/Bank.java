@@ -376,6 +376,24 @@ public class Bank {
 
 	}
 
+	// Method to update the password in DB
+
+	public void updatePasswordInDB(Account acc, String newPassword) {
+		String sql = "UPDATE accounts SET password = ? WHERE owner_name = ?";
+
+		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setString(1, newPassword);
+			pstmt.setString(2, acc.getOwner());
+			pstmt.executeUpdate();
+			System.out.println("💾 Database: Password permanently updated for " + acc.getOwner());
+
+		} catch (SQLException e) {
+			System.out.println("❌ Database Error: Could not update password.");
+			e.printStackTrace();
+		}
+	}
+
 	// SEGMENTING THE COSTUMERS
 
 	// Method to get the VIPS clients

@@ -31,6 +31,13 @@ public abstract class Account {
 
 	// Other Methods
 
+	// Method String (account data)
+	public String toString() {
+		return "Account Owner: " + owner + " | Balance " + balance + "€";
+	}
+
+	// Method to do a deposit
+
 	public boolean deposit(double amount) {
 		if (amount <= 0) {
 			System.out.println("❌ Error: Deposit amount must be positive.");
@@ -40,6 +47,8 @@ public abstract class Account {
 		this.transactionHistory.add(String.format("Deposited: %.2f€", amount));
 		return true;
 	}
+
+	// Method to do a withdraw
 
 	public boolean withdraw(double amount) {
 
@@ -59,10 +68,7 @@ public abstract class Account {
 		}
 	}
 
-	public String toString() {
-		return "Account Owner: " + owner + " | Balance " + balance + "€";
-	}
-
+	// Method to do a transfer
 	public void transfer(double amount, Account destinationAccount) {
 		if (amount <= balance) {
 			this.withdraw(amount);
@@ -73,6 +79,8 @@ public abstract class Account {
 		}
 	}
 
+	// Method to print the account history
+
 	public void printHistory() {
 		System.out.println("--- Transaction History for " + owner + " ---");
 		for (String record : transactionHistory) {
@@ -81,15 +89,28 @@ public abstract class Account {
 		System.out.printf("Current Balance: %.2f€%n", balance);
 	}
 
+	// Method to default interest rate
+
 	public double getInterestRate() {
 		return 0.0;
 	}
+
+	// Method to verify the password
 
 	public boolean verifyPassword(String input) {
 		if (input == null)
 			return false;
 
 		return this.password.equals(input);
+	}
+
+	// Method to set the password
+
+	public void setPassword(String newPassword) {
+		if (newPassword != null && !newPassword.trim().isEmpty()) {
+			this.password = newPassword;
+			System.out.println("✅ Password updated in memory.");
+		}
 	}
 
 	// SETTERS & GETTERS

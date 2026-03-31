@@ -101,7 +101,7 @@ public class HelloWorld {
 				if (accWithdraw.withdraw(amountWithdraw)) {
 					myBank.updateBalanceInDB(accWithdraw);
 					myBank.logTransaction(nameWithdraw, "Withdrawal", -amountWithdraw);
-					System.out.println("✅ Please take your cash.New balance: " + accWithdraw.getBalance() + "€");
+					System.out.println("✅ Please take your cash. New balance: " + accWithdraw.getBalance() + "€");
 				} else {
 					System.out.println("⚠️ Transaction failed. Check your balance and try again.");
 				}
