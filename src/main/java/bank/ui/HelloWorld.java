@@ -181,7 +181,10 @@ public class HelloWorld {
 				String to = Read.readString("Enter receiver name: ");
 
 				double transferAmount = Read.readDouble("Enter amount to transfer: ");
-				myBank.transferMoney(from, to, transferAmount);
+
+				String senderPass = Read.readString("Enter password for " + from + ": ");
+
+				myBank.transferMoney(from, to, transferAmount, senderPass);
 
 				break;
 

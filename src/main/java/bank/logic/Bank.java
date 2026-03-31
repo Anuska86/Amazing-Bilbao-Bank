@@ -209,15 +209,15 @@ public class Bank {
 	public void transferMoney(String fromName, String toName, double amount, String password) {
 		Account sender = findAccount(fromName);
 		Account receiver = findAccount(toName);
-
-		if (sender == null || receiver == null) {
+		
+		if(sender == null || receiver == null) {
 			System.out.println("❌ Error: One or both accounts not found.");
-			return;
+			return; 
 		}
-
-		if (!sender.verifyPassword(password)) {
+		
+		if(!sender.verifyPassword(password)) {
 			System.out.println("❌ Error: Incorrect password for sender " + fromName);
-			return;
+	        return;
 		}
 
 		if (sender.withdraw(amount)) {
