@@ -7,6 +7,20 @@ import bank.models.Account;
 
 public class HelloWorld {
 
+	// MENU CONSTANTS
+
+	public static final int SHOW_ALL = 1;
+	public static final int SHOW_VIP = 2;
+	public static final int DEPOSIT = 3;
+	public static final int WITHDRAW = 4;
+	public static final int OPEN_ACCOUNT = 5;
+	public static final int CLOSE_ACCOUNT = 6;
+	public static final int ANNUAL_INTEREST = 7;
+	public static final int TRANSFER = 8;
+	public static final int VIEW_STATEMENT = 9;
+	public static final int CHANGE_PASSWORD = 10;
+	public static final int EXIT = 0;
+
 	public static void main(String[] args) {
 
 		System.out.println("DEBUG: Password found? " + (System.getenv("DB_PASSWORD") != null));
@@ -43,12 +57,12 @@ public class HelloWorld {
 			int choice = Read.readInt("Choose an option: ");
 
 			switch (choice) {
-			case 1:
+			case SHOW_ALL:
 
 				myBank.showStatus();
 				break;
 
-			case 2:
+			case SHOW_VIP:
 
 				List<String> vips = myBank.getVIPCustomers();
 				System.out.println("--- ⭐ VIP CUSTOMERS (>100000€) ---");
@@ -61,7 +75,7 @@ public class HelloWorld {
 
 				break;
 
-			case 3:
+			case DEPOSIT:
 
 				String nameToDeposit = Read.readString("Enter account owner name: ");
 				Account accDep = myBank.findAccount(nameToDeposit);
@@ -81,7 +95,7 @@ public class HelloWorld {
 
 				break;
 
-			case 4:
+			case WITHDRAW:
 
 				String nameWithdraw = Read.readString("Enter account owner name: ");
 				Account accWithdraw = myBank.findAccount(nameWithdraw);
@@ -110,7 +124,7 @@ public class HelloWorld {
 
 				break;
 
-			case 5:
+			case OPEN_ACCOUNT:
 
 				String nameAdd = Read.readString("Enter new account name: ");
 				double initialBalance = Read.readDouble("Enter initial deposit: ");
@@ -137,7 +151,7 @@ public class HelloWorld {
 
 				break;
 
-			case 6:
+			case CLOSE_ACCOUNT:
 
 				String nameClose = Read.readString("Enter account owner name: ");
 				Account accClose = myBank.findAccount(nameClose);
@@ -169,13 +183,13 @@ public class HelloWorld {
 
 				break;
 
-			case 7:
+			case ANNUAL_INTEREST:
 
 				System.out.println("⏳ Calculating interest for all accounts...");
 				myBank.applyAnnualInterest();
 				break;
 
-			case 8:
+			case TRANSFER:
 
 				String from = Read.readString("Enter sender name: ");
 
@@ -189,13 +203,13 @@ public class HelloWorld {
 
 				break;
 
-			case 9:
+			case VIEW_STATEMENT:
 
 				String statementName = Read.readString("Enter account owner name for statement:");
 				myBank.printStatement(statementName);
 				break;
 
-			case 10:
+			case CHANGE_PASSWORD:
 
 				String nameChange = Read.readString("Enter account name: ");
 				Account accChange = myBank.findAccount(nameChange);
@@ -224,7 +238,7 @@ public class HelloWorld {
 
 				break;
 
-			case 0:
+			case EXIT:
 
 				System.out.println("Thank you for using Amazing Bilbao Bank. Have a nice day! Agur!");
 				running = false;
