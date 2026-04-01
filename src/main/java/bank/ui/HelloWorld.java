@@ -20,6 +20,7 @@ public class HelloWorld {
 	public static final int TRANSFER = 8;
 	public static final int VIEW_STATEMENT = 9;
 	public static final int CHANGE_PASSWORD = 10;
+
 	public static final int EXIT = 0;
 
 	public static void main(String[] args) {
@@ -241,31 +242,39 @@ public class HelloWorld {
 				String nameChange = Read.readString("Enter account name: ");
 				Account accChange = myBank.findAccount(nameChange);
 
-				if (accChange != null) {
-					String currentPass = Read.readString("Enter current password: ");
+				if (accChange == null) {
+					System.out.println("❌ Account not found.");
+					break;
+				}
 
-					if (accChange.verifyPassword(currentPass)) {
-						String newPass = Read.readString("Enter new password: ");
+				String currentPass = Read.readString("Enter current password: ");
 
-						if (!isPasswordStrong(newPass)) {
+				if (accChange.verifyPassword(currentPass)) {
+					boolean newPassValid = false;
+					String newPass = "";
+
+					while (!newPassValid) {
+						newPass = Read.readString("Enter new password (or type 'cancel'): ");
+
+						if (newPass.equalsIgnoreCase("cancel"))
 							break;
+
+						if (isPasswordStrong(newPass)) {
+							String confirmPass = Read.readString("Confirm new password: ");
+							if (newPass.equals(confirmPass)) {
+								newPassValid = true;
+							} else {
+								System.out.println("❌ Error: Passwords do not match.");
+							}
 						}
 
-						String confirmPass = Read.readString("Confirm new password: ");
-
-						if (newPass.equals(confirmPass)) {
-							accChange.setPassword(newPass);
-							myBank.updatePasswordInDB(accChange, newPass);
-							System.out.println("Password changed!");
-						} else {
-							System.out.println("❌ Passwords do not match.");
-						}
-					} else {
-						System.out.println("❌ Incorrect password.");
 					}
 
-				} else {
-					System.out.println("❌ Account not found.");
+					if (newPassValid) {
+						accChange.setPassword(newPass);
+						myBank.updatePasswordInDB(accChange, newPass);
+						System.out.println("✅ Password successfully updated!");
+					}
 				}
 
 				break;
@@ -277,7 +286,8 @@ public class HelloWorld {
 				break;
 
 			default:
-				System.out.println("Invalid option. Try again.");
+				System.out.println("❌ Error: '" + choice + "' is not a valid option.");
+				System.out.println("Please enter a number between 0 and 10.");
 			}
 		}
 
