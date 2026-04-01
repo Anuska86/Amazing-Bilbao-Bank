@@ -90,7 +90,7 @@ public class HelloWorld {
 
 				if (accDep.deposit(depAmount)) {
 					myBank.updateBalanceInDB(accDep);
-					myBank.logTransaction(nameToDeposit, "Deposit", depAmount);
+					myBank.logTransaction(accDep.getId(), "Deposit", depAmount);
 					System.out.println(" ✅ Deposit successful!");
 				}
 
@@ -117,7 +117,7 @@ public class HelloWorld {
 
 				if (accWithdraw.withdraw(amountWithdraw)) {
 					myBank.updateBalanceInDB(accWithdraw);
-					myBank.logTransaction(nameWithdraw, "Withdrawal", -amountWithdraw);
+					myBank.logTransaction(accWithdraw.getId(), "Withdrawal", -amountWithdraw);
 					System.out.println("✅ Please take your cash. New balance: " + accWithdraw.getBalance() + "€");
 				} else {
 					System.out.println("⚠️ Transaction failed. Check your balance and try again.");
@@ -226,7 +226,14 @@ public class HelloWorld {
 			case VIEW_STATEMENT:
 
 				String statementName = Read.readString("Enter account owner name for statement:");
-				myBank.printStatement(statementName);
+				Account accStat = myBank.findAccount(statementName);
+
+				if (accStat != null) {
+					myBank.printStatement(accStat.getId());
+				} else {
+					System.out.println("❌ Account not found.");
+				}
+
 				break;
 
 			case CHANGE_PASSWORD:

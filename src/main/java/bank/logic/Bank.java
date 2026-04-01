@@ -275,8 +275,8 @@ public class Bank {
 			updateBalanceInDB(sender);
 			updateBalanceInDB(receiver);
 
-			logTransaction(fromName, "Transfer to " + toName, -amount);
-			logTransaction(toName, "Transfer from " + fromName, amount);
+			logTransaction(sender.getId(), "Transfer to " + receiver.getOwner(), -amount);
+			logTransaction(receiver.getId(), "Transfer from " + sender.getOwner(), amount);
 
 			System.out.println("✅ Transfer completed and logged to history!");
 		}
@@ -285,19 +285,19 @@ public class Bank {
 
 	// Method to log the transactions
 
-	public void logTransaction(String name, String type, double amount) {
-		String sql = "INSERT INTO transactions (owner_name, type, amount) VALUES (?, ?, ?)";
+	public void logTransaction(int accountId, String type, double amount) {
+		String sql = "INSERT INTO transactions (account_id, type, amount) VALUES (?, ?, ?)";
 
 		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-			pstmt.setString(1, name);
+			pstmt.setInt(1, accountId);
 			pstmt.setString(2, type);
 			pstmt.setDouble(3, amount);
 
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out.println("⚠️ Warning: Could not save transaction history for " + name);
+			System.out.println("⚠️ Warning: Could not save transaction history for ID" + accountId);
 			e.printStackTrace();
 		}
 	}
