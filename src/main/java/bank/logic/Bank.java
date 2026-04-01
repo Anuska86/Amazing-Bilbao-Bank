@@ -48,7 +48,7 @@ public class Bank {
 
 	// Method to open accounts
 
-	public void addAccounts(Account acc) {
+	public void addAccount(Account acc) {
 		String sql = "INSERT INTO accounts (owner_name, balance, account_type) VALUES (?, ?, ?)";
 
 		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -59,7 +59,17 @@ public class Bank {
 			pstmt.setString(3, type);
 
 			pstmt.executeUpdate();
-			System.out.println("✅ Account saved to Database!");
+
+			try (ResultSet rs = pstmt.getGeneratedKeys()) {
+				if (rs.next()) {
+					int id = rs.getInt(1);
+
+					accountsById.put(id, acc);
+					accountsByName.put(acc.getOwner().toLowerCase(), acc);
+				}
+			}
+
+			System.out.println("✅ Account saved to Database and Memory!");
 		} catch (SQLException e) {
 			System.out.println("❌ Error saving to database");
 			e.printStackTrace();
