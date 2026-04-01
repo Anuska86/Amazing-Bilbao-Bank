@@ -1,8 +1,8 @@
 package bank.models;
 
 public class FixedTermDeposit extends Account {
-	public FixedTermDeposit(String owner, double balance, String password) {
-		super(owner, balance, password);
+	public FixedTermDeposit(int id, String owner, double balance, String password) {
+		super(id, owner, balance, password);
 	}
 
 	@Override

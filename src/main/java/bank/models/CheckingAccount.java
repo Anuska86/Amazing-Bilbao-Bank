@@ -2,8 +2,8 @@ package bank.models;
 
 public class CheckingAccount extends Account {
 
-	public CheckingAccount(String owner, double balance, String password) {
-		super(owner, balance, password);
+	public CheckingAccount(int id, String owner, double balance, String password) {
+		super(id, owner, balance, password);
 	}
 
 	@Override

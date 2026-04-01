@@ -8,6 +8,7 @@ public abstract class Account {
 
 	// Variables (Attributes)
 
+	private int id;
 	private String owner;
 	private double balance;
 	private String password;
@@ -15,7 +16,8 @@ public abstract class Account {
 
 	// CONSTRUCTOR
 
-	public Account(String owner, double balance, String password) {
+	public Account(int id, String owner, double balance, String password) {
+		this.id = id;
 		this.owner = owner;
 		this.balance = balance;
 		this.password = password;
@@ -134,9 +136,15 @@ public abstract class Account {
 		return balance;
 	}
 
-	// Balance with currency
+	// GET Balance with currency
 	public String getBalanceWithCurrency() {
 		return balance + "€";
+	}
+
+	// GET id
+
+	public int getId() {
+		return id;
 	}
 
 	// HELPERS

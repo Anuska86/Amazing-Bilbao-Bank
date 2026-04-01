@@ -22,13 +22,17 @@ public class Bank {
 	private String bankName;
 
 	// Key is String (Name), Value is Account (The Object)
-	private Map<String, Account> accountsMap = new TreeMap<>();
+	private Map<String, Account> accountsByName = new TreeMap<>();
+
+	// Key is Integer (ID), Value is Account (The Object)
+	private Map<Integer, Account> accountsById = new TreeMap<>();
 
 	// Constructor
 
 	public Bank(String name) {
 		this.bankName = name;
-		this.accountsMap = new HashMap<>();
+		this.accountsByName = new HashMap<>();
+		this.accountsById = new HashMap<>();
 	}
 
 	// METHODS
@@ -68,7 +72,11 @@ public class Bank {
 	public void addAccountWithSpecificType(String name, double balance, AccountType type, String password) {
 		String sql = "INSERT INTO accounts (owner_name, balance, account_type, password) VALUES (?, ?, ?, ?)";
 
-		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		int generatedId = 0;
+		Account newAcc = null;
+
+		try (Connection conn = connect();
+				PreparedStatement pstmt = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
 
 			pstmt.setString(1, name);
 			pstmt.setDouble(2, balance);
@@ -77,6 +85,25 @@ public class Bank {
 
 			pstmt.executeUpdate();
 			System.out.println("✅ " + type + " account created for " + name);
+
+			try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+				if (generatedKeys.next()) {
+					generatedId = generatedKeys.getInt(1);
+				}
+			}
+
+			if (type == AccountType.SAVINGS) {
+				newAcc = new SavingsAccount(generatedId, name, balance, password);
+			} else if (type == AccountType.CHECKING) {
+				newAcc = new CheckingAccount(generatedId, name, balance, password);
+			} else if (type == AccountType.FIXED_TERM) {
+				newAcc = new FixedTermDeposit(generatedId, name, balance, password);
+			}
+
+			if (newAcc != null) {
+				accountsByName.put(name.toLowerCase(), newAcc);
+				accountsById.put(generatedId, newAcc);
+			}
 
 		} catch (SQLException e) {
 			System.out.println("❌ Error: Could not create account.");
@@ -116,7 +143,17 @@ public class Bank {
 
 	}
 
-	// Method to search an account
+	// Methods to search an account
+
+	// BY ID
+
+	public Account findAccountById(int id) {
+
+		return accountsById.get(id);
+
+	}
+
+	// BY NAME
 
 	public Account findAccount(String nameToFind) {
 
@@ -127,19 +164,18 @@ public class Bank {
 			ResultSet rs = pstmt.executeQuery();
 
 			if (rs.next()) {
+				int id = rs.getInt("id");
 				String name = rs.getString("owner_name");
 				double balance = rs.getDouble("balance");
 				String typeFromDB = rs.getString("account_type");
 				String passFromDB = rs.getString("password");
 
-				if (typeFromDB.equalsIgnoreCase("Fixed-Term Deposit")) {
-					return new FixedTermDeposit(name, balance, passFromDB);
-				} else if (typeFromDB.equalsIgnoreCase("Savings")) {
-					return new SavingsAccount(name, balance, passFromDB);
-				} else if (typeFromDB.equalsIgnoreCase("Checking")) {
-					return new CheckingAccount(name, balance, passFromDB);
+				if (typeFromDB.equalsIgnoreCase("Fixed-Term Deposit") || typeFromDB.equalsIgnoreCase("FIXED_TERM")) {
+					return new FixedTermDeposit(id, name, balance, passFromDB);
+				} else if (typeFromDB.equalsIgnoreCase("Savings") || typeFromDB.equalsIgnoreCase("SAVINGS")) {
+					return new SavingsAccount(id, name, balance, passFromDB);
 				} else {
-					return new CheckingAccount(name, balance, passFromDB);
+					return new CheckingAccount(id, name, balance, passFromDB);
 				}
 
 			}
@@ -318,7 +354,7 @@ public class Bank {
 	// Method to compare the money quantity
 
 	public void sortAccountsByBalance() {
-		ArrayList<Account> sortedList = new ArrayList<>(accountsMap.values());
+		ArrayList<Account> sortedList = new ArrayList<>(accountsByName.values());
 
 		sortedList.sort((a1, a2) -> Double.compare(a2.getBalance(), a1.getBalance()));
 

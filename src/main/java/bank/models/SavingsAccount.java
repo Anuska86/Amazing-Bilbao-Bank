@@ -8,18 +8,18 @@ public class SavingsAccount extends Account implements InterestBearing {
 
 	// CONSTRUCTOR
 
-	public SavingsAccount(String owner, double balance, double interestRate, String password) {
+	public SavingsAccount(int id, String owner, double balance, double interestRate, String password) {
 
 		// super calls the constructor of Account (parent)
-		super(owner, balance, password);
+		super(id, owner, balance, password);
 		// TODO Auto-generated constructor stub
 		this.interestRate = interestRate;
 	}
 
 	// 2nd CONSTRUCTOR (default interest rate)
 
-	public SavingsAccount(String owner, double balance, String password) {
-		super(owner, balance, password);
+	public SavingsAccount(int id, String owner, double balance, String password) {
+		super(id, owner, balance, password);
 		this.interestRate = 2.0;
 	}
 
