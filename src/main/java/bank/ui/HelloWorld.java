@@ -134,7 +134,10 @@ public class HelloWorld {
 				String newPassword = "";
 				boolean passwordValid = false;
 
+				printPasswordRequirements();
+
 				while (!passwordValid) {
+
 					newPassword = Read.readString("Create a secure password: ");
 
 					if (!isPasswordStrong(newPassword)) {
