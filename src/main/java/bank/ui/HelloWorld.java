@@ -136,8 +136,8 @@ public class HelloWorld {
 				while (!passwordValid) {
 					newPassword = Read.readString("Create a secure password: ");
 
-					if (newPassword == null || newPassword.trim().isEmpty()) {
-						System.out.println("❌ Error: Password cannot be empty or just spaces!");
+					if (!isPasswordStrong(newPassword)) {
+
 						continue;
 					}
 
@@ -276,6 +276,26 @@ public class HelloWorld {
 			}
 		}
 
+	}
+
+	// HELPERS
+
+	private static boolean isPasswordStrong(String password) {
+		if (password.length() < 6) {
+			System.out.println("❌ Error: Password must be at least 6 characters long.");
+			return false;
+		}
+
+		if (!password.matches(".*\\d.*")) {
+			System.out.println("Error: Password must contain at least one number.");
+			return false;
+		}
+
+		if (!password.matches(".*[A-Z].*")) {
+			System.out.println("❌ Error: Password must contain at least one uppercase letter.");
+			return false;
+		}
+		return true;
 	}
 
 }
