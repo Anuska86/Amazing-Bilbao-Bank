@@ -246,6 +246,11 @@ public class HelloWorld {
 
 					if (accChange.verifyPassword(currentPass)) {
 						String newPass = Read.readString("Enter new password: ");
+
+						if (!isPasswordStrong(newPass)) {
+							break;
+						}
+
 						String confirmPass = Read.readString("Confirm new password: ");
 
 						if (newPass.equals(confirmPass)) {
@@ -293,6 +298,11 @@ public class HelloWorld {
 
 		if (!password.matches(".*[A-Z].*")) {
 			System.out.println("❌ Error: Password must contain at least one uppercase letter.");
+			return false;
+		}
+
+		if (!password.matches(".*[!@#$%^&*()].*")) {
+			System.out.println("❌ Error: Password must contain at least one special character (!@#$%^&*).");
 			return false;
 		}
 		return true;
