@@ -250,6 +250,9 @@ public class HelloWorld {
 				String currentPass = Read.readString("Enter current password: ");
 
 				if (accChange.verifyPassword(currentPass)) {
+
+					printPasswordRequirements();
+
 					boolean newPassValid = false;
 					String newPass = "";
 
@@ -316,6 +319,15 @@ public class HelloWorld {
 			return false;
 		}
 		return true;
+	}
+
+	private static void printPasswordRequirements() {
+		System.out.println("\n🔐 --- PASSWORD REQUIREMENTS ---");
+		System.out.println(" • Minimum 6 characters");
+		System.out.println(" • At least one number (0-9)");
+		System.out.println(" • At least one Uppercase letter (A-Z)");
+		System.out.println(" • At least one Special character (!@#$%^&*)");
+		System.out.println("----------------------------------\n");
 	}
 
 }
