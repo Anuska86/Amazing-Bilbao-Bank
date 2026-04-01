@@ -62,9 +62,10 @@ public class Bank {
 
 			try (ResultSet rs = pstmt.getGeneratedKeys()) {
 				if (rs.next()) {
-					int id = rs.getInt(1);
+					int newId = rs.getInt(1);
+					acc.setId(newId);
 
-					accountsById.put(id, acc);
+					accountsById.put(newId, acc);
 					accountsByName.put(acc.getOwner().toLowerCase(), acc);
 				}
 			}

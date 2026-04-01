@@ -136,15 +136,19 @@ public abstract class Account {
 		return balance;
 	}
 
-	// GET Balance with currency
-	public String getBalanceWithCurrency() {
-		return balance + "€";
-	}
+	// Id Group
 
-	// GET id
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public int getId() {
 		return id;
+	}
+
+	// GET Balance with currency
+	public String getBalanceWithCurrency() {
+		return balance + "€";
 	}
 
 	// HELPERS
