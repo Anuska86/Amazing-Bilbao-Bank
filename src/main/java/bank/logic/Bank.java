@@ -304,15 +304,15 @@ public class Bank {
 
 	// Method to print the account statement
 
-	public void printStatement(String name) {
-		System.out.println("\n--- 🧾 OFFICIAL STATEMENT FOR " + name.toUpperCase() + " ---");
+	public void printStatement(int accountId) {
+		System.out.println("\n--- 🧾 OFFICIAL STATEMENT FOR ACCOUNT ID" + accountId + " ---");
 		System.out.printf("%-20s | %-15s | %-10s\n", "DATE", "TYPE", "AMOUNT");
 		System.out.println("-------------------------------------------------------------");
 
-		String sql = "SELECT * FROM transactions WHERE LOWER(owner_name) = ? ORDER BY transaction_date DESC";
+		String sql = "SELECT * FROM transactions WHERE account_id = ? ORDER BY transaction_date DESC";
 
 		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, name.toLowerCase());
+			pstmt.setInt(1, accountId);
 			ResultSet rs = pstmt.executeQuery();
 
 			boolean found = false;
