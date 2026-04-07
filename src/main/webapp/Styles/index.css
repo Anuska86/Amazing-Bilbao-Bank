@@ -1,0 +1,50 @@
+@charset "UTF-8";
+
+/*BASE*/
+
+body {
+    background-color: #f4f7f6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/*TITLES*/
+
+h1 { color: #2c3e50; }
+
+/*CARD*/
+
+.card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    width: 350px;
+    text-align: center;
+}
+
+
+/*BALANCE*/
+
+.balance {
+    font-size: 2rem;
+    color: #27ae60;
+    font-weight: bold;
+}
+
+
+/*BUTTON*/
+
+.btn {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #3498db;
+    border: 1px solid #3498db;
+    padding: 8px 16px;
+    border-radius: 5px;
+}
