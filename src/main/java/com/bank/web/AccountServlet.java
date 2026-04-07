@@ -37,15 +37,20 @@ public class AccountServlet extends HttpServlet {
 
 		Account myAcc = new SavingsAccount(0, "Susazhina", 48000.0, 0, "K8454w$");
 
-		out.println("<html><body style='font-family: sans-serif; text-align: center;'>");
-		out.println("<h1 style='color: #2c3e50;'>🏦 Bank Account Dashboard</h1>");
-		out.println("<hr>");
-		out.println("<p><strong>Account Holder:</strong>" + myAcc.getOwner() + "</p>");
-		out.println("<p><strong>Current Balance:</strong> <span style='color: green;'>$" + myAcc.getBalance()
-				+ "</span> </p>");
-		out.println("<a href='index.html'>Back to Home</a>");
-		out.println("</body></html>");
+		out.println("<html>");
+		out.println("<head>");
+		String path = request.getContextPath();
+		out.println("<link rel='stylesheet' type='text/css' href='" + path + "/styles/index.css'>");
+		out.println("</head>");
 
+		out.println("<body>");
+		out.println("  <div class='card'>");
+		out.println("    <h1>🏦 Bank Dashboard</h1>");
+		out.println("    <p>Account Holder: <strong>" + myAcc.getOwner() + "</strong></p>");
+		out.println("    <p class='balance'>$" + String.format("%.2f", myAcc.getBalance()) + "</p>");
+		out.println("    <a href='index.html' class='btn'>Back to Home</a>");
+		out.println("  </div>");
+		out.println("</body></html>");
 	}
 
 	/**
