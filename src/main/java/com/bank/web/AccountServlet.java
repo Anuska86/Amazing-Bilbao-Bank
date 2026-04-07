@@ -1,6 +1,8 @@
 package com.bank.web;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import bank.models.Account;
 import bank.models.SavingsAccount;
@@ -37,6 +39,12 @@ public class AccountServlet extends HttpServlet {
 
 		Account myAcc = new SavingsAccount(0, "Susazhina", 48000.0, 0, "K8454w$");
 
+		// Balance format
+
+		Locale spain = Locale.of("es", "ES");
+		NumberFormat euroFormatter = NumberFormat.getCurrencyInstance(spain);
+		String formattedBalance = euroFormatter.format(myAcc.getBalance());
+
 		out.println("<html>");
 		out.println("<head>");
 		String path = request.getContextPath();
@@ -47,7 +55,7 @@ public class AccountServlet extends HttpServlet {
 		out.println("  <div class='card'>");
 		out.println("    <h1>🏦 Bank Dashboard</h1>");
 		out.println("    <p>Account Holder: <strong>" + myAcc.getOwner() + "</strong></p>");
-		out.println("    <p class='balance'>$" + String.format("%.2f", myAcc.getBalance()) + "</p>");
+		out.println("<p class='balance'>" + formattedBalance + "</p>");
 		out.println("    <a href='index.html' class='btn'>Back to Home</a>");
 		out.println("  </div>");
 		out.println("</body></html>");
