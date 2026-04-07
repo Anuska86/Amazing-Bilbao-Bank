@@ -2,13 +2,30 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Amazing Bilbao Bank</title>
+<title>Bank Login</title>
+    <link rel="stylesheet" type="text/css" href="styles/index.css">
 </head>
 <body>
-	<h1>🏦 Welcome to My Bank Web App!</h1>
-	<p>The server is running perfectly.</p>
+<div class="card">
+	<h1>🏦 Welcome to Amazing Bilbao Bank</h1>
+	<p>Please log in to your account</p>
+	
+	<form action="LoginServlet" method="POST">
+            <div style="margin-bottom: 15px;">
+                <input type="text" name="username" placeholder="Username" required 
+                       style="padding: 10px; width: 80%; border-radius: 5px; border: 1px solid #ccc;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <input type="password" name="password" placeholder="Password" required 
+                       style="padding: 10px; width: 80%; border-radius: 5px; border: 1px solid #ccc;">
+            </div>
+            <button type="submit" class="btn" style="background: #3498db; color: white; border: none; cursor: pointer; width: 80%;">
+                Login
+            </button>
+        </form>
 	
 	
-	<a href="account">Go to My Account Dashboard</a>
+	
+	</div>
 </body>
 </html>
