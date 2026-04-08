@@ -1,10 +1,17 @@
 package com.bank.web;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.NumberFormat;
 import java.util.Locale;
 
 import bank.models.Account;
+import bank.models.AccountType;
+import bank.models.CheckingAccount;
+import bank.models.FixedTermDeposit;
 import bank.models.SavingsAccount;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -33,13 +40,62 @@ public class AccountServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		String sessionUser = (String) request.getSession().getAttribute("user");
+
+		if (sessionUser == null) {
+			response.sendRedirect("index.html");
+			return;
+		}
+
+		double balanceFromDB = 0.0;
+		String dbPassword = System.getenv("DB_PASSWORD");
+		String typeFromDB = "";
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
+					dbPassword);
+
+			String sql = "SELECT balance, account_type FROM accounts WHERE owner_name = ?";
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, sessionUser);
+
+			ResultSet rs = st.executeQuery();
+
+			if (rs.next()) {
+				balanceFromDB = rs.getDouble("balance");
+				typeFromDB = rs.getString("account_type").toUpperCase().replace("-", "_");
+
+			}
+			conn.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		AccountType type = AccountType.valueOf(typeFromDB);
+
+		Account myAcc = null;
+
+		switch (type) {
+		case CHECKING:
+			myAcc = new CheckingAccount(0, sessionUser, balanceFromDB, "");
+			break;
+
+		case FIXED_TERM:
+			myAcc = new FixedTermDeposit(0, sessionUser, balanceFromDB, "");
+			break;
+
+		case SAVINGS:
+			myAcc = new SavingsAccount(0, sessionUser, balanceFromDB, 0, "");
+			break;
+
+		default:
+			break;
+		}
+
 		response.setContentType("text/html");
-
 		java.io.PrintWriter out = response.getWriter();
-
-		Account myAcc = new SavingsAccount(0, "Susazhina", 48000.0, 0, "K8454w$");
-
-		// Balance format
 
 		Locale spain = Locale.of("es", "ES");
 		NumberFormat euroFormatter = NumberFormat.getCurrencyInstance(spain);
@@ -50,7 +106,6 @@ public class AccountServlet extends HttpServlet {
 		String path = request.getContextPath();
 		out.println("<link rel='stylesheet' type='text/css' href='" + path + "/styles/index.css'>");
 		out.println("</head>");
-
 		out.println("<body>");
 		out.println("  <div class='card'>");
 		out.println("    <h1>🏦 Bank Dashboard</h1>");
@@ -59,6 +114,7 @@ public class AccountServlet extends HttpServlet {
 		out.println("    <a href='index.html' class='btn'>Back to Home</a>");
 		out.println("  </div>");
 		out.println("</body></html>");
+
 	}
 
 	/**
