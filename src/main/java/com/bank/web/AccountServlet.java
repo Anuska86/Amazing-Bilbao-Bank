@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import com.bank.utils.UIHelper;
+
 import bank.models.Account;
 import bank.models.AccountType;
 import bank.models.CheckingAccount;
@@ -101,22 +103,19 @@ public class AccountServlet extends HttpServlet {
 		NumberFormat euroFormatter = NumberFormat.getCurrencyInstance(spain);
 		String formattedBalance = euroFormatter.format(myAcc.getBalance());
 
-		out.println("<html>");
-		out.println("<head>");
 		String path = request.getContextPath();
-		out.println("<link rel='stylesheet' type='text/css' href='" + path + "/styles/index.css'>");
-		out.println("</head>");
-		out.println("<body>");
+
+		UIHelper.printHeader(out, "Dashboard", sessionUser, path);
+
 		out.println("  <div class='card'>");
-		out.println("    <h1>🏦 Bank Dashboard</h1>");
-		out.println("    <p>Account Holder: <strong>" + myAcc.getOwner() + "</strong></p>");
 
+		out.println("  <p class='account-holder'>Account Holder: <strong>" + myAcc.getOwner() + "</strong></p>");
 		out.println("<p class='account-type'>" + myAcc.getDisplayName() + "</p>");
-
 		out.println("<p class='balance'>" + formattedBalance + "</p>");
-		out.println("    <a href='index.html' class='btn'>Back to Home</a>");
+
 		out.println("  </div>");
-		out.println("</body></html>");
+
+		UIHelper.printFooter(out);
 
 	}
 
