@@ -74,9 +74,10 @@ public class LoginServlet extends HttpServlet {
 			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			response.getWriter().println("Database error: " + e.getMessage());
+		}
 		}
 
-		doGet(request, response);
 	}
 
 }
