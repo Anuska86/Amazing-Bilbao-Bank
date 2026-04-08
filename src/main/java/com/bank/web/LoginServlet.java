@@ -76,8 +76,6 @@ public class LoginServlet extends HttpServlet {
 			e.printStackTrace();
 			response.getWriter().println("Database error: " + e.getMessage());
 		}
-		}
-
 	}
 
 }
