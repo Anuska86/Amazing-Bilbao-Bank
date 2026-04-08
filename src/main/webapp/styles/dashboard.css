@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+/*CARD*/
+.card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    width: 350px;
+    text-align: center;
+}
+
+/*ACCOUNT TYPE*/
+
+.account-type {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #95a5a6;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+
+
+/*BALANCE*/
+
+.balance {
+    font-size: 2rem;
+    color: #27ae60;
+    font-weight: bold;
+}
+
