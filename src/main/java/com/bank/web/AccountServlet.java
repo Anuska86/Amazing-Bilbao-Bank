@@ -64,7 +64,7 @@ public class AccountServlet extends HttpServlet {
 
 			if (rs.next()) {
 				balanceFromDB = rs.getDouble("balance");
-				typeFromDB = rs.getString("account_type").toUpperCase().replace("-", "_");
+				typeFromDB = rs.getString("account_type").toUpperCase().replace("-", "_").replace(" ", "_");
 
 			}
 			conn.close();
@@ -82,7 +82,7 @@ public class AccountServlet extends HttpServlet {
 			myAcc = new CheckingAccount(0, sessionUser, balanceFromDB, "");
 			break;
 
-		case FIXED_TERM:
+		case FIXED_TERM_DEPOSIT:
 			myAcc = new FixedTermDeposit(0, sessionUser, balanceFromDB, "");
 			break;
 
@@ -110,6 +110,9 @@ public class AccountServlet extends HttpServlet {
 		out.println("  <div class='card'>");
 		out.println("    <h1>🏦 Bank Dashboard</h1>");
 		out.println("    <p>Account Holder: <strong>" + myAcc.getOwner() + "</strong></p>");
+
+		out.println("<p class='account-type'>" + myAcc.getDisplayName() + "</p>");
+
 		out.println("<p class='balance'>" + formattedBalance + "</p>");
 		out.println("    <a href='index.html' class='btn'>Back to Home</a>");
 		out.println("  </div>");

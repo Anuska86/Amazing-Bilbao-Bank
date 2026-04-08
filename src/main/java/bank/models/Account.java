@@ -115,6 +115,17 @@ public abstract class Account {
 		}
 	}
 
+	// Method to display the name of the account type nicely
+
+	public String getDisplayName() {
+		String accTypeName = this.getClass().getSimpleName();
+
+		if (accTypeName.equals("FixedTermDeposit"))
+			return "Fixed-Term Deposit";
+
+		return accTypeName.replace("Account", "") + " Account";
+	}
+
 	// SETTERS & GETTERS
 
 	// Owner group
