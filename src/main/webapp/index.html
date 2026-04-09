@@ -5,27 +5,18 @@
 <title>Bank Login</title>
     <link rel="stylesheet" type="text/css" href="styles/index.css">
 </head>
-<body>
-<div class="card">
-	<h1>🏦 Welcome to Amazing Bilbao Bank</h1>
-	<p>Please log in to your account</p>
-	
-	<form action="LoginServlet" method="POST">
-            <div style="margin-bottom: 15px;">
-                <input type="text" name="username" placeholder="Username" required 
-                       style="padding: 10px; width: 80%; border-radius: 5px; border: 1px solid #ccc;">
-            </div>
-            <div style="margin-bottom: 15px;">
-                <input type="password" name="password" placeholder="Password" required 
-                       style="padding: 10px; width: 80%; border-radius: 5px; border: 1px solid #ccc;">
-            </div>
-            <button type="submit" class="btn" style="background: #3498db; color: white; border: none; cursor: pointer; width: 80%;">
-                Login
-            </button>
-        </form>
-	
-	
-	
-	</div>
+
+	<body>
+    <main class="content-wrapper">
+        <div class="card login-container">
+            <h1>🏦 Welcome to Amazing Bilbao Bank</h1>
+            <p>Please log in to your account</p>
+            <form action="account" method="GET">
+                <input type="text" name="user" placeholder="Username" required>
+                <button type="submit" class="login-btn">Enter Dashboard</button>
+            </form>
+        </div>
+    </main>
 </body>
+	
 </html>
