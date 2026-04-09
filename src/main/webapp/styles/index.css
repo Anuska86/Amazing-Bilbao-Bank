@@ -20,8 +20,11 @@ body {
     flex: 1; 
     padding: 20px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding-top: 60px;
+    background-color: #f4f7f6;
 }
 
 

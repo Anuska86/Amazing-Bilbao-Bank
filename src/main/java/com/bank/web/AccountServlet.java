@@ -107,11 +107,16 @@ public class AccountServlet extends HttpServlet {
 
 		UIHelper.printHeader(out, "Dashboard", sessionUser, path);
 
+		out.println("<div class='welcome-section'>");
+		out.println("  <h1>Good morning, " + sessionUser + "</h1>");
+		out.println("  <p>Here is what's happening with your accounts today.</p>");
+		out.println("</div>");
+
 		out.println("  <div class='card'>");
 
 		out.println("  <p class='account-holder'>Account Holder: <strong>" + myAcc.getOwner() + "</strong></p>");
-		out.println("<p class='account-type'>" + myAcc.getDisplayName() + "</p>");
-		out.println("<p class='balance'>" + formattedBalance + "</p>");
+		out.println("  <p class='account-type'>" + myAcc.getDisplayName() + "</p>");
+		out.println("  <p class='balance'>" + formattedBalance + "</p>");
 
 		out.println("  </div>");
 

@@ -1,34 +1,63 @@
 @charset "UTF-8";
 
+
+/*WELCOME SECTION*/
+
+.welcome-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.welcome-section h1 {
+    color: #2c3e50;
+    font-size: 2.2rem;
+    margin-bottom: 5px;
+}
+
+
 /*CARD*/
+
 .card {
-    background: white;
-    padding: 40px;
+    background: #ffffff;
+    padding: 3rem;
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
     width: 450px;
     text-align: center;
-    border-top: 5px solid #2c3e50;
+    border-top: 6px solid #2c3e50;
+}
+
+
+/*ACCOUNTS*/
+
+/*ACCOUNT HOLDER*/
+
+.account-holder {
+    font-size: 1.1rem;
+    color: #2c3e50;
+    margin-bottom: 5px;
 }
 
 /*ACCOUNT TYPE*/
 
 .account-type {
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     color: #95a5a6;
     font-weight: bold;
+    font-size: 0.85rem;
     margin-top: 10px;
 }
-
 
 
 /*BALANCE*/
 
 .balance {
-    color: #7f8c8d;
-    font-size: 0.8rem;
+    color: #27ae60;
+    font-size: 3.5rem;
     letter-spacing: 2px;
-    margin-bottom: 5px;
+    font-weight: 800;
+    margin: 20px 0;
+    
 }
 
