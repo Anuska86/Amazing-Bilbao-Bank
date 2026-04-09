@@ -118,8 +118,8 @@ public class AccountServlet extends HttpServlet {
 		// Quick Actions Section
 		out.println("<h2 class='section-title'>Quick Actions</h2>");
 		out.println("<div class='actions-container'>");
-		out.println("  <a href='transfer' class='btn'>New Transfer</a>");
-		out.println("  <a href='bizum' class='btn'>Send Bizum</a>");
+		out.println("  <a href='transfer' class='quick-actions-btn'>New Transfer</a>");
+		out.println("  <a href='bizum' class='quick-actions-btn'>Send Bizum</a>");
 		out.println("</div>");
 
 		// Footer

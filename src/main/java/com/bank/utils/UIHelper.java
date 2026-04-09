@@ -7,6 +7,7 @@ public class UIHelper {
 	public static void printHeader(PrintWriter out, String title, String username, String path) {
 
 		out.println("<!DOCTYPE html><html><head>");
+		out.println("<meta charset='UTF-8'>");
 		out.println("<title>" + title + " - Amazing Bilbao Bank</title>");
 		out.println("<link rel='stylesheet' type='text/css' href='" + path + "/styles/index.css'>");
 		out.println("</head><body>");
@@ -22,11 +23,13 @@ public class UIHelper {
 		out.println("    <span class='user-tag'>Welcome, " + username + "</span>");
 		out.println("  </div>");
 		out.println("</header>");
-		out.println("<main class='content-wrapper'>");
+
+		out.println("<main class='content-wrapper' style='flex-direction: column; display: flex;'>");
 
 	}
 
 	public static void printFooter(PrintWriter out) {
+
 		out.println("</main>");
 		out.println("<footer class='main-footer'>");
 		out.println("  <p>&copy; 2026 Amazing Bilbao Bank. Authorized by the Bank of Spain.</p>");
