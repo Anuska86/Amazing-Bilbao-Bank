@@ -9,15 +9,36 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+/*NAV*/
+
 .nav-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .main-header nav a {
-    color: white;
-    margin: 0 15px;
+   color: #bdc3c7;
     text-decoration: none;
-    font-weight: 500;
+    margin-left: 20px;
+    transition: color 0.3s;
 }
+
+.nav-container a:hover {
+    color: white;
+}
+
+/*USER-TAG*/
+
+.user-tag {
+    font-weight: bold;
+    color: #27ae60;
+}
+
+
+
+
+
+

@@ -2,8 +2,10 @@
 
 .main-footer {
     background-color: #ecf0f1;
+    color: #7f8c8d;
     text-align: center;
     padding: 10px;
-    font-size: 0.8rem;
-    color: #7f8c8d;
+    font-size: 0.9rem;
+    border-top: 1px solid #dcdde1;
+    
 }
