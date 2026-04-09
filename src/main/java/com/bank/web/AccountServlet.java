@@ -116,11 +116,13 @@ public class AccountServlet extends HttpServlet {
 		out.println("</div>");
 
 		// Quick Actions Section
+		out.println("  <div class='quick-actions-main-container'>");
 		out.println("<h2 class='section-title'>Quick Actions</h2>");
-		out.println("<div class='actions-container'>");
+		out.println("<div class='quick-actions-container'>");
 		out.println("  <a href='transfer' class='quick-actions-btn'>New Transfer</a>");
 		out.println("  <a href='bizum' class='quick-actions-btn'>Send Bizum</a>");
 		out.println("</div>");
+		out.println("  </div>");
 
 		// Footer
 

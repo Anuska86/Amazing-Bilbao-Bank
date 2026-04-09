@@ -15,6 +15,8 @@ public class UIHelper {
 		out.println("<header class='main-header'>");
 		out.println("  <div class='nav-container'>");
 		out.println("    <span class='logo'>🏦 Amazing Bilbao Bank</span>");
+
+		out.println("    <div class='header-right'>");
 		out.println("    <nav>");
 		out.println("      <a href='account'>Dashboard</a>");
 		out.println("      <a href='transfer'>Transfer</a>");
@@ -22,6 +24,8 @@ public class UIHelper {
 		out.println("    </nav>");
 		out.println("    <span class='user-tag'>Welcome, " + username + "</span>");
 		out.println("  </div>");
+		out.println("  </div>");
+
 		out.println("</header>");
 
 		out.println("<main class='content-wrapper' style='flex-direction: column; display: flex;'>");
