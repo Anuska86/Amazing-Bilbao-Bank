@@ -17,23 +17,28 @@
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 0 20px;
 }
 
 .main-header nav a {
-   color: #bdc3c7;
+    color: #bdc3c7;
     text-decoration: none;
-    margin-left: 20px;
-    transition: color 0.3s;
+    margin: 0 15px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: 0.3s;
 }
 
 .nav-container a:hover {
-    color: white;
+    color: #3498db;
 }
 
 /*USER-TAG*/
 
 .user-tag {
     font-weight: bold;
+    font-style: italic;
+    opacity: 0.8;
     color: #27ae60;
 }
 
