@@ -16,6 +16,15 @@ body {
     margin: 0;
 }
 
+.content-wrapper {
+    flex: 1; 
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 /*TITLES*/
 
 h1 { color: #2c3e50; }

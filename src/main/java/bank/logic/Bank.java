@@ -107,7 +107,7 @@ public class Bank {
 				newAcc = new SavingsAccount(generatedId, name, balance, password);
 			} else if (type == AccountType.CHECKING) {
 				newAcc = new CheckingAccount(generatedId, name, balance, password);
-			} else if (type == AccountType.FIXED_TERM) {
+			} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
 				newAcc = new FixedTermDeposit(generatedId, name, balance, password);
 			}
 

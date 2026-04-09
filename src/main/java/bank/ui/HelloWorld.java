@@ -166,7 +166,7 @@ public class HelloWorld {
 				} else if (typeChoice == 2) {
 					type = AccountType.SAVINGS;
 				} else {
-					type = AccountType.FIXED_TERM;
+					type = AccountType.FIXED_TERM_DEPOSIT;
 				}
 
 				myBank.addAccountWithSpecificType(nameAdd, initialBalance, type, newPassword);

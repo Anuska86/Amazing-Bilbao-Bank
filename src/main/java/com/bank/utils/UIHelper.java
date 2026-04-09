@@ -8,7 +8,7 @@ public class UIHelper {
 
 		out.println("<!DOCTYPE html><html><head>");
 		out.println("<title>" + title + " - Amazing Bilbao Bank</title>");
-		out.println("<link rel='stylesheet' type='text/css' href='styles/index.css'>");
+		out.println("<link rel='stylesheet' type='text/css' href='" + path + "/styles/index.css'>");
 		out.println("</head><body>");
 
 		out.println("<header class='main-header'>");
