@@ -20,9 +20,12 @@ public class UIHelper {
 		out.println("    <nav>");
 		out.println("<a href='bank?action=dashboard'>Dashboard</a>");
 		out.println("<a href='bank?action=transfer'>Transfer</a>");
-		out.println("<a href='bank?action=logout'>Logout</a>");
 		out.println("    </nav>");
+
+		out.println("      <div class='user-menu'>");
 		out.println("    <span class='user-tag'>Welcome, " + username + "</span>");
+		out.println("<a href='bank?action=logout' class='logout-link'>Logout</a>");
+		out.println("  </div>");
 		out.println("  </div>");
 		out.println("  </div>");
 
