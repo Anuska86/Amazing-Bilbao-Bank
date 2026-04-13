@@ -18,9 +18,9 @@ public class UIHelper {
 
 		out.println("    <div class='header-right'>");
 		out.println("    <nav>");
-		out.println("      <a href='account'>Dashboard</a>");
-		out.println("      <a href='transfer'>Transfer</a>");
-		out.println("      <a href='logout'>Logout</a>");
+		out.println("<a href='bank?action=dashboard'>Dashboard</a>");
+		out.println("<a href='bank?action=transfer'>Transfer</a>");
+		out.println("<a href='bank?action=logout'>Logout</a>");
 		out.println("    </nav>");
 		out.println("    <span class='user-tag'>Welcome, " + username + "</span>");
 		out.println("  </div>");
