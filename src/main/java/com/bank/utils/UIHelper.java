@@ -24,7 +24,7 @@ public class UIHelper {
 
 		out.println("      <div class='user-menu'>");
 		out.println("    <span class='user-tag'>Welcome, " + username + "</span>");
-		out.println("<a href='bank?action=logout' class='logout-link'>Logout</a>");
+		out.println("<a href='bank?action=logout' class='logout-link'>Logout &#10142</a>");
 		out.println("  </div>");
 		out.println("  </div>");
 		out.println("  </div>");

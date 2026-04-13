@@ -68,11 +68,14 @@
     text-decoration: none;
     transition: 0.3s;
     margin-top: 2px;
+    transition: all 0.3s ease;
+    display: inline-block;
 }
 
 .logout-link:hover {
     text-decoration: underline;
-    color: #e74c3c important!;
+    color: #e74c3c !important;
+    transform: translateX(3px);
 }
 
 
