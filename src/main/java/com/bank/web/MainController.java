@@ -59,6 +59,12 @@ public class MainController extends HttpServlet {
 
 			break;
 
+		case "details":
+
+			showDetails(request, response);
+
+			break;
+
 		case "login":
 
 			response.sendRedirect("index.html");
@@ -141,7 +147,7 @@ public class MainController extends HttpServlet {
 
 				// Clickable card
 
-				out.println("<a href='details?id=" + rawType + "' class='card clickable-card'>");
+				out.println("<a href='bank?action=details&type=" + rawType + "' class='card clickable-card'>");
 				out.println("  <p class='account-holder'>Account Holder: <strong>" + acc.getOwner() + "</strong></p>");
 				out.println("  <p class='account-type'>" + acc.getDisplayName() + "</p>");
 				out.println("  <p class='balance'>" + euroFormatter.format(acc.getBalance()) + "</p>");
@@ -168,6 +174,40 @@ public class MainController extends HttpServlet {
 		// Footer
 
 		UIHelper.printFooter(out);
+	}
+
+	// SHOW ACCOUNT DETAILS
+
+	private void showDetails(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String sessionUser = (String) request.getSession().getAttribute("user");
+		String rawType = request.getParameter("type");
+
+		String accountDisplayName = (rawType != null) ? rawType : "Unknown Account";
+
+		if (sessionUser == null) {
+			response.sendRedirect("index.html");
+			return;
+		}
+
+		response.setContentType("text/html");
+		java.io.PrintWriter out = response.getWriter();
+		String path = request.getContextPath();
+
+		// Header
+		UIHelper.printHeader(out, "Account Details", sessionUser, path);
+
+		// Main
+
+		out.println("<div class='details-container'>");
+		out.println("  <h1>Details for " + accountDisplayName + "</h1>");
+		out.println("  <p>Coming soon: Transaction history for this account...</p>");
+		out.println("  <a href='bank?action=dashboard' class='back-btn'>&larr; Back to Dashboard</a>");
+		out.println("</div>");
+
+		// Footer
+		UIHelper.printFooter(out);
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
