@@ -201,7 +201,34 @@ public class MainController extends HttpServlet {
 
 		out.println("<div class='details-container'>");
 		out.println("  <h1>Details for " + accountDisplayName + "</h1>");
-		out.println("  <p>Coming soon: Transaction history for this account...</p>");
+
+		try {
+			String dbPassword = System.getenv("DB_PASSWORD");
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
+					dbPassword);
+
+			String sql = "SELECT balance FROM accounts WHERE owner_name = ? AND account_type = ?";
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, sessionUser);
+			st.setString(2, rawType.toLowerCase().replace("_", "-"));
+
+			ResultSet rs = st.executeQuery();
+
+			if (rs.next()) {
+				double balance = rs.getDouble("balance");
+				out.println("  <div class='balance-display'>");
+				out.println("    <p>Current Balance: <strong>" + balance + " €</strong></p>");
+				out.println("  </div>");
+			} else {
+				out.println("  <p>Account not found.</p>");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			out.println("<p style='color:red;'>Error connecting to the bank database.</p>");
+		}
+
 		out.println("  <a href='bank?action=dashboard' class='back-btn'>&larr; Back to Dashboard</a>");
 		out.println("</div>");
 
