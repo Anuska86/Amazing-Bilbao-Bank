@@ -106,7 +106,7 @@ public class MainController extends HttpServlet {
 		NumberFormat euroFormatter = NumberFormat.getCurrencyInstance(spain);
 
 		// Header
-		UIHelper.printHeader(out, "Dashboard", sessionUser, path);
+		UIHelper.printHeader(out, "Dashboard", sessionUser, path, null);
 
 		// Welcome section
 		out.println("<div class='welcome-section'>");
@@ -194,8 +194,13 @@ public class MainController extends HttpServlet {
 		java.io.PrintWriter out = response.getWriter();
 		String path = request.getContextPath();
 
+		// Formatter for euros
+
+		Locale spain = Locale.of("es", "ES");
+		NumberFormat euroFormatter = NumberFormat.getCurrencyInstance(spain);
+
 		// Header
-		UIHelper.printHeader(out, "Account Details", sessionUser, path);
+		UIHelper.printHeader(out, "Account Details", sessionUser, path, "details.css");
 
 		// Main
 
@@ -217,12 +222,19 @@ public class MainController extends HttpServlet {
 
 			if (rs.next()) {
 				double balance = rs.getDouble("balance");
-				out.println("  <div class='balance-display'>");
-				out.println("    <p>Current Balance: <strong>" + balance + " €</strong></p>");
+				out.println("<div class='detail-card'>");
+				out.println("  <div class='account-info-header'>");
+				out.println("    <span class='type-badge'>" + accountDisplayName.replace("_", " ") + "</span>");
+				out.println("    <p class='label'>Available Balance</p>");
+				out.println("  </div>");
+				out.println("  <h2 class='detail-balance'>" + euroFormatter.format(balance) + "</h2>");
+				out.println("  <p class='iban-display'>ES91 2100 0412 8802 0103 ****</p>");
+
 				out.println("  </div>");
 			} else {
-				out.println("  <p>Account not found.</p>");
+				out.println("<p class='error-msg'>No data found for this specific account.</p>");
 			}
+			conn.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();

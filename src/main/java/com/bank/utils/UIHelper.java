@@ -4,12 +4,17 @@ import java.io.PrintWriter;
 
 public class UIHelper {
 
-	public static void printHeader(PrintWriter out, String title, String username, String path) {
+	public static void printHeader(PrintWriter out, String title, String username, String path, String extraCss) {
 
 		out.println("<!DOCTYPE html><html><head>");
 		out.println("<meta charset='UTF-8'>");
 		out.println("<title>" + title + " - Amazing Bilbao Bank</title>");
 		out.println("<link rel='stylesheet' type='text/css' href='" + path + "/styles/index.css'>");
+
+		if (extraCss != null) {
+			out.println("<link rel='stylesheet' type='text/css' href='" + path + "/styles/" + extraCss + "'>");
+		}
+
 		out.println("</head><body>");
 
 		out.println("<header class='main-header'>");
