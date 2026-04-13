@@ -205,7 +205,7 @@ public class MainController extends HttpServlet {
 		// Main
 
 		out.println("<div class='details-container'>");
-		out.println("  <h1>Details for " + accountDisplayName + "</h1>");
+		out.println("  <h1>Details for " + accountDisplayName + " account</h1>");
 
 		try {
 			String dbPassword = System.getenv("DB_PASSWORD");
@@ -213,7 +213,7 @@ public class MainController extends HttpServlet {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
 					dbPassword);
 
-			String sql = "SELECT balance FROM accounts WHERE owner_name = ? AND account_type = ?";
+			String sql = "SELECT balance, owner_name, co_owner_name FROM accounts WHERE owner_name = ? AND account_type = ?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, sessionUser);
 			st.setString(2, rawType.toLowerCase().replace("_", "-"));
@@ -222,15 +222,32 @@ public class MainController extends HttpServlet {
 
 			if (rs.next()) {
 				double balance = rs.getDouble("balance");
+				String titular = rs.getString("owner_name");
+				String cotitular = rs.getString("co_owner_name");
+
 				out.println("<div class='detail-card'>");
 				out.println("  <div class='account-info-header'>");
-				out.println("    <span class='type-badge'>" + accountDisplayName.replace("_", " ") + "</span>");
-				out.println("    <p class='label'>Available Balance</p>");
+				out.println("    <span class='type-badge'>Active Account</span>");
+				out.println("    <p class='label'>Available Balance:</p>");
 				out.println("  </div>");
 				out.println("  <h2 class='detail-balance'>" + euroFormatter.format(balance) + "</h2>");
 				out.println("  <p class='iban-display'>ES91 2100 0412 8802 0103 ****</p>");
 
+				out.println("  <div class='ownership-info'>");
+				out.println("    <div class='info-group'>");
+				out.println("      <span class='small-label'>Main Titular:</span>");
+				out.println("      <span class='info-value'>" + titular + "</span>");
+				out.println("    </div>");
+
+				if (cotitular != null && !cotitular.trim().isEmpty()) {
+					out.println("    <div class='info-group'>");
+					out.println("      <span class='small-label'>Cotitular:</span>");
+					out.println("      <span class='info-value'>" + cotitular + "</span>");
+					out.println("    </div>");
+				}
+
 				out.println("  </div>");
+				out.println("</div>");
 			} else {
 				out.println("<p class='error-msg'>No data found for this specific account.</p>");
 			}
