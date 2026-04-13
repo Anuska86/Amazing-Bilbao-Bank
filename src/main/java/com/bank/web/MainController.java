@@ -61,6 +61,8 @@ public class MainController extends HttpServlet {
 
 		case "login":
 
+			response.sendRedirect("index.html");
+
 			break;
 
 		case "logout":
