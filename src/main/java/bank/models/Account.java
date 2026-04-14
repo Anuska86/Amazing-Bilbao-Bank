@@ -115,17 +115,6 @@ public abstract class Account {
 		}
 	}
 
-	// Method to display the name of the account type nicely
-
-	public String getDisplayName() {
-		String accTypeName = this.getClass().getSimpleName();
-
-		if (accTypeName.equals("FixedTermDeposit"))
-			return "Fixed-Term Deposit";
-
-		return accTypeName.replace("Account", "") + " Account";
-	}
-
 	// SETTERS & GETTERS
 
 	// Owner group
@@ -160,6 +149,24 @@ public abstract class Account {
 	// GET Balance with currency
 	public String getBalanceWithCurrency() {
 		return balance + "€";
+	}
+
+	// Method to display the name of the account type nicely
+
+	public String getDisplayName() {
+		String accTypeName = this.getClass().getSimpleName();
+
+		if (accTypeName.equals("FixedTermDeposit"))
+			return "Fixed-Term Deposit";
+
+		return accTypeName.replace("Account", "") + " Account";
+	}
+
+	// GET Account Type
+
+	public String getType() {
+
+		return this.getClass().getSimpleName().replace("Account", "").toUpperCase();
 	}
 
 	// HELPERS

@@ -11,7 +11,9 @@
 <link rel="stylesheet" type="text/css" href="styles/dashboard.css">
 </head>
 <body>
+<jsp:include page="/WEB-INF/header.jsp" />
 
+<div class="main-container">
 	<%-- Welcome section --%>
 
 	<div class='welcome-section'>
@@ -40,6 +42,8 @@
 			</a>
 		</c:forEach>
 	</div>
+	
+	</div>
 
 	<%-- Quick Actions Section --%>
 	<div class='quick-actions-main-container'>
@@ -51,5 +55,7 @@
 		</div>
 
 	</div>
+	
+	<jsp:include page="/WEB-INF/footer.jsp" />
 </body>
 </html>
