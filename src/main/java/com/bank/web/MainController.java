@@ -5,10 +5,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.NumberFormat;
-import java.util.Locale;
-
-import com.bank.utils.UIHelper;
+import java.util.ArrayList;
+import java.util.List;
 
 import bank.models.Account;
 import bank.models.AccountType;
@@ -89,6 +87,9 @@ public class MainController extends HttpServlet {
 
 	private void showDashboard(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		// Session check
+
 		String sessionUser = (String) request.getSession().getAttribute("user");
 
 		if (sessionUser == null) {
@@ -96,27 +97,9 @@ public class MainController extends HttpServlet {
 			return;
 		}
 
+		// Data
+		List<Account> accountList = new ArrayList<>();
 		String dbPassword = System.getenv("DB_PASSWORD");
-		String path = request.getContextPath();
-		response.setContentType("text/html");
-		java.io.PrintWriter out = response.getWriter();
-
-		// Formatters
-		Locale spain = Locale.of("es", "ES");
-		NumberFormat euroFormatter = NumberFormat.getCurrencyInstance(spain);
-
-		// Header
-		UIHelper.printHeader(out, "Dashboard", sessionUser, path, null);
-
-		// Welcome section
-		out.println("<div class='welcome-section'>");
-		out.println("  <h1>Good morning, " + sessionUser + "</h1>");
-		out.println("  <p>Here is what's happening with your accounts today.</p>");
-		out.println("</div>");
-
-		// Accounts
-		out.println("<h2 class='section-title'>Your Accounts</h2>");
-		out.println("<div class='accounts-grid'>");
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -145,13 +128,8 @@ public class MainController extends HttpServlet {
 					acc = new CheckingAccount(0, owner, balance, "");
 				}
 
-				// Clickable card
+				accountList.add(acc);
 
-				out.println("<a href='bank?action=details&type=" + rawType + "' class='card clickable-card'>");
-				out.println("  <p class='account-holder'>Account Holder: <strong>" + acc.getOwner() + "</strong></p>");
-				out.println("  <p class='account-type'>" + acc.getDisplayName() + "</p>");
-				out.println("  <p class='balance'>" + euroFormatter.format(acc.getBalance()) + "</p>");
-				out.println("</a>");
 			}
 
 			conn.close();
@@ -160,20 +138,10 @@ public class MainController extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		out.println("</div>");
+		request.setAttribute("user", sessionUser);
+		request.setAttribute("accounts", accountList);
+		request.getRequestDispatcher("/dashboard.jsp").forward(request, response);
 
-		// Quick Actions Section
-		out.println("  <div class='quick-actions-main-container'>");
-		out.println("<h2 class='section-title'>Quick Actions</h2>");
-		out.println("<div class='quick-actions-container'>");
-		out.println("  <a href='bank?action=transfer' class='quick-actions-btn'>New Transfer</a>");
-		out.println("  <a href='bank?action=bizum' class='quick-actions-btn'>Send Bizum</a>");
-		out.println("</div>");
-		out.println("  </div>");
-
-		// Footer
-
-		UIHelper.printFooter(out);
 	}
 
 	// SHOW ACCOUNT DETAILS
