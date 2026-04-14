@@ -190,23 +190,6 @@ public class MainController extends HttpServlet {
 			return;
 		}
 
-		response.setContentType("text/html");
-		java.io.PrintWriter out = response.getWriter();
-		String path = request.getContextPath();
-
-		// Formatter for euros
-
-		Locale spain = Locale.of("es", "ES");
-		NumberFormat euroFormatter = NumberFormat.getCurrencyInstance(spain);
-
-		// Header
-		UIHelper.printHeader(out, "Account Details", sessionUser, path, "details.css");
-
-		// Main
-
-		out.println("<div class='details-container'>");
-		out.println("  <h1>Details for " + accountDisplayName + " account</h1>");
-
 		try {
 			String dbPassword = System.getenv("DB_PASSWORD");
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -221,49 +204,21 @@ public class MainController extends HttpServlet {
 			ResultSet rs = st.executeQuery();
 
 			if (rs.next()) {
-				double balance = rs.getDouble("balance");
-				String titular = rs.getString("owner_name");
-				String cotitular = rs.getString("co_owner_name");
 
-				out.println("<div class='detail-card'>");
-				out.println("  <div class='account-info-header'>");
-				out.println("    <span class='type-badge'>Active Account</span>");
-				out.println("    <p class='label'>Available Balance:</p>");
-				out.println("  </div>");
-				out.println("  <h2 class='detail-balance'>" + euroFormatter.format(balance) + "</h2>");
-				out.println("  <p class='iban-display'>ES91 2100 0412 8802 0103 ****</p>");
-
-				out.println("  <div class='ownership-info'>");
-				out.println("    <div class='info-group'>");
-				out.println("      <span class='small-label'>Main Titular:</span>");
-				out.println("      <span class='info-value'>" + titular + "</span>");
-				out.println("    </div>");
-
-				if (cotitular != null && !cotitular.trim().isEmpty()) {
-					out.println("    <div class='info-group'>");
-					out.println("      <span class='small-label'>Cotitular:</span>");
-					out.println("      <span class='info-value'>" + cotitular + "</span>");
-					out.println("    </div>");
-				}
-
-				out.println("  </div>");
-				out.println("</div>");
-			} else {
-				out.println("<p class='error-msg'>No data found for this specific account.</p>");
+				request.setAttribute("balance", rs.getDouble("balance"));
+				request.setAttribute("titular", rs.getString("owner_name"));
+				request.setAttribute("cotitular", rs.getString("co_owner_name"));
+				request.setAttribute("accountName", rawType.replace("_", " "));
 			}
+
 			conn.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			out.println("<p style='color:red;'>Error connecting to the bank database.</p>");
+
 		}
 
-		out.println("  <a href='bank?action=dashboard' class='back-btn'>&larr; Back to Dashboard</a>");
-		out.println("</div>");
-
-		// Footer
-		UIHelper.printFooter(out);
-
+		request.getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
