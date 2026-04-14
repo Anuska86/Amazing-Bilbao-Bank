@@ -140,8 +140,7 @@ public class MainController extends HttpServlet {
 
 		request.setAttribute("user", sessionUser);
 		request.setAttribute("accounts", accountList);
-		request.getRequestDispatcher("/dashboard.jsp").forward(request, response);
-
+		request.getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
 	}
 
 	// SHOW ACCOUNT DETAILS
