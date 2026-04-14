@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,17 +29,17 @@
 	<div class='accounts-grid'>
 		<c:forEach var="acc" items="${accounts}">
 			<a href="bank?action=details&type=${acc.type}"
-				class="card clickable-card">
-				<p class="account-holder">
+				class="card clickable-card card-${fn:replace(fn:toLowerCase(acc.type), ' ', '-')}">
+				<span class="account-holder">
 					Account Holder: <strong>${acc.owner}</strong>
-				</p>
-				<p class="account-type">${acc.displayName}</p>
+				</span>
+				<span class="account-type">${acc.displayName}</span>
 
 
-				<p class="balance">
+				<span class="balance">
 					<fmt:setLocale value="es_ES" />
 					<fmt:formatNumber value="${acc.balance}" type="currency" />
-				</p>
+				</span>
 			</a>
 		</c:forEach>
 	</div>
