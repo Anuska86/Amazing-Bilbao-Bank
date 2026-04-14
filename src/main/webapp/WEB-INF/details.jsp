@@ -13,6 +13,9 @@
 	href="${pageContext.request.contextPath}/styles/details.css">
 </head>
 <body>
+	<jsp:include page="/WEB-INF/header.jsp" />
+
+
 	<div class="details-container">
 		<h1>Details for ${accountName} account</h1>
 
@@ -48,5 +51,7 @@
 		<a href="bank?action=dashboard" class="back-btn">&larr; Back to
 			Dashboard</a>
 	</div>
+
+	<jsp:include page="/WEB-INF/footer.jsp" />
 </body>
 </html>
