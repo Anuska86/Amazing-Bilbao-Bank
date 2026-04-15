@@ -175,7 +175,7 @@ public class MainController extends HttpServlet {
 				request.setAttribute("balance", rs.getDouble("balance"));
 				request.setAttribute("titular", rs.getString("owner_name"));
 				request.setAttribute("cotitular", rs.getString("co_owner_name"));
-				request.setAttribute("accountName", rawType.replace("_", " "));
+				request.setAttribute("accountName", accountDisplayName);
 			}
 
 			conn.close();
