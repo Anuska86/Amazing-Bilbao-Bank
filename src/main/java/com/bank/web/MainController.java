@@ -76,10 +76,69 @@ public class MainController extends HttpServlet {
 
 			break;
 
+		case "transfer":
+			showTransferForm(request, response);
+
 		default:
 			response.sendRedirect("index.html");
 			break;
 		}
+
+	}
+
+	// Transfer Form
+
+	private void showTransferForm(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String sessionUser = (String) request.getSession().getAttribute("user");
+
+		if (sessionUser == null) {
+			response.sendRedirect("index.html");
+			return;
+		}
+
+		List<Account> accountList = new ArrayList<>();
+		String dbPassword = System.getenv("DB_PASSWORD");
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
+					dbPassword);
+
+			String sql = "SELECT balance, account_type, owner_name FROM accounts WHERE owner_name = ?";
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, sessionUser);
+
+			ResultSet rs = st.executeQuery();
+
+			while (rs.next()) {
+				double balance = rs.getDouble("balance");
+				String owner = rs.getString("owner_name");
+				String rawType = rs.getString("account_type").toUpperCase().replace("-", "_").replace(" ", "_");
+
+				AccountType type = AccountType.valueOf(rawType);
+				Account acc = null;
+
+				if (type == AccountType.SAVINGS) {
+					acc = new SavingsAccount(0, owner, balance, 0, "");
+				} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
+					acc = new FixedTermDeposit(0, owner, balance, "");
+				} else {
+					acc = new CheckingAccount(0, owner, balance, "");
+				}
+
+				accountList.add(acc);
+
+			}
+
+			conn.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		request.setAttribute("accounts", accountList);
+		request.getRequestDispatcher("/WEB-INF/transfer.jsp").forward(request, response);
 
 	}
 
