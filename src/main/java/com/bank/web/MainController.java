@@ -262,8 +262,76 @@ public class MainController extends HttpServlet {
 
 	// Handle Transfer
 
-	private void handleTransfer(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
+	private void handleTransfer(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		String user = (String) request.getSession().getAttribute("user");
+		String fromAcc = request.getParameter("fromAccount");
+		String toAcc = request.getParameter("toAccount");
+		String amountRaw = request.getParameter("amount");
+
+		if (user == null || amountRaw == null) {
+			response.sendRedirect("index.html");
+			return;
+		}
+
+		double amount = Double.parseDouble(amountRaw);
+
+		// Stop transfering to the same account
+
+		if (fromAcc.equals(toAcc)) {
+			response.sendRedirect("bank?action=transfer&msg=same_account");
+			return;
+		}
+
+		String dbPassword = System.getenv("DB_PASSWORD");
+
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
+				dbPassword)) {
+
+			conn.setAutoCommit(false);
+
+			try {
+
+				String subSQL = "UPDATE accounts SET balance = balance - ? WHERE owner_name = ? AND account_type = ? AND balance >= ?";
+				PreparedStatement psSub = conn.prepareStatement(subSQL);
+				psSub.setDouble(1, amount);
+				psSub.setString(2, user);
+				psSub.setString(3, fromAcc);
+				psSub.setDouble(4, amount);
+
+				int rows = psSub.executeUpdate();
+
+				if (rows > 0) {
+
+					// Add the money
+
+					String addSQL = "UPDATE accounts SET balance = balance + ? WHERE owner_name = ? AND account_type = ?";
+					PreparedStatement psAdd = conn.prepareStatement(addSQL);
+					psAdd.setDouble(1, amount);
+					psAdd.setString(2, user);
+					psAdd.setString(3, toAcc);
+					psAdd.executeUpdate();
+
+					conn.commit();
+					response.sendRedirect("bank?action=dashboard&success=transfer");
+
+				} else {
+
+					// FAIL (not enough money)
+
+					conn.rollback();
+					response.sendRedirect("bank?action=transfer&msg=low_funds");
+
+				}
+
+			} catch (Exception e) {
+				conn.rollback();
+				throw e;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
