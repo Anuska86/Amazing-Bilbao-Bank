@@ -14,9 +14,10 @@
 
 	<main class="content-wrapper"
 		style="display: flex; justify-content: center; padding: 2rem;">
-		<div class="card" style="width: 100%; max-width: 500px;">
+		<div class="transfer-card">
 			<h2 class="section-title">New Internal Transfer</h2>
-			<p>Move money instantly between your accounts.</p>
+			<p class="transfer-description">Move money instantly between your
+				accounts.</p>
 
 			<%-- Transfer form --%>
 
@@ -29,7 +30,7 @@
 					<label for="fromAccount">From Account:</label> <select
 						name="fromAccount" id="fromAccount" required>
 						<c:forEach var="acc" items="${accounts}">
-							<option value="${acc.type}">${acc.type} —
+							<option value="${acc.type}">${acc.type}—
 								<fmt:formatNumber value="${acc.balance}" type="currency"
 									currencySymbol="€" />
 							</option>
@@ -58,8 +59,7 @@
 						placeholder="0.00" required>
 				</div>
 
-				<button type="submit" class="btn-primary"
-					style="margin-top: 20px; width: 100%;">Transfer Funds</button>
+				<button type="submit" class="btn-primary">Transfer Funds</button>
 			</form>
 
 		</div>

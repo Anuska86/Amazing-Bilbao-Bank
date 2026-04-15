@@ -1,0 +1,81 @@
+@charset "UTF-8";
+
+/*Content wrapper*/
+.content-wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 40px 20px;
+	min-height: 70vh;
+}
+
+/*Transfer card*/
+.transfer-card {
+	background: #ffffff;
+	padding: 2.5rem;
+	border-radius: 15px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	max-width: 450px;
+	text-align: left;
+}
+
+/*Title*/
+.section-title {
+	color: #2c3e50;
+	margin-bottom: 10px;
+	font-size: 1.8rem;
+}
+
+/*Description*/
+.transfer-description {
+	color: #7f8c8d;
+	margin-bottom: 25px;
+	font-size: 0.95rem;
+}
+
+/*FORM*/
+.form-group {
+	margin-bottom: 20px;
+}
+
+.form-group label {
+	display: block;
+	font-weight: 600;
+	color: #34495e;
+	margin-bottom: 8px;
+}
+
+.form-group select, .form-group input {
+	width: 100%;
+	padding: 12px;
+	border: 2px solid #ecf0f1;
+	border-radius: 8px;
+	font-size: 1rem;
+	color: #2c3e50;
+	transition: border-color 0.3s ease;
+}
+
+.form-group select:focus, .form-group input:focus {
+	outline: none;
+	border-color: #3498db;
+}
+
+/*BUTTON*/
+.btn-primary {
+	background-color: #2c3e50;
+	color: white;
+	padding: 14px;
+	border: none;
+	border-radius: 8px;
+	font-size: 1.1rem;
+	font-weight: 600;
+	cursor: pointer;
+	width: 100%;
+	transition: background 0.3s ease;
+	margin-top: 10px;
+}
+
+.btn-primary:hover {
+	background-color: #34495e;
+}
