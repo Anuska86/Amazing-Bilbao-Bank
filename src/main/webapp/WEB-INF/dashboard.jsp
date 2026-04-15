@@ -14,6 +14,9 @@
 <body>
 <jsp:include page="/WEB-INF/header.jsp" />
 
+<main class="content-wrapper"
+	style="flex-direction: column; display: flex;">
+
 <div class="main-container">
 	<%-- Welcome section --%>
 
@@ -56,6 +59,7 @@
 		</div>
 
 	</div>
+	</main>
 	
 	<jsp:include page="/WEB-INF/footer.jsp" />
 </body>

@@ -21,5 +21,3 @@
 </header>
 
 
-<main class="content-wrapper"
-	style="flex-direction: column; display: flex;">

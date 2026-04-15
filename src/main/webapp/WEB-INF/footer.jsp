@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 
-</main>
+
 
 
 <footer class="main-footer">
