@@ -78,6 +78,7 @@ public class MainController extends HttpServlet {
 
 		case "transfer":
 			showTransferForm(request, response);
+			break;
 
 		default:
 			response.sendRedirect("index.html");

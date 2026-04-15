@@ -7,7 +7,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Your Transfers</title>
-<link rel="stylesheet" type="text/css" href="styles/transfer.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/styles/index.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/styles/transfer.css">
 </head>
 <body>
 	<jsp:include page="/WEB-INF/header.jsp" />
