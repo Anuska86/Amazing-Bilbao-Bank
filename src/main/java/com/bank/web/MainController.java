@@ -254,7 +254,16 @@ public class MainController extends HttpServlet {
 
 		if ("login".equals(action)) {
 			handleLogin(request, response);
+		} else if ("processTransfer".equals(action)) {
+			handleTransfer(request, response);
+
 		}
+	}
+
+	// Handle Transfer
+
+	private void handleTransfer(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
 
 	}
 
