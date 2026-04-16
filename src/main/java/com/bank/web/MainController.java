@@ -281,7 +281,7 @@ public class MainController extends HttpServlet {
 			}
 
 		} catch (NumberFormatException | NullPointerException e) {
-			response.sendRedirect("bank?action=transfer&msg=invalid_amount");
+			response.sendRedirect("bank?action=transfer&msg=invalid_amount&transferType=" + type);
 			return;
 		}
 
@@ -328,11 +328,8 @@ public class MainController extends HttpServlet {
 
 					if (rowsAdded == 0) {
 						conn.rollback();
-						response.sendRedirect("bank?action=transfer&msg=user_not_found");
+						response.sendRedirect("bank?action=transfer&msg=user_not_found&transferType=" + type);
 						return;
-					} else {
-						conn.rollback();
-						response.sendRedirect("bank?action=transfer&msg=low_funds");
 					}
 
 					// Record the transaction into the SQL table

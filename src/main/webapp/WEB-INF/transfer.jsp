@@ -27,27 +27,42 @@
 			<%-- User not found error --%>
 
 			<c:if test="${param.msg == 'user_not_found'}">
-				<div
+				<div id="errorBox" class="alert-error"
 					style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #f5c6cb;">
-					⚠️ Recipient not found. Please check the name and try again.</div>
+					<span>⚠️ Recipient not found. Please check the name.</span>
+					<button type="button" onclick="closeError()"
+						style="position: absolute; top: 5px; right: 10px; background: none; border: none; font-size: 20px; cursor: pointer; color: #721c24;">
+						&times;</button>
+				</div>
 			</c:if>
 
 
 			<%-- Not enough money error --%>
 
 			<c:if test="${param.msg == 'low_funds'}">
-				<div
+				<div id="errorBox" class="alert-error"
 					style="background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #ffeeba;">
-					💸 Insufficient funds for this transfer.</div>
+					<span>💸 Insufficient funds for this transfer.</span>
+					<button type="button" onclick="closeError()"
+						style="position: absolute; top: 5px; right: 10px; background: none; border: none; font-size: 20px; cursor: pointer; color: #721c24;">
+						&times;</button>
+
+				</div>
 
 			</c:if>
 
 			<%--Invalid amount error --%>
 
 			<c:if test="${param.msg == 'invalid_amount'}">
-				<div
+				<div id="errorBox" class="alert-error"
 					style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #f5c6cb;">
-					🔢 Please enter a valid numerical amount.</div>
+
+					<span>🔢 Please enter a valid numerical amount.</span>
+					<button type="button" onclick="closeError()"
+						style="position: absolute; top: 5px; right: 10px; background: none; border: none; font-size: 20px; cursor: pointer; color: #721c24;">
+						&times;</button>
+
+				</div>
 			</c:if>
 
 
@@ -75,8 +90,12 @@
 				<div class="form-group">
 					<label>Transfer Type:</label> <select id="transferType"
 						name="transferType" onchange="toggleTransferFields()">
-						<option value="internal">My Own Accounts</option>
-						<option value="external">To Someone Else</option>
+						<option value="internal"
+							${param.transferType == 'internal' ? 'selected' : ''}>My
+							Own Accounts</option>
+						<option value="external"
+							${param.transferType == 'external' ? 'selected' : ''}>To
+							Someone Else</option>
 					</select>
 				</div>
 
@@ -121,6 +140,10 @@
 	<jsp:include page="/WEB-INF/footer.jsp" />
 
 	<script>
+		window.onload = function() {
+			toggleTransferFields();
+		};
+
 		function toggleTransferFields() {
 			const type = document.getElementById("transferType").value;
 			const internal = document.getElementById("internalFields");
@@ -134,6 +157,26 @@
 				external.style.display = "block";
 			}
 		}
+		
+		// Function to close error manually with the X
+	    function closeError() {
+	        const errorBox = document.getElementById("errorBox");
+	        if (errorBox) {
+	            errorBox.style.display = "none";
+	        }
+	    }
+		
+		
+	 // Automatically hide error when user interacts with the form
+		
+		document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                closeError();
+            });
+        });
+    });
 	</script>
 
 </body>
