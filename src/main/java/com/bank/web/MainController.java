@@ -313,6 +313,16 @@ public class MainController extends HttpServlet {
 					psAdd.setString(3, toAcc);
 					psAdd.executeUpdate();
 
+					// Record the transaction into the SQL table
+					String logSQL = "INSERT INTO transactions (type, amount, transaction_date, account_id) "
+							+ "VALUES (?, ?, NOW(), (SELECT id FROM accounts WHERE owner_name = ? AND account_type = ?))";
+					PreparedStatement psLog = conn.prepareStatement(logSQL);
+					psLog.setString(1, "TRANSFER OUT: " + fromAcc + " to " + toAcc);
+					psLog.setDouble(2, amount);
+					psLog.setString(3, user);
+					psLog.setString(4, fromAcc);
+					psLog.executeUpdate();
+
 					conn.commit();
 					response.sendRedirect("bank?action=dashboard&success=transfer");
 

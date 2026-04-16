@@ -14,6 +14,12 @@
 <body>
 <jsp:include page="/WEB-INF/header.jsp" />
 
+<c:if test="${param.sucess == 'transfer' }">
+<div style="background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+✅ Transfer completed successfully!
+</div>
+</c:if>
+
 <main class="content-wrapper"
 	style="flex-direction: column; display: flex;">
 
