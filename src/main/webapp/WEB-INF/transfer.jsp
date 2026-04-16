@@ -28,7 +28,7 @@
 
 			<c:if test="${param.msg == 'user_not_found'}">
 				<div id="errorBox" class="alert-error"
-					style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #f5c6cb;">
+					style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #f5c6cb; position: relative;">
 					<span>⚠️ Recipient not found. Please check the name.</span>
 					<button type="button" onclick="closeError()"
 						style="position: absolute; top: 5px; right: 10px; background: none; border: none; font-size: 20px; cursor: pointer; color: #721c24;">
@@ -41,7 +41,7 @@
 
 			<c:if test="${param.msg == 'low_funds'}">
 				<div id="errorBox" class="alert-error"
-					style="background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #ffeeba;">
+					style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #f5c6cb; position: relative;">
 					<span>💸 Insufficient funds for this transfer.</span>
 					<button type="button" onclick="closeError()"
 						style="position: absolute; top: 5px; right: 10px; background: none; border: none; font-size: 20px; cursor: pointer; color: #721c24;">
@@ -55,7 +55,7 @@
 
 			<c:if test="${param.msg == 'invalid_amount'}">
 				<div id="errorBox" class="alert-error"
-					style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #f5c6cb;">
+					style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #f5c6cb; position: relative;">
 
 					<span>🔢 Please enter a valid numerical amount.</span>
 					<button type="button" onclick="closeError()"
