@@ -267,21 +267,28 @@ public class MainController extends HttpServlet {
 
 		String user = (String) request.getSession().getAttribute("user");
 		String fromAcc = request.getParameter("fromAccount");
-		String toAcc = request.getParameter("toAccount");
 		String amountRaw = request.getParameter("amount");
+		String type = request.getParameter("transferType");
 
-		if (user == null || amountRaw == null) {
-			response.sendRedirect("index.html");
+		double amount = 0;
+
+		try {
+			amount = Double.parseDouble(amountRaw);
+
+		} catch (NumberFormatException | NullPointerException e) {
+			response.sendRedirect("bank?action=transfer&msg=invalid_amount");
 			return;
 		}
 
-		double amount = Double.parseDouble(amountRaw);
+		String recipient;
+		String toAcc;
 
-		// Stop transfering to the same account
-
-		if (fromAcc.equals(toAcc)) {
-			response.sendRedirect("bank?action=transfer&msg=same_account");
-			return;
+		if ("external".equals(type)) {
+			recipient = request.getParameter("recipientName");
+			toAcc = "checking-account"; // default
+		} else {
+			recipient = user; // Internal transfer
+			toAcc = request.getParameter("toAccountInternal");
 		}
 
 		String dbPassword = System.getenv("DB_PASSWORD");
@@ -300,24 +307,31 @@ public class MainController extends HttpServlet {
 				psSub.setString(3, fromAcc);
 				psSub.setDouble(4, amount);
 
-				int rows = psSub.executeUpdate();
+				int rowsSubstracted = psSub.executeUpdate();
 
-				if (rows > 0) {
+				if (rowsSubstracted > 0) {
 
 					// Add the money
 
 					String addSQL = "UPDATE accounts SET balance = balance + ? WHERE owner_name = ? AND account_type = ?";
 					PreparedStatement psAdd = conn.prepareStatement(addSQL);
 					psAdd.setDouble(1, amount);
-					psAdd.setString(2, user);
+					psAdd.setString(2, recipient);
 					psAdd.setString(3, toAcc);
-					psAdd.executeUpdate();
+
+					int rowsAdded = psAdd.executeUpdate();
+
+					if (rowsAdded == 0) {
+						conn.rollback();
+						response.sendRedirect("bank?action=transfer&msg=user_not_found");
+						return;
+					}
 
 					// Record the transaction into the SQL table
 					String logSQL = "INSERT INTO transactions (type, amount, transaction_date, account_id) "
 							+ "VALUES (?, ?, NOW(), (SELECT id FROM accounts WHERE owner_name = ? AND account_type = ?))";
 					PreparedStatement psLog = conn.prepareStatement(logSQL);
-					psLog.setString(1, "TRANSFER OUT: " + fromAcc + " to " + toAcc);
+					psLog.setString(1, "TRANSFER TO: " + recipient + " (" + toAcc + ")");
 					psLog.setDouble(2, amount);
 					psLog.setString(3, user);
 					psLog.setString(4, fromAcc);

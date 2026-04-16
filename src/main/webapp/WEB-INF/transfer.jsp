@@ -22,30 +22,13 @@
 			<p class="transfer-description">Move money instantly between your
 				accounts.</p>
 
-			<%-- Transfer form --%>
+			<%-- TRANSFER FORM --%>
 
 			<form action="bank" method="POST">
 				<input type="hidden" name="action" value="processTransfer">
 
-				<%-- TRANSFER TYPE --%>
-				<label>Transfer Type:</label> <select id="transferType"
-					name="transferType" onchange="toggleTransferFields()">
-					<option value="internal">My Own Accounts</option>
-					<option value="external">To Someone Else</option>
-				</select>
-
-				<div id="internalFields">
-					<label>To My Account:</label> <select name="toAccount">
-					</select>
-				</div>
-
-				<div id="externalFields" style="display: none;">
-					<label>Recipient Name or IBAN:</label> <input type="text"
-						name="recipientInfo" placeholder="Enter name or account number">
-				</div>
-
-
 				<%-- FROM ACCOUNT --%>
+
 
 				<div class="form-group">
 					<label for="fromAccount">From Account:</label> <select
@@ -59,17 +42,35 @@
 					</select>
 				</div>
 
-
-				<%-- TO ACCOUNT --%>
-
+				<%-- CHOOSE INTERNAL OR EXTERNAL --%>
 				<div class="form-group">
-					<label for="toAccount">To Account:</label> <select name="toAccount"
-						id="toAccount" required>
+					<label>Transfer Type:</label> <select id="transferType"
+						name="transferType" onchange="toggleTransferFields()">
+						<option value="internal">My Own Accounts</option>
+						<option value="external">To Someone Else</option>
+					</select>
+				</div>
+
+
+
+				<%-- TO WHICH ACCOUNT --%>
+
+				<div id="internalFields" class="form-group">
+					<label for="toAccountInternal">To My Account:</label> <select
+						name="toAccountInternal" id="toAccountInternal">
 						<c:forEach var="acc" items="${accounts}">
 							<option value="${acc.type}">${acc.type}</option>
 						</c:forEach>
 					</select>
 				</div>
+
+
+				<div id="externalFields" class="form-group" style="display: none;">
+					<label for="recipientName">Recipient Name:</label> <input
+						type="text" name="recipientName" id="recipientName"
+						placeholder="Enter owner name">
+				</div>
+
 
 
 				<%-- AMOUNT --%>
@@ -94,7 +95,7 @@
 		function toggleTransferFields() {
 			const type = document.getElementById("transferType").value;
 			const internal = document.getElementById("internalFields");
-			const extenal = document.getElementById("externalFields");
+			const external = document.getElementById("externalFields");
 
 			if (type === "internal") {
 				internal.style.display = "block";
