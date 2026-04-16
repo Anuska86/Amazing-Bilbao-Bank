@@ -264,47 +264,57 @@ public class MainController extends HttpServlet {
 	// Handle Transfer
 
 	private void handleTransfer(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
 		String user = (String) request.getSession().getAttribute("user");
 		String fromAcc = request.getParameter("fromAccount");
 		String amountRaw = request.getParameter("amount");
 		String type = request.getParameter("transferType");
 
 		double amount = 0;
-
 		try {
 			amount = Double.parseDouble(amountRaw);
-
 			if (amount <= 0) {
-				response.sendRedirect("bank?action=transfer&msg=invalid_amount");
+				response.sendRedirect("bank?action=transfer&msg=invalid_amount&transferType=" + type);
 				return;
 			}
-
 		} catch (NumberFormatException | NullPointerException e) {
 			response.sendRedirect("bank?action=transfer&msg=invalid_amount&transferType=" + type);
 			return;
 		}
 
-		String recipient;
-		String toAcc;
-
-		if ("external".equals(type)) {
-			recipient = request.getParameter("recipientName");
-			toAcc = "CHECKING"; // default
-		} else {
-			recipient = user; // Internal transfer
-			toAcc = request.getParameter("toAccountInternal");
-		}
-
 		String dbPassword = System.getenv("DB_PASSWORD");
 
+		// 1. OPEN CONNECTION FIRST
 		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
 				dbPassword)) {
-
 			conn.setAutoCommit(false);
 
-			try {
+			String recipient;
+			String toAcc = ""; // Initialize it
 
+			// 2. NOW PERFORM THE LOOKUP INSIDE THE CONNECTION SCOPE
+			if ("external".equals(type)) {
+				recipient = request.getParameter("recipientName");
+				String findAccSQL = "SELECT account_type FROM accounts WHERE owner_name = ? LIMIT 1";
+
+				try (PreparedStatement psFind = conn.prepareStatement(findAccSQL)) {
+					psFind.setString(1, recipient);
+					try (ResultSet rsFind = psFind.executeQuery()) {
+						if (rsFind.next()) {
+							toAcc = rsFind.getString("account_type");
+						} else {
+							// User doesn't exist at all
+							response.sendRedirect("bank?action=transfer&msg=user_not_found&transferType=external");
+							return;
+						}
+					}
+				}
+			} else {
+				recipient = user;
+				toAcc = request.getParameter("toAccountInternal");
+			}
+
+			// 3. PROCEED WITH THE TRANSACTION
+			try {
 				String subSQL = "UPDATE accounts SET balance = balance - ? WHERE owner_name = ? AND account_type = ? AND balance >= ?";
 				PreparedStatement psSub = conn.prepareStatement(subSQL);
 				psSub.setDouble(1, amount);
@@ -312,27 +322,21 @@ public class MainController extends HttpServlet {
 				psSub.setString(3, fromAcc);
 				psSub.setDouble(4, amount);
 
-				int rowsSubstracted = psSub.executeUpdate();
-
-				if (rowsSubstracted > 0) {
-
-					// Add the money
-
+				if (psSub.executeUpdate() > 0) {
+					// Add money
 					String addSQL = "UPDATE accounts SET balance = balance + ? WHERE owner_name = ? AND account_type = ?";
 					PreparedStatement psAdd = conn.prepareStatement(addSQL);
 					psAdd.setDouble(1, amount);
 					psAdd.setString(2, recipient);
 					psAdd.setString(3, toAcc);
 
-					int rowsAdded = psAdd.executeUpdate();
-
-					if (rowsAdded == 0) {
+					if (psAdd.executeUpdate() == 0) {
 						conn.rollback();
 						response.sendRedirect("bank?action=transfer&msg=user_not_found&transferType=" + type);
 						return;
 					}
 
-					// Record the transaction into the SQL table
+					// Log Transaction
 					String logSQL = "INSERT INTO transactions (type, amount, transaction_date, account_id) "
 							+ "VALUES (?, ?, NOW(), (SELECT id FROM accounts WHERE owner_name = ? AND account_type = ?))";
 					PreparedStatement psLog = conn.prepareStatement(logSQL);
@@ -344,25 +348,17 @@ public class MainController extends HttpServlet {
 
 					conn.commit();
 					response.sendRedirect("bank?action=dashboard&success=transfer");
-
 				} else {
-
-					// FAIL (not enough money)
-
 					conn.rollback();
 					response.sendRedirect("bank?action=transfer&msg=low_funds");
-
 				}
-
 			} catch (Exception e) {
 				conn.rollback();
 				throw e;
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	// Login
