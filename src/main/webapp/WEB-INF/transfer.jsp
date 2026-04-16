@@ -22,6 +22,35 @@
 			<p class="transfer-description">Move money instantly between your
 				accounts.</p>
 
+			<%-- Error Messages Handling --%>
+
+			<%-- User not found error --%>
+
+			<c:if test="${param.msg == 'user_not_found'}">
+				<div
+					style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #f5c6cb;">
+					⚠️ Recipient not found. Please check the name and try again.</div>
+			</c:if>
+
+
+			<%-- Not enough money error --%>
+
+			<c:if test="${param.msg == 'low_funds'}">
+				<div
+					style="background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #ffeeba;">
+					💸 Insufficient funds for this transfer.</div>
+
+			</c:if>
+
+			<%--Invalid amount error --%>
+
+			<c:if test="${param.msg == 'invalid_amount'}">
+				<div
+					style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #f5c6cb;">
+					🔢 Please enter a valid numerical amount.</div>
+			</c:if>
+
+
 			<%-- TRANSFER FORM --%>
 
 			<form action="bank" method="POST">
