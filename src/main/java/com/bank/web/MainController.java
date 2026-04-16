@@ -226,7 +226,7 @@ public class MainController extends HttpServlet {
 			String sql = "SELECT balance, owner_name, co_owner_name FROM accounts WHERE owner_name = ? AND account_type = ?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, sessionUser);
-			st.setString(2, rawType.toLowerCase().replace("_", "-"));
+			st.setString(2, rawType.toUpperCase());
 
 			ResultSet rs = st.executeQuery();
 
@@ -290,7 +290,7 @@ public class MainController extends HttpServlet {
 
 		if ("external".equals(type)) {
 			recipient = request.getParameter("recipientName");
-			toAcc = "checking-account"; // default
+			toAcc = "CHECKING"; // default
 		} else {
 			recipient = user; // Internal transfer
 			toAcc = request.getParameter("toAccountInternal");
