@@ -14,17 +14,20 @@
 <body>
 	<jsp:include page="/WEB-INF/header.jsp" />
 	<div class="container mt-3">
-		<c:if test="${param.success == 'transfer' }">
-			<div class="alert alert-success alert-dismissible fade show mt-3"
-				role="alert">
-				<span> ✅ <strong>Success!</strong> Your transfer of <strong>€${param.amt}</strong>
-					to <strong>${param.to}</strong> has been completed.
-				</span>
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+				<c:if test="${param.success == 'transfer' }">
+					<div class="alert alert-success alert-dismissible fade show mt-3"
+						role="alert">
+						<span> ✅ <strong>Success!</strong> Your transfer of <strong>€${param.amt}</strong>
+							to <strong>${param.to}</strong> has been completed.
+						</span>
 
-				<button type="button" class="btn-close" data-bs-dismiss="alert"
-					aria-label="Close"></button>
-
+						<button type="button" class="btn-close" data-bs-dismiss="alert"
+							aria-label="Close"></button>
+					</div>
 			</div>
+		</div>
 		</c:if>
 	</div>
 
