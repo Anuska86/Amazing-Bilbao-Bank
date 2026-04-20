@@ -15,7 +15,10 @@
 <header class="main-header">
 	<div class="nav-container">
 
-		<span class="logo">🏦 Amazing Bilbao Bank</span>
+		<a href="bank?action=dashboard" class="logo-link"
+			style="text-decoration: none; color: inherit;"> <span
+			class="logo">🏦 Amazing Bilbao Bank</span>
+		</a>
 
 		<div class="header-right">
 			<nav>

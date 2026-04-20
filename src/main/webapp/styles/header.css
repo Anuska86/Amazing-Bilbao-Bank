@@ -33,6 +33,17 @@
     transition: 0.3s;
 }
 
+/*Logo*/
+
+.logo-link {
+    text-decoration: none !important; 
+    color: inherit !important;          
+    cursor: pointer;
+}
+
+.logo-link:hover {
+    opacity: 0.8; 
+}
 
 /*HEADER RIGHT*/
 
