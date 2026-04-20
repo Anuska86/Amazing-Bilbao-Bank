@@ -13,21 +13,20 @@
 </head>
 <body>
 	<jsp:include page="/WEB-INF/header.jsp" />
+	<div class="container mt-3">
+		<c:if test="${param.success == 'transfer' }">
+			<div class="alert alert-success alert-dismissible fade show mt-3"
+				role="alert">
+				<span> ✅ <strong>Success!</strong> Your transfer of <strong>€${param.amt}</strong>
+					to <strong>${param.to}</strong> has been completed.
+				</span>
 
-	<c:if test="${param.success == 'transfer' }">
-		<div id="successBox"
-			style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #c3e6cb; position: relative;">
-			<span> ✅ <strong>Success!</strong> Your transfer of <strong>€${param.amt}</strong>
-				to <strong>${param.to}</strong> has been completed.
-			</span>
+				<button type="button" class="btn-close" data-bs-dismiss="alert"
+					aria-label="Close"></button>
 
-			<button type="button"
-				onclick="this.parentElement.style.display='none'"
-				style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 20px; cursor: pointer; color: #155724;">
-				&times;</button>
-
-		</div>
-	</c:if>
+			</div>
+		</c:if>
+	</div>
 
 	<main class="content-wrapper"
 		style="flex-direction: column; display: flex;">
@@ -63,9 +62,9 @@
 		<div class='quick-actions-main-container'>
 			<h2 class='section-title'>Quick Actions</h2>
 			<div class='quick-actions-container'>
-				<a href='bank?action=transfer' class='quick-actions-btn'>New
-					Transfer</a> <a href='bank?action=bizum' class='quick-actions-btn'>Send
-					Bizum</a>
+				<a href='bank?action=transfer' class='btn btn-primary px-4'>New
+					Transfer</a> <a href='bank?action=bizum'
+					class='btn btn-outline-primary px-4'>Send Bizum</a>
 			</div>
 
 		</div>
