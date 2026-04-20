@@ -347,7 +347,9 @@ public class MainController extends HttpServlet {
 					psLog.executeUpdate();
 
 					conn.commit();
-					response.sendRedirect("bank?action=dashboard&success=transfer");
+					String encodedRecipient = java.net.URLEncoder.encode(recipient, "UTF-8");
+					response.sendRedirect(
+							"bank?action=dashboard&success=transfer&to=" + encodedRecipient + "&amt=" + amount);
 				} else {
 					conn.rollback();
 					response.sendRedirect("bank?action=transfer&msg=low_funds");
