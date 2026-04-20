@@ -93,8 +93,14 @@ public class MainController extends HttpServlet {
 
 	// Fetch history methog
 
-	private void showHistory(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
+	private void showHistory(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String sessionUser = (String) request.getSession().getAttribute("user");
+
+		if (sessionUser == null) {
+
+			response.sendRedirect("index.html");
+			return;
+		}
 
 	}
 
