@@ -80,10 +80,21 @@ public class MainController extends HttpServlet {
 			showTransferForm(request, response);
 			break;
 
+		case "history":
+			showHistory(request, response);
+			break;
+
 		default:
 			response.sendRedirect("index.html");
 			break;
 		}
+
+	}
+
+	// Fetch history methog
+
+	private void showHistory(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
 
 	}
 
