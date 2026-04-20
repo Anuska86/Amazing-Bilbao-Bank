@@ -166,9 +166,9 @@ public class MainController extends HttpServlet {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
 					dbPassword);
 
-			String sql = "SELECT balance, account_type, owner_name FROM accounts WHERE owner_name LIKE ?";
+			String sql = "SELECT balance, account_type, owner_name FROM accounts WHERE owner_name = ?";
 			PreparedStatement st = conn.prepareStatement(sql);
-			st.setString(1, "%" + sessionUser + "%");
+			st.setString(1, sessionUser);
 
 			ResultSet rs = st.executeQuery();
 
