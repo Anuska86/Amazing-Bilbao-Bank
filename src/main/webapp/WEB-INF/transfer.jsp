@@ -24,59 +24,40 @@
 
 			<%-- Error Messages Handling --%>
 
-			<%-- User not found error --%>
+			<c:if test="${not empty param.msg}">
+				<div class="alert alert-danger alert-dismissible fade show mb-4"
+					role="alert">
+					<c:choose>
+						<c:when test="${param.msg == 'user_not_found'}">
+                ⚠️ <strong>Recipient not found!</strong> Please check the name.
+            </c:when>
+						<c:when test="${param.msg == 'low_funds'}">
+                💸 <strong>Insufficient funds</strong> for this transfer.
+            </c:when>
+						<c:when test="${param.msg == 'invalid_amount'}">
+                🔢 Please enter a <strong>valid numerical
+								amount</strong>.
+            </c:when>
 
-			<c:if test="${param.msg == 'user_not_found'}">
-				<div id="errorBox" class="alert-error"
-					style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #f5c6cb; position: relative;">
-					<span>⚠️ Recipient not found. Please check the name.</span>
-					<button type="button" onclick="closeError()"
-						style="position: absolute; top: 5px; right: 10px; background: none; border: none; font-size: 20px; cursor: pointer; color: #721c24;">
-						&times;</button>
-				</div>
-			</c:if>
-
-
-			<%-- Not enough money error --%>
-
-			<c:if test="${param.msg == 'low_funds'}">
-				<div id="errorBox" class="alert-error"
-					style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #f5c6cb; position: relative;">
-					<span>💸 Insufficient funds for this transfer.</span>
-					<button type="button" onclick="closeError()"
-						style="position: absolute; top: 5px; right: 10px; background: none; border: none; font-size: 20px; cursor: pointer; color: #721c24;">
-						&times;</button>
-
-				</div>
-
-			</c:if>
-
-			<%--Invalid amount error --%>
-
-			<c:if test="${param.msg == 'invalid_amount'}">
-				<div id="errorBox" class="alert-error"
-					style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #f5c6cb; position: relative;">
-
-					<span>🔢 Please enter a valid numerical amount.</span>
-					<button type="button" onclick="closeError()"
-						style="position: absolute; top: 5px; right: 10px; background: none; border: none; font-size: 20px; cursor: pointer; color: #721c24;">
-						&times;</button>
-
+					</c:choose>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"
+						aria-label="Close"></button>
 				</div>
 			</c:if>
 
 
 			<%-- TRANSFER FORM --%>
 
-			<form action="bank" method="POST">
+			<form action="bank" method="POST" class="needs-validation">
 				<input type="hidden" name="action" value="processTransfer">
 
 				<%-- FROM ACCOUNT --%>
 
 
-				<div class="form-group">
-					<label for="fromAccount">From Account:</label> <select
-						name="fromAccount" id="fromAccount" required>
+				<div class="mb-3">
+					<label for="fromAccount" class="form-label fw-bold">From
+						Account:</label> <select name="fromAccount" id="fromAccount"
+						class="form-select" required>
 						<c:forEach var="acc" items="${accounts}">
 							<option value="${acc.type}">${acc.type}—
 								<fmt:formatNumber value="${acc.balance}" type="currency"
@@ -87,9 +68,10 @@
 				</div>
 
 				<%-- CHOOSE INTERNAL OR EXTERNAL --%>
-				<div class="form-group">
-					<label>Transfer Type:</label> <select id="transferType"
-						name="transferType" onchange="toggleTransferFields()">
+				<div class="mb-3">
+					<label class="form-label fw-bold">Transfer Type:</label> <select
+						id="transferType" name="transferType" class="form-select"
+						onchange="toggleTransferFields()">
 						<option value="internal"
 							${param.transferType == 'internal' ? 'selected' : ''}>My
 							Own Accounts</option>
@@ -103,9 +85,10 @@
 
 				<%-- TO WHICH ACCOUNT --%>
 
-				<div id="internalFields" class="form-group">
-					<label for="toAccountInternal">To My Account:</label> <select
-						name="toAccountInternal" id="toAccountInternal">
+				<div id="internalFields" class="mb-3">
+					<label for="toAccountInternal" class="form-label fw-bold">To
+						My Account:</label> <select name="toAccountInternal"
+						id="toAccountInternal" class="form-select">
 						<c:forEach var="acc" items="${accounts}">
 							<option value="${acc.type}">${acc.type}</option>
 						</c:forEach>
@@ -113,23 +96,29 @@
 				</div>
 
 
-				<div id="externalFields" class="form-group" style="display: none;">
-					<label for="recipientName">Recipient Name:</label> <input
-						type="text" name="recipientName" id="recipientName"
-						placeholder="Enter owner name">
+				<div id="externalFields" class="mb-3" style="display: none;">
+					<label for="recipientName" class="form-label fw-bold">Recipient
+						Name:</label> <input type="text" name="recipientName" id="recipientName"
+						class="form-control" placeholder="Enter owner name">
 				</div>
 
 
 
 				<%-- AMOUNT --%>
 
-				<div class="form-group">
-					<label for="amount">Amount to Transfer:</label> <input
-						type="number" name="amount" id="amount" step="0.01" min="0.01"
-						placeholder="0.00" required>
+				<div class="mb-4">
+					<label for="amount" class="form-label fw-bold">Amount to
+						Transfer:</label>
+					<div class="input-group">
+						<span class="input-group-text">€</span> <input type="number"
+							name="amount" id="amount" class="form-control" step="0.01"
+							min="0.01" placeholder="0.00" required>
+					</div>
 				</div>
 
-				<button type="submit" class="btn-primary">Transfer Funds</button>
+				<button type="submit"
+					class="btn btn-primary w-100 py-2 fw-bold shadow-sm">Transfer
+					Funds</button>
 			</form>
 
 		</div>
