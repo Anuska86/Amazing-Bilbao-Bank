@@ -14,7 +14,7 @@
 <body>
 	<jsp:include page="/WEB-INF/header.jsp" />
 
-	<c:if test="${param.sucess == 'transfer' }">
+	<c:if test="${param.success == 'transfer' }">
 		<div id="successBox"
 			style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #c3e6cb; position: relative;">
 			<span> ✅ <strong>Success!</strong> Your transfer of <strong>€${param.amt}</strong>
