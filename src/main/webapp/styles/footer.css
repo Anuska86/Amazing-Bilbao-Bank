@@ -1,11 +1,23 @@
 @charset "UTF-8";
 
 .main-footer {
-    background-color: #ecf0f1;
-    color: #7f8c8d;
-    text-align: center;
-    padding: 10px;
-    font-size: 0.9rem;
-    border-top: 1px solid #dcdde1;
-    
+	display: flex !important;
+	width: 100% !important;
+	background-color: #2c3e50;
+	color: white;
+	text-align: center;
+	padding: 10px;
+	font-size: 0.9rem;
+	border-top: 1px solid #dcdde1;
+}
+
+/*Social icons*/
+.social-icons a {
+	display: inline-block;
+	transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icons a:hover {
+	color: #3498db !important;
+	transform: translateY(-3px);
 }
