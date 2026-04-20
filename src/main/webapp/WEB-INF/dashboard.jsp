@@ -13,10 +13,12 @@
 </head>
 <body>
 	<jsp:include page="/WEB-INF/header.jsp" />
-	<div class="container mt-3">
-		<div class="row justify-content-center">
-			<div class="col-md-6">
-				<c:if test="${param.success == 'transfer' }">
+
+	<c:if test="${param.success == 'transfer'}">
+		<div class="container mt-3">
+			<div class="row justify-content-center">
+				<div class="col-md-6">
+
 					<div class="alert alert-success alert-dismissible fade show mt-3"
 						role="alert">
 						<span> ✅ <strong>Success!</strong> Your transfer of <strong>€${param.amt}</strong>
@@ -26,10 +28,11 @@
 						<button type="button" class="btn-close" data-bs-dismiss="alert"
 							aria-label="Close"></button>
 					</div>
+				</div>
 			</div>
 		</div>
-		</c:if>
-	</div>
+	</c:if>
+
 
 	<main class="content-wrapper"
 		style="flex-direction: column; display: flex;">
