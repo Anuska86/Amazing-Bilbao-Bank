@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>>Account Details - Amazing Bilbao Bank</title>
+<title>Account Details - Amazing Bilbao Bank</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/styles/index.css">
 <link rel="stylesheet"
