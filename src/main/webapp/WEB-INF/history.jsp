@@ -11,7 +11,7 @@
 <body>
 	<jsp:include page="/WEB-INF/header.jsp" />
 
-	<main class="container mt-5">
+	<main class="container mt-5 pb-5 mb-5">
 
 		<nav aria-label="breadcrumb" class="mb-3">
 			<ol class="breadcrumb">
@@ -20,46 +20,41 @@
 			</ol>
 		</nav>
 
-		<div class="mb-4">
 
-			<a href="bank?action=dashboard"
-				class="btn btn-outline-secondary btn-sm"> <i
-				class="bi bi-arrow-left"></i> Back to Dashboard
-			</a>
-
-		</div>
 
 		<div class="row justify-content-center">
-			<div class="col-md-10 col-lg-8 text-center">
-				<h2 class="mb-4">Transaction History</h2>
+			<div class="col-md-10 col-lg-8">
+				<h2 class="text-center mb-5">Transaction History</h2>
 
 
-
-				<div class="card shadow text-start">
-					<div class="table-responsive">
-						<table class="table table-hover mb-0">
-							<thead class="table-dark">
-								<tr>
-									<th>Date</th>
-									<th>Description</th>
-									<th class="text-end">Amount</th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:forEach var="t" items="${transactions}">
+				<div class="d-flex justify-content-center">
+					<div class="card shadow border-0"
+						style="width: 100%; max-width: 600px;">
+						<div class="table-responsive">
+							<table class="table table-hover mb-0">
+								<thead class="table-dark">
 									<tr>
-										<td><fmt:formatDate value="${t.date}"
-												pattern="dd MMM yyyy HH:mm" /></td>
-										<td>${t.type}</td>
-										<td
-											class="text-end fw-bold ${t.amount < 0 ? 'text-danger' : 'text-success'}">
-											<fmt:formatNumber value="${t.amount}" type="currency"
-												currencySymbol="€" />
-										</td>
+										<th>Date</th>
+										<th>Description</th>
+										<th class="text-end">Amount</th>
 									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
+								</thead>
+								<tbody>
+									<c:forEach var="t" items="${transactions}">
+										<tr>
+											<td class="align-middle"><fmt:formatDate
+													value="${t.date}" pattern="dd MMM yyyy HH:mm" /></td>
+											<td class="align-middle">${t.type}</td>
+											<td
+												class="text-end align-middle fw-bold ${t.amount < 0 ? 'text-danger' : 'text-success'}">
+												<fmt:formatNumber value="${t.amount}" type="currency"
+													currencySymbol="€" />
+											</td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
