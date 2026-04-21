@@ -13,6 +13,7 @@ import bank.models.AccountType;
 import bank.models.CheckingAccount;
 import bank.models.FixedTermDeposit;
 import bank.models.SavingsAccount;
+import bank.models.Transaction;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -93,7 +94,8 @@ public class MainController extends HttpServlet {
 
 	// Fetch history methog
 
-	private void showHistory(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void showHistory(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 		String sessionUser = (String) request.getSession().getAttribute("user");
 
 		if (sessionUser == null) {
@@ -101,6 +103,41 @@ public class MainController extends HttpServlet {
 			response.sendRedirect("index.html");
 			return;
 		}
+
+		List<Transaction> historyList = new ArrayList<>();
+		String dbPassword = System.getenv("DB_PASSWORD");
+
+		try {
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
+					dbPassword);
+
+			// JOIN with accounts table
+
+			String sql = "SELECT t.* FROM transactions t " + "JOIN accounts a ON t.account_id = a.id "
+					+ "WHERE a.owner_name = ? " + "ORDER BY t.transaction_date DESC";
+
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, sessionUser);
+
+			ResultSet rs = st.executeQuery();
+
+			while (rs.next()) {
+				// Map the transactions table
+
+				Transaction trans = new Transaction(rs.getInt("id"), rs.getString("type"), rs.getDouble("amount"),
+						rs.getTimestamp("transaction_date"), rs.getInt("account_id"));
+				historyList.add(trans);
+			}
+			conn.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		request.setAttribute("transactions", historyList);
+		request.getRequestDispatcher("/WEB-INF/history.jsp").forward(request, response);
 
 	}
 
