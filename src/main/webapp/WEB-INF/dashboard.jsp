@@ -51,16 +51,30 @@
 
 			<div class='accounts-grid'>
 				<c:forEach var="acc" items="${accounts}">
-					<a href="bank?action=details&type=${acc.type}"
-						class="card clickable-card card-${fn:replace(fn:toLowerCase(acc.type), ' ', '-')}">
-						<span class="account-holder"> Account Holder: <strong>${acc.owner}</strong>
-					</span> <span class="account-type">${acc.displayName}</span> <span
-						class="balance"> <fmt:setLocale value="es_ES" /> <fmt:formatNumber
-								value="${acc.balance}" type="currency" />
-					</span>
-					</a>
+					<div class="card-container">
+						<a href="bank?action=details&type=${acc.type}"
+							class="card clickable-card card-${fn:replace(fn:toLowerCase(acc.type), ' ', '-')}">
+							<span class="account-holder"> Account Holder: <strong>${acc.owner}</strong>
+						</span> <span class="account-type">${acc.displayName}</span> <span
+							class="balance"> <fmt:setLocale value="es_ES" /> <fmt:formatNumber
+									value="${acc.balance}" type="currency" />
+
+
+						</span> <span class="history-link-wrapper"
+							style="display: block; margin-top: 15px;"> <span
+								class="btn-history"
+								style="text-decoration: underline; font-weight: bold;"
+								onclick="event.preventDefault(); window.location.href='bank?action=history&accountId=${acc.id}';">
+									<i class="bi bi-clock-history"></i> View History
+							</span>
+						</span>
+						</a>
+					</div>
+
 				</c:forEach>
+
 			</div>
+
 
 		</div>
 

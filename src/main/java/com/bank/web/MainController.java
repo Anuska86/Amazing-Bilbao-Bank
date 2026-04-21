@@ -96,11 +96,10 @@ public class MainController extends HttpServlet {
 
 	private void showHistory(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		String sessionUser = (String) request.getSession().getAttribute("user");
+		String accountIdParam = request.getParameter("accountId");
 
-		if (sessionUser == null) {
-
-			response.sendRedirect("index.html");
+		if (accountIdParam == null) {
+			response.sendRedirect("bank?action=dashboard");
 			return;
 		}
 
@@ -119,7 +118,7 @@ public class MainController extends HttpServlet {
 					+ "WHERE a.owner_name = ? " + "ORDER BY t.transaction_date DESC";
 
 			PreparedStatement st = conn.prepareStatement(sql);
-			st.setString(1, sessionUser);
+			st.setInt(1, Integer.parseInt(accountIdParam));
 
 			ResultSet rs = st.executeQuery();
 
