@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="styles/history.css">
 <title>Transactions history</title>
 </head>
 <body>
@@ -32,7 +33,7 @@
 						style="width: 100%; max-width: 600px;">
 						<div class="table-responsive">
 							<table class="table table-hover mb-0">
-								<thead class="table-dark">
+								<thead class="table-bilbao-dark">
 									<tr>
 										<th>Date</th>
 										<th>Description</th>
