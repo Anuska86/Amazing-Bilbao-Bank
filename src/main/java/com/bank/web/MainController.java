@@ -386,14 +386,26 @@ public class MainController extends HttpServlet {
 					}
 
 					// Log Transaction
-					String logSQL = "INSERT INTO transactions (type, amount, transaction_date, account_id) "
+
+					// Log for the SENDER (The "From" Account) - negative amount
+					String logSenderSQL = "INSERT INTO transactions (type, amount, transaction_date, account_id) "
 							+ "VALUES (?, ?, NOW(), (SELECT id FROM accounts WHERE owner_name = ? AND account_type = ?))";
-					PreparedStatement psLog = conn.prepareStatement(logSQL);
-					psLog.setString(1, "TRANSFER TO: " + recipient + " (" + toAcc + ")");
-					psLog.setDouble(2, amount);
-					psLog.setString(3, user);
-					psLog.setString(4, fromAcc);
-					psLog.executeUpdate();
+					PreparedStatement psLogSender = conn.prepareStatement(logSenderSQL);
+					psLogSender.setString(1, "TRANSFER TO: " + recipient + " (" + toAcc + ")");
+					psLogSender.setDouble(2, -amount); // Notice the minus sign!
+					psLogSender.setString(3, user);
+					psLogSender.setString(4, fromAcc);
+					psLogSender.executeUpdate();
+
+					// Log for the RECIPIENT (The "To" Account) - positive amount
+					String logRecipientSQL = "INSERT INTO transactions (type, amount, transaction_date, account_id) "
+							+ "VALUES (?, ?, NOW(), (SELECT id FROM accounts WHERE owner_name = ? AND account_type = ?))";
+					PreparedStatement psLogRec = conn.prepareStatement(logRecipientSQL);
+					psLogRec.setString(1, "TRANSFER FROM: " + user + " (" + fromAcc + ")");
+					psLogRec.setDouble(2, amount); // Positive amount
+					psLogRec.setString(3, recipient);
+					psLogRec.setString(4, toAcc);
+					psLogRec.executeUpdate();
 
 					conn.commit();
 					String encodedRecipient = java.net.URLEncoder.encode(recipient, "UTF-8");
