@@ -260,12 +260,9 @@ public class MainController extends HttpServlet {
 
 	private void showDetails(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String sessionUser = (String) request.getSession().getAttribute("user");
-		String rawType = request.getParameter("type");
+		String accountId = request.getParameter("accountId");
 
-		String accountDisplayName = (rawType != null) ? rawType : "Unknown Account";
-
-		if (sessionUser == null) {
+		if (accountId == null) {
 			response.sendRedirect("index.html");
 			return;
 		}
@@ -276,19 +273,18 @@ public class MainController extends HttpServlet {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
 					dbPassword);
 
-			String sql = "SELECT balance, owner_name, co_owner_name FROM accounts WHERE owner_name = ? AND account_type = ?";
+			String sql = "SELECT id, balance, owner_name, co_owner_name, account_type FROM accounts WHERE id = ?";
 			PreparedStatement st = conn.prepareStatement(sql);
-			st.setString(1, sessionUser);
-			st.setString(2, rawType.toUpperCase());
+			st.setInt(1, Integer.parseInt(accountId));
 
 			ResultSet rs = st.executeQuery();
 
 			if (rs.next()) {
-
+				request.setAttribute("accountId", rs.getInt("id"));
 				request.setAttribute("balance", rs.getDouble("balance"));
 				request.setAttribute("titular", rs.getString("owner_name"));
 				request.setAttribute("cotitular", rs.getString("co_owner_name"));
-				request.setAttribute("accountName", accountDisplayName);
+				request.setAttribute("accountName", rs.getString("account_type"));
 			}
 
 			conn.close();

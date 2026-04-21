@@ -59,6 +59,13 @@
 					</c:if>
 
 				</div>
+
+				<div class="mt-4 pt-3 border-top text-center">
+					<a href="bank?action=history&accountId=${accountId}"
+						class="btn btn-outline-primary btn-sm"> <i
+						class="bi bi-clock-history me-1"></i> View Transaction History
+					</a>
+				</div>
 			</div>
 
 

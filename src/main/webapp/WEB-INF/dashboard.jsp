@@ -60,12 +60,12 @@
 									value="${acc.balance}" type="currency" />
 
 
-						</span> <span class="history-link-wrapper"
+						</span> <span class="details-link-wrapper"
 							style="display: block; margin-top: 15px;"> <span
-								class="btn-history"
+								class="btn-details"
 								style="text-decoration: underline; font-weight: bold;"
-								onclick="event.preventDefault(); window.location.href='bank?action=history&accountId=${acc.id}';">
-									<i class="bi bi-clock-history"></i> View History
+								onclick="event.preventDefault(); window.location.href='bank?action=details&accountId=${acc.id}';">
+									<i class="bi bi-info-circle me-1"></i> View Details
 							</span>
 						</span>
 						</a>
