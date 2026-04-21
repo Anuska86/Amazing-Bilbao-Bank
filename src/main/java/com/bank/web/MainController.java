@@ -96,9 +96,9 @@ public class MainController extends HttpServlet {
 
 	private void showHistory(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		String accountIdParam = request.getParameter("accountId");
+		String accountId = request.getParameter("accountId");
 
-		if (accountIdParam == null) {
+		if (accountId == null) {
 			response.sendRedirect("bank?action=dashboard");
 			return;
 		}
@@ -114,11 +114,10 @@ public class MainController extends HttpServlet {
 
 			// JOIN with accounts table
 
-			String sql = "SELECT t.* FROM transactions t " + "JOIN accounts a ON t.account_id = a.id "
-					+ "WHERE a.owner_name = ? " + "ORDER BY t.transaction_date DESC";
+			String sql = "SELECT * FROM transactions WHERE account_id = ? ORDER BY transaction_date DESC";
 
 			PreparedStatement st = conn.prepareStatement(sql);
-			st.setInt(1, Integer.parseInt(accountIdParam));
+			st.setInt(1, Integer.parseInt(accountId));
 
 			ResultSet rs = st.executeQuery();
 
@@ -159,7 +158,7 @@ public class MainController extends HttpServlet {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
 					dbPassword);
 
-			String sql = "SELECT balance, account_type, owner_name FROM accounts WHERE owner_name = ?";
+			String sql = "SELECT id, balance, account_type, owner_name FROM accounts WHERE owner_name = ?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, sessionUser);
 
@@ -219,13 +218,14 @@ public class MainController extends HttpServlet {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
 					dbPassword);
 
-			String sql = "SELECT balance, account_type, owner_name FROM accounts WHERE owner_name = ?";
+			String sql = "SELECT id, balance, account_type, owner_name FROM accounts WHERE owner_name = ?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, sessionUser);
 
 			ResultSet rs = st.executeQuery();
 
 			while (rs.next()) {
+				int id = rs.getInt("id");
 				double balance = rs.getDouble("balance");
 				String owner = rs.getString("owner_name");
 				String rawType = rs.getString("account_type").toUpperCase().replace("-", "_").replace(" ", "_");
@@ -234,11 +234,11 @@ public class MainController extends HttpServlet {
 				Account acc = null;
 
 				if (type == AccountType.SAVINGS) {
-					acc = new SavingsAccount(0, owner, balance, 0, "");
+					acc = new SavingsAccount(id, owner, balance, 0, "");
 				} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
-					acc = new FixedTermDeposit(0, owner, balance, "");
+					acc = new FixedTermDeposit(id, owner, balance, "");
 				} else {
-					acc = new CheckingAccount(0, owner, balance, "");
+					acc = new CheckingAccount(id, owner, balance, "");
 				}
 
 				accountList.add(acc);
