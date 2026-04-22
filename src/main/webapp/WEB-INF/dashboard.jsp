@@ -45,53 +45,62 @@
 				<p>Here is what's happening with your accounts today.</p>
 			</div>
 
+			<div class="mb-0">
+				<a href="bank?action=applyInterest"
+					class="btn btn-warning shadow-sm"> <i class="bi bi-piggy-bank"></i>
+					Simulate Monthly Interest
+				</a>
+			</div>
+
 			<%-- Details section --%>
 
 			<h2 class='section-title'>Your Accounts</h2>
 
-			<div class='accounts-grid'>
-				<c:forEach var="acc" items="${accounts}">
-					<div class="card-container">
-						<a href="bank?action=details&accountId=${acc.id}"
-							class="card clickable-card card-${fn:replace(fn:toLowerCase(acc.type), ' ', '-')}">
-							<span class="account-holder"> Account Holder: <strong>${acc.owner}</strong>
-						</span> 
-						<span class="account-type">${acc.displayName}</span> <span
-							class="balance"> <fmt:setLocale value="es_ES" /> <fmt:formatNumber
-									value="${acc.balance}" type="currency" />
+
+		</div>
+
+		<div class='accounts-grid'>
+			<c:forEach var="acc" items="${accounts}">
+				<div class="card-container">
+					<a href="bank?action=details&accountId=${acc.id}"
+						class="card clickable-card card-${fn:replace(fn:toLowerCase(acc.type), ' ', '-')}">
+						<span class="account-holder"> Account Holder: <strong>${acc.owner}</strong>
+					</span> <span class="account-type">${acc.displayName}</span> <span
+						class="balance"> <fmt:setLocale value="es_ES" /> <fmt:formatNumber
+								value="${acc.balance}" type="currency" />
 
 
-						</span> <span class="details-link-wrapper"
-							style="display: block; margin-top: 15px;"> <span
-								class="btn-details"
-								style="text-decoration: underline; font-weight: bold;"
-								onclick="event.preventDefault(); window.location.href='bank?action=details&accountId=${acc.id}';">
-									<i class="bi bi-info-circle me-1"></i> View Details
-							</span>
+					</span> <span class="details-link-wrapper"
+						style="display: block; margin-top: 15px;"> <span
+							class="btn-details"
+							style="text-decoration: underline; font-weight: bold;"
+							onclick="event.preventDefault(); window.location.href='bank?action=details&accountId=${acc.id}';">
+								<i class="bi bi-info-circle me-1"></i> View Details
 						</span>
-						</a>
-					</div>
+					</span>
+					</a>
+				</div>
 
-				</c:forEach>
+			</c:forEach>
 
-			</div>
+		</div>
 
 
-			<%-- Quick Actions Section --%>
-			<div class='section mt-5 mb-5'>
-				<h2 class='section-title text-center mb-4'>Quick Actions</h2>
-				<div class='quick-actions-card'>
-					<div class='actions-grid'>
-						<a href='bank?action=transfer' class='action-item primary'> <span
-							class="action-icon"> <i class="bi bi-arrow-left-right"></i>
-						</span> <span>New Transfer</span>
-						</a> <a href='bank?action=bizum' class='action-item secondary'> <span
-							class="action-icon"> <i class="bi bi-phone-fill"></i>
-						</span> <span>Send Bizum</span>
-						</a>
-					</div>
+		<%-- Quick Actions Section --%>
+		<div class='section mt-5 mb-5'>
+			<h2 class='section-title text-center mb-4'>Quick Actions</h2>
+			<div class='quick-actions-card'>
+				<div class='actions-grid'>
+					<a href='bank?action=transfer' class='action-item primary'> <span
+						class="action-icon"> <i class="bi bi-arrow-left-right"></i>
+					</span> <span>New Transfer</span>
+					</a> <a href='bank?action=bizum' class='action-item secondary'> <span
+						class="action-icon"> <i class="bi bi-phone-fill"></i>
+					</span> <span>Send Bizum</span>
+					</a>
 				</div>
 			</div>
+		</div>
 		</div>
 
 

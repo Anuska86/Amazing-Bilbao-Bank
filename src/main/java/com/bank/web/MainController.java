@@ -110,19 +110,41 @@ public class MainController extends HttpServlet {
 	private void applyInterest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String dbPassword = System.getenv("DB_PASSWORD");
 
-		// Update the balance
-
-		String sql = "UPDATE accounts SET balance = CASE " + "WHEN account_type = 'SAVINGS' THEN balance * 1.02 "
-				+ "WHEN account_type = 'FIXED-TERM DEPOSIT' THEN balance * 1.05 " + "ELSE balance * 1.001 END";
-
 		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
-				dbPassword); PreparedStatement st = conn.prepareStatement(sql)) {
+				dbPassword)) {
+			conn.setAutoCommit(false);
 
-			int rowsUpdated = st.executeUpdate();
+			try {
 
-			response.sendRedirect("bank?action=dashboard&msg=interest_applied&count=" + rowsUpdated);
+				// Update the balance
 
+				String updateSQL = "UPDATE accounts SET balance = CASE "
+						+ "WHEN account_type = 'SAVINGS' THEN balance * 1.02 "
+						+ "WHEN account_type = 'FIXED-TERM DEPOSIT' THEN balance * 1.05 " + "ELSE balance * 1.001 END";
+
+				PreparedStatement psUpdate = conn.prepareStatement(updateSQL);
+				int rowsUpdated = psUpdate.executeUpdate();
+
+				// Log the transaction + calculate interest
+
+				String logSQL = "INSERT INTO transactions (type, amount, transaction_date, account_id) "
+						+ "SELECT 'MONTHLY INTEREST PAYMENT', "
+						+ "(CASE WHEN account_type = 'SAVINGS' THEN balance * 0.02 "
+						+ "      WHEN account_type = 'FIXED-TERM DEPOSIT' THEN balance * 0.05 "
+						+ "      ELSE balance * 0.001 END), " + "NOW(), id FROM accounts";
+
+				PreparedStatement psLog = conn.prepareStatement(logSQL);
+				psLog.executeUpdate();
+
+				conn.commit(); // Save
+				response.sendRedirect("bank?action=dashboard&msg=interest_applied&count=" + rowsUpdated);
+
+			} catch (Exception e) {
+				conn.rollback();
+				throw e;
+			}
 		} catch (Exception e) {
+			System.out.println("❌ Interest Error: " + e.getMessage());
 			e.printStackTrace();
 			response.sendRedirect("bank?action=dashboard&msg=error");
 		}
