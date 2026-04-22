@@ -11,15 +11,17 @@ public abstract class Account {
 	private int id;
 	private String owner;
 	private double balance;
+	private String iban;
 	private String password;
 	protected ArrayList<String> transactionHistory;
 
 	// CONSTRUCTOR
 
-	public Account(int id, String owner, double balance, String password) {
+	public Account(int id, String owner, double balance, String iban, String password) {
 		this.id = id;
 		this.owner = owner;
 		this.balance = balance;
+		this.iban = iban;
 		this.password = password;
 		this.transactionHistory = new ArrayList<>();
 		transactionHistory.add("Account created with " + balance + "€");
@@ -134,6 +136,16 @@ public abstract class Account {
 
 	public double getBalance() {
 		return balance;
+	}
+
+	// IBAN group
+
+	public String getIban() {
+		return iban;
+	}
+
+	public void setIban(String iban) {
+		this.iban = iban;
 	}
 
 	// Id Group

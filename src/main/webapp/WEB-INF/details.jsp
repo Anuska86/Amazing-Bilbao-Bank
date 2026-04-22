@@ -32,14 +32,15 @@
 
 		<div class="details-container">
 			<div class='welcome-section mb-4'>
-				<h1>${fn:toUpperCase(accountName)}Account</h1>
+				<h1>Account Details</h1>
 				<p class="text-secondary">Viewing details for account ID:
 					#${accountId}</p>
 			</div>
 
 			<div class="detail-card">
 				<div class="account-info-header">
-					<span class="type-badge">${fn:toUpperCase(accountName)}</span>
+					<span class="type-badge">${fn:toUpperCase(accountName)}
+						ACCOUNT</span>
 					<p class="label">Available Balance:</p>
 				</div>
 
@@ -49,11 +50,11 @@
 				</h2>
 
 				<div
-					class="iban-container d-flex align-items-center justify-content-center bg-light p-2 rounded mb-4">
-					<p class="iban-display mb-0 me-2" id="ibanText">ES91 2100 0412
-						8802 0103 ****</p>
-					<button class="btn btn-sm btn-link p-0 text-primary"
-						onclick="copyIban()" title="Copy to clipboard">
+					class="iban-wrapper d-flex align-items-center justify-content-center mb-4">
+					<p class="iban-display mb-0 me-3" id="ibanText"
+						style="letter-spacing: 2px;">ES91 2100 0412 8802 0103 ****</p>
+					<button class="btn btn-sm btn-outline-secondary border-0"
+						onclick="copyIban()" title="Copy IBAN">
 						<i class="bi bi-clipboard"></i>
 					</button>
 				</div>
@@ -91,9 +92,13 @@
 
 <script>
 function copyIban() {
-    const iban = document.getElementById('ibanText').innerText;
+    const iban = "ES91 2100 0412 8802 0103 4567"; 
     navigator.clipboard.writeText(iban).then(() => {
-        alert("IBAN copied to clipboard!");
+     
+        const btn = event.currentTarget;
+        const icon = btn.querySelector('i');
+        icon.classList.replace('bi-clipboard', 'bi-check-lg');
+        setTimeout(() => icon.classList.replace('bi-check-lg', 'bi-clipboard'), 2000);
     });
 }
 </script>
