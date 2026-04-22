@@ -49,14 +49,15 @@ public class Bank {
 	// Method to open accounts
 
 	public void addAccount(Account acc) {
-		String sql = "INSERT INTO accounts (owner_name, balance, account_type) VALUES (?, ?, ?)";
+		String sql = "INSERT INTO accounts (owner_name, balance,iban, account_type) VALUES (?, ?, ?,?)";
 
 		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			pstmt.setString(1, acc.getOwner());
 			pstmt.setDouble(2, acc.getBalance());
+			pstmt.setString(3, acc.getIban());
 			String type = acc.getClass().getSimpleName().replace("Account", "");
-			pstmt.setString(3, type);
+			pstmt.setString(4, type);
 
 			pstmt.executeUpdate();
 
@@ -80,8 +81,9 @@ public class Bank {
 
 	// Method to open accounts with type
 
-	public void addAccountWithSpecificType(String name, double balance, AccountType type, String password) {
-		String sql = "INSERT INTO accounts (owner_name, balance, account_type, password) VALUES (?, ?, ?, ?)";
+	public void addAccountWithSpecificType(String name, double balance, String iban, AccountType type,
+			String password) {
+		String sql = "INSERT INTO accounts (owner_name, balance,iban, account_type, password) VALUES (?, ?, ?, ?,?)";
 
 		int generatedId = 0;
 		Account newAcc = null;
@@ -91,8 +93,9 @@ public class Bank {
 
 			pstmt.setString(1, name);
 			pstmt.setDouble(2, balance);
-			pstmt.setString(3, type.name());
-			pstmt.setString(4, password);
+			pstmt.setString(3, iban);
+			pstmt.setString(4, type.name());
+			pstmt.setString(5, password);
 
 			pstmt.executeUpdate();
 			System.out.println("✅ " + type + " account created for " + name);
@@ -104,11 +107,11 @@ public class Bank {
 			}
 
 			if (type == AccountType.SAVINGS) {
-				newAcc = new SavingsAccount(generatedId, name, balance, password);
+				newAcc = new SavingsAccount(generatedId, name, balance, iban, password);
 			} else if (type == AccountType.CHECKING) {
-				newAcc = new CheckingAccount(generatedId, name, balance, password);
+				newAcc = new CheckingAccount(generatedId, name, balance, iban, password);
 			} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
-				newAcc = new FixedTermDeposit(generatedId, name, balance, password);
+				newAcc = new FixedTermDeposit(generatedId, name, balance, iban, password);
 			}
 
 			if (newAcc != null) {
@@ -178,15 +181,16 @@ public class Bank {
 				int id = rs.getInt("id");
 				String name = rs.getString("owner_name");
 				double balance = rs.getDouble("balance");
+				String iban = rs.getString("iban");
 				String typeFromDB = rs.getString("account_type");
 				String passFromDB = rs.getString("password");
 
 				if (typeFromDB.equalsIgnoreCase("Fixed-Term Deposit") || typeFromDB.equalsIgnoreCase("FIXED_TERM")) {
-					return new FixedTermDeposit(id, name, balance, passFromDB);
+					return new FixedTermDeposit(id, name, balance, iban, passFromDB);
 				} else if (typeFromDB.equalsIgnoreCase("Savings") || typeFromDB.equalsIgnoreCase("SAVINGS")) {
-					return new SavingsAccount(id, name, balance, passFromDB);
+					return new SavingsAccount(id, name, balance, iban, passFromDB);
 				} else {
-					return new CheckingAccount(id, name, balance, passFromDB);
+					return new CheckingAccount(id, name, balance, iban, passFromDB);
 				}
 
 			}

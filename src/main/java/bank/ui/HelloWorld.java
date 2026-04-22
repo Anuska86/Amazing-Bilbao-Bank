@@ -169,7 +169,9 @@ public class HelloWorld {
 					type = AccountType.FIXED_TERM_DEPOSIT;
 				}
 
-				myBank.addAccountWithSpecificType(nameAdd, initialBalance, type, newPassword);
+				String newIban = "ES912100041288020103" + (int) (Math.random() * 9000 + 1000);
+
+				myBank.addAccountWithSpecificType(nameAdd, initialBalance, newIban, type, newPassword);
 
 				System.out.println("🎊 Welcome to the bank, " + nameAdd + "!");
 

@@ -57,6 +57,7 @@
 											</c:forEach>
 										</tbody>
 									</table>
+								</div>
 							</c:when>
 							<c:otherwise>
 								<div class="text-center py-5">
@@ -70,7 +71,8 @@
 				</div>
 			</div>
 		</div>
-		</div>
+		
+
 	</main>
 
 	<jsp:include page="/WEB-INF/footer.jsp" />

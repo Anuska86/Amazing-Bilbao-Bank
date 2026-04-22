@@ -158,7 +158,7 @@ public class MainController extends HttpServlet {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
 					dbPassword);
 
-			String sql = "SELECT id, balance, account_type, owner_name FROM accounts WHERE owner_name = ?";
+			String sql = "SELECT id, balance,iban, account_type, owner_name FROM accounts WHERE owner_name = ?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, sessionUser);
 
@@ -166,6 +166,7 @@ public class MainController extends HttpServlet {
 
 			while (rs.next()) {
 				double balance = rs.getDouble("balance");
+				String iban = rs.getString("iban");
 				String owner = rs.getString("owner_name");
 				String rawType = rs.getString("account_type").toUpperCase().replace("-", "_").replace(" ", "_");
 
@@ -173,11 +174,11 @@ public class MainController extends HttpServlet {
 				Account acc = null;
 
 				if (type == AccountType.SAVINGS) {
-					acc = new SavingsAccount(0, owner, balance, 0, "");
+					acc = new SavingsAccount(0, owner, balance, iban, 0, "");
 				} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
-					acc = new FixedTermDeposit(0, owner, balance, "");
+					acc = new FixedTermDeposit(0, owner, balance, iban, "");
 				} else {
-					acc = new CheckingAccount(0, owner, balance, "");
+					acc = new CheckingAccount(0, owner, balance, iban, "");
 				}
 
 				accountList.add(acc);
@@ -227,6 +228,7 @@ public class MainController extends HttpServlet {
 			while (rs.next()) {
 				int id = rs.getInt("id");
 				double balance = rs.getDouble("balance");
+				String iban = rs.getString("iban");
 				String owner = rs.getString("owner_name");
 				String rawType = rs.getString("account_type").toUpperCase().replace("-", "_").replace(" ", "_");
 
@@ -234,11 +236,11 @@ public class MainController extends HttpServlet {
 				Account acc = null;
 
 				if (type == AccountType.SAVINGS) {
-					acc = new SavingsAccount(id, owner, balance, 0, "");
+					acc = new SavingsAccount(id, owner, balance, iban, 0, "");
 				} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
-					acc = new FixedTermDeposit(id, owner, balance, "");
+					acc = new FixedTermDeposit(id, owner, balance, iban, "");
 				} else {
-					acc = new CheckingAccount(id, owner, balance, "");
+					acc = new CheckingAccount(id, owner, balance, iban, "");
 				}
 
 				accountList.add(acc);
