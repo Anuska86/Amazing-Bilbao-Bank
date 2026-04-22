@@ -1,8 +1,8 @@
-🏦 Amazing Bilbao Bank:
+# 🏦 Amazing Bilbao Bank:
 
 Welcome to my first major Java project! This application is a full-stack banking system that I built while learning the fundamentals of the language and moving into web development.
 
-🎓 The Learning Journey:
+## 🎓 The Learning Journey:
 
 This project represents my progression through the Java ecosystem:
 
@@ -12,7 +12,7 @@ This project represents my progression through the Java ecosystem:
 
 - Phase 3: Web Integration: I moved into the Jakarta EE world, using Servlets for the controller logic and JSP/JSTL for the dynamic frontend.
 
-🚀 Key Features: 
+## 🚀 Key Features: 
 
 - MVC Architecture: A clean separation between Models (Accounts/Transactions), the Controller (MainController), and the View (JSP files).
 
@@ -22,7 +22,7 @@ This project represents my progression through the Java ecosystem:
 
 - Dynamic Dashboard: Real-time balance updates and transaction history categorization (Internal vs. External).
 
-🛠️ Tech Stack:
+## 🛠️ Tech Stack:
 
 
 - Language: Java 26 (The latest version!)
@@ -60,7 +60,16 @@ Run:
 
 - Deploy the project onto an Apache Tomcat 10.1 server.
 
-Developed by Ana Sappia Rey:
+## 🛠️ Future Roadmap (To-Do)
+I am constantly looking to improve this project. My next steps include:
+- **Financial Products:** Adding options for users to manage investments, stocks, and high-yield savings plans.
+- **Framework Migration:** Transitioning the backend from Vanilla Servlets to **Spring Boot** to implement industry-standard dependency injection and security.
+- **UX/UI Enhancement:** Improving the user interface with more advanced Bootstrap components, charts for spending habits, and a dark mode toggle.
+- **Interest Automation:** Implementing a scheduled task to automatically calculate and apply monthly interest to savings accounts.
+
+
+
+## 👩‍💻 Developed by Ana Sappia Rey:
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ana-sappia-rey/)
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Anuska86)
