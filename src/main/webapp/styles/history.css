@@ -25,3 +25,11 @@ card {
 .table-bilbao-dark th:last-child {
 	border-top-right-radius: 10px;
 }
+
+
+/*Text end*/
+
+.text-end {
+    white-space: nowrap !important;
+    min-width: 120px;
+}
