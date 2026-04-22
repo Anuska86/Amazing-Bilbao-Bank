@@ -38,6 +38,32 @@
 		style="flex-direction: column; display: flex;">
 
 		<div class="main-container">
+
+			<%-- Monthly interest message --%>
+			<c:if test="${param.msg == 'success_interest'}">
+				<div
+					class="alert alert-success alert-dismissible fade show shadow-sm"
+					role="alert">
+					<i class="bi bi-check-circle-fill me-2"></i> <strong>Success!</strong>
+					Monthly interest has been applied to all accounts.
+					<button type="button" class="btn-close" data-bs-dismiss="alert"
+						aria-label="Close"></button>
+				</div>
+			</c:if>
+
+			<%-- Monthly interest message denied --%>
+
+			<c:if test="${param.msg == 'already_applied'}">
+				<div
+					class="alert alert-warning alert-dismissible fade show shadow-sm"
+					role="alert">
+					<i class="bi bi-exclamation-triangle-fill me-2"></i> <strong>Action
+						Denied:</strong> Interest has already been applied for the current month.
+					<button type="button" class="btn-close" data-bs-dismiss="alert"
+						aria-label="Close"></button>
+				</div>
+			</c:if>
+
 			<%-- Welcome section --%>
 
 			<div class='welcome-section'>
@@ -46,9 +72,8 @@
 			</div>
 
 			<div class="mb-0">
-				<a href="bank?action=applyInterest"
-					class="btn btn-warning shadow-sm"> <i class="bi bi-piggy-bank"></i>
-					Simulate Monthly Interest
+				<a href="bank?action=applyInterest" class="btn btn-light shadow-sm">
+					<i class="bi bi-piggy-bank"></i> Simulate Monthly Interest
 				</a>
 			</div>
 
@@ -101,7 +126,7 @@
 				</div>
 			</div>
 		</div>
-		</div>
+
 
 
 	</main>

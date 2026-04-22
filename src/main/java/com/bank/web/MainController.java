@@ -114,13 +114,38 @@ public class MainController extends HttpServlet {
 				dbPassword)) {
 			conn.setAutoCommit(false);
 
+			// Check it the interest it has been applied this month
+
+			String checkSQL = "SELECT last_interest_date FROM system_config WHERE id = 1";
+
+			try (PreparedStatement psCheck = conn.prepareStatement(checkSQL); ResultSet rs = psCheck.executeQuery()) {
+
+				if (rs.next()) {
+					java.sql.Date lastDate = rs.getDate("last_interest_date");
+					java.util.Calendar cal = java.util.Calendar.getInstance();
+					int currentMonth = cal.get(java.util.Calendar.MONTH);
+					int currentYear = cal.get(java.util.Calendar.YEAR);
+
+					cal.setTime(lastDate);
+					if (cal.get(java.util.Calendar.MONTH) == currentMonth
+							&& cal.get(java.util.Calendar.YEAR) == currentYear) {
+
+						// already done, error!
+						response.sendRedirect("bank?action=dashboard&msg=already_applied");
+						return;
+					}
+				}
+
+			}
+
 			try {
 
 				// Update the balance
 
-				String updateSQL = "UPDATE accounts SET balance = CASE "
+				String updateSQL = "UPDATE accounts SET balance = ROUND(CASE "
 						+ "WHEN account_type = 'SAVINGS' THEN balance * 1.02 "
-						+ "WHEN account_type = 'FIXED-TERM DEPOSIT' THEN balance * 1.05 " + "ELSE balance * 1.001 END";
+						+ "WHEN account_type = 'FIXED-TERM DEPOSIT' THEN balance * 1.05 "
+						+ "ELSE balance * 1.001 END, 2)";
 
 				PreparedStatement psUpdate = conn.prepareStatement(updateSQL);
 				int rowsUpdated = psUpdate.executeUpdate();
@@ -128,13 +153,20 @@ public class MainController extends HttpServlet {
 				// Log the transaction + calculate interest
 
 				String logSQL = "INSERT INTO transactions (type, amount, transaction_date, account_id) "
-						+ "SELECT 'MONTHLY INTEREST PAYMENT', "
-						+ "(CASE WHEN account_type = 'SAVINGS' THEN balance * 0.02 "
+						+ "SELECT CONCAT('INTEREST PAYMENT (', account_type, ')'), "
+						+ "ROUND(CASE WHEN account_type = 'SAVINGS' THEN balance * 0.02 "
 						+ "      WHEN account_type = 'FIXED-TERM DEPOSIT' THEN balance * 0.05 "
-						+ "      ELSE balance * 0.001 END), " + "NOW(), id FROM accounts";
+						+ "      ELSE balance * 0.001 END, 2), " + "NOW(), id FROM accounts";
 
 				PreparedStatement psLog = conn.prepareStatement(logSQL);
 				psLog.executeUpdate();
+
+				// Save the last_interest_date
+				String updateDateSQL = "UPDATE system_config SET last_interest_date = NOW() WHERE id = 1";
+
+				try (PreparedStatement psDate = conn.prepareStatement(updateDateSQL)) {
+					psDate.executeUpdate();
+				}
 
 				conn.commit(); // Save
 				response.sendRedirect("bank?action=dashboard&msg=interest_applied&count=" + rowsUpdated);
