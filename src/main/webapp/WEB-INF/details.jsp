@@ -52,8 +52,11 @@
 				<div
 					class="iban-wrapper d-flex align-items-center justify-content-center mb-4">
 					<p class="iban-display mb-0 me-3" id="ibanText"
-						style="letter-spacing: 2px;">ES91 2100 0412 8802 0103 ****</p>
-					<button class="btn btn-sm btn-outline-secondary border-0"
+						style="letter-spacing: 1px; font-family: monospace;">
+						${fn:substring(iban, 0, 4)} ${fn:substring(iban, 4, 8)}
+						${fn:substring(iban, 8, 12)} ${fn:substring(iban, 12, 16)}
+						${fn:substring(iban, 16, 20)} ${fn:substring(iban, 20, 24)}</p>
+					<button class="btn btn-sm btn-outline-primary border-0"
 						onclick="copyIban()" title="Copy IBAN">
 						<i class="bi bi-clipboard"></i>
 					</button>
@@ -92,11 +95,10 @@
 
 <script>
 function copyIban() {
-    const iban = "ES91 2100 0412 8802 0103 4567"; 
-    navigator.clipboard.writeText(iban).then(() => {
-     
-        const btn = event.currentTarget;
-        const icon = btn.querySelector('i');
+	const rawIban = "${iban}"; 
+    navigator.clipboard.writeText(rawIban).then(() => {
+        
+        const icon = document.querySelector('.bi-clipboard');
         icon.classList.replace('bi-clipboard', 'bi-check-lg');
         setTimeout(() => icon.classList.replace('bi-check-lg', 'bi-clipboard'), 2000);
     });

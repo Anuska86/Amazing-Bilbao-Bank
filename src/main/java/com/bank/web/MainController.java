@@ -273,7 +273,7 @@ public class MainController extends HttpServlet {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
 					dbPassword);
 
-			String sql = "SELECT id, balance, owner_name, co_owner_name, account_type FROM accounts WHERE id = ?";
+			String sql = "SELECT id, balance, iban, owner_name, co_owner_name, account_type FROM accounts WHERE id = ?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setInt(1, Integer.parseInt(accountId));
 
@@ -282,6 +282,7 @@ public class MainController extends HttpServlet {
 			if (rs.next()) {
 				request.setAttribute("accountId", rs.getInt("id"));
 				request.setAttribute("balance", rs.getDouble("balance"));
+				request.setAttribute("iban", rs.getString("iban"));
 				request.setAttribute("titular", rs.getString("owner_name"));
 				request.setAttribute("cotitular", rs.getString("co_owner_name"));
 				request.setAttribute("accountName", rs.getString("account_type"));
