@@ -97,53 +97,49 @@ public class MainController extends HttpServlet {
 	private void showHistory(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		String accountId = request.getParameter("accountId");
+		String sessionUser = (String) request.getSession().getAttribute("user");
 
-		if (accountId == null) {
-			response.sendRedirect("bank?action=dashboard");
-			return;
-		}
-
-		List<Transaction> historyList = new ArrayList<>();
+		List<Transaction> internalTrans = new ArrayList<>();
+		List<Transaction> externalTrans = new ArrayList<>();
 		String dbPassword = System.getenv("DB_PASSWORD");
 
-		try {
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
+				dbPassword);
+				PreparedStatement st = conn.prepareStatement(
+						"SELECT * FROM transactions WHERE account_id = ? ORDER BY transaction_date DESC")) {
 
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
-					dbPassword);
-
-			// JOIN with accounts table
-
-			String sql = "SELECT * FROM transactions WHERE account_id = ? ORDER BY transaction_date DESC";
-
-			PreparedStatement st = conn.prepareStatement(sql);
 			st.setInt(1, Integer.parseInt(accountId));
 
-			ResultSet rs = st.executeQuery();
+			try (ResultSet rs = st.executeQuery()) {
+				while (rs.next()) {
+					Transaction trans = new Transaction(rs.getInt("id"), rs.getString("type"), rs.getDouble("amount"),
+							rs.getTimestamp("transaction_date"), rs.getInt("account_id"));
 
-			while (rs.next()) {
-				// Map the transactions table
-
-				Transaction trans = new Transaction(rs.getInt("id"), rs.getString("type"), rs.getDouble("amount"),
-						rs.getTimestamp("transaction_date"), rs.getInt("account_id"));
-				historyList.add(trans);
+					String desc = trans.getType();
+					// Categorize by checking if the session user is the one mentioned in the
+					// description
+					if (desc.contains("TRANSFER TO: " + sessionUser)
+							|| desc.contains("TRANSFER FROM: " + sessionUser)) {
+						internalTrans.add(trans);
+					} else {
+						externalTrans.add(trans);
+					}
+				}
 			}
-			conn.close();
-
 		} catch (Exception e) {
-			System.out.println("❌ History Error: " + e.getMessage());
+			System.out.println("❌ Show History Error: " + e.getMessage());
 			e.printStackTrace();
 		}
 
-		request.setAttribute("transactions", historyList);
+		request.setAttribute("internalTransactions", internalTrans);
+		request.setAttribute("externalTransactions", externalTrans);
 		request.getRequestDispatcher("/WEB-INF/history.jsp").forward(request, response);
-
 	}
-
 	// Transfer Form
 
 	private void showTransferForm(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		String sessionUser = (String) request.getSession().getAttribute("user");
 
 		if (sessionUser == null) {
@@ -151,42 +147,42 @@ public class MainController extends HttpServlet {
 			return;
 		}
 
+		// Data
+
 		List<Account> accountList = new ArrayList<>();
 		String dbPassword = System.getenv("DB_PASSWORD");
+		String sql = "SELECT id, balance,iban, account_type, owner_name FROM accounts WHERE owner_name = ?";
 
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
-					dbPassword);
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
+				dbPassword);) {
 
-			String sql = "SELECT id, balance,iban, account_type, owner_name FROM accounts WHERE owner_name = ?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, sessionUser);
 
-			ResultSet rs = st.executeQuery();
+			try (ResultSet rs = st.executeQuery();) {
+				while (rs.next()) {
+					int id = rs.getInt("id");
+					double balance = rs.getDouble("balance");
+					String iban = rs.getString("iban");
+					String owner = rs.getString("owner_name");
+					String rawType = rs.getString("account_type").toUpperCase().replace("-", "_").replace(" ", "_");
 
-			while (rs.next()) {
-				double balance = rs.getDouble("balance");
-				String iban = rs.getString("iban");
-				String owner = rs.getString("owner_name");
-				String rawType = rs.getString("account_type").toUpperCase().replace("-", "_").replace(" ", "_");
+					AccountType type = AccountType.valueOf(rawType);
+					Account acc = null;
 
-				AccountType type = AccountType.valueOf(rawType);
-				Account acc = null;
+					if (type == AccountType.SAVINGS) {
+						acc = new SavingsAccount(id, owner, balance, iban, 0, "");
+					} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
+						acc = new FixedTermDeposit(id, owner, balance, iban, "");
+					} else {
+						acc = new CheckingAccount(id, owner, balance, iban, "");
+					}
 
-				if (type == AccountType.SAVINGS) {
-					acc = new SavingsAccount(0, owner, balance, iban, 0, "");
-				} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
-					acc = new FixedTermDeposit(0, owner, balance, iban, "");
-				} else {
-					acc = new CheckingAccount(0, owner, balance, iban, "");
+					accountList.add(acc);
+
 				}
 
-				accountList.add(acc);
-
 			}
-
-			conn.close();
 
 		} catch (Exception e) {
 			System.out.println("❌ Transfer Form Error: " + e.getMessage());
@@ -215,41 +211,37 @@ public class MainController extends HttpServlet {
 		// Data
 		List<Account> accountList = new ArrayList<>();
 		String dbPassword = System.getenv("DB_PASSWORD");
+		String sql = "SELECT id, balance,iban, account_type, owner_name FROM accounts WHERE owner_name = ?";
 
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
-					dbPassword);
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
+				dbPassword);) {
 
-			String sql = "SELECT id, balance,iban, account_type, owner_name FROM accounts WHERE owner_name = ?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, sessionUser);
 
-			ResultSet rs = st.executeQuery();
+			try (ResultSet rs = st.executeQuery()) {
+				while (rs.next()) {
+					int id = rs.getInt("id");
+					double balance = rs.getDouble("balance");
+					String iban = rs.getString("iban");
+					String owner = rs.getString("owner_name");
+					String rawType = rs.getString("account_type").toUpperCase().replace("-", "_").replace(" ", "_");
 
-			while (rs.next()) {
-				int id = rs.getInt("id");
-				double balance = rs.getDouble("balance");
-				String iban = rs.getString("iban");
-				String owner = rs.getString("owner_name");
-				String rawType = rs.getString("account_type").toUpperCase().replace("-", "_").replace(" ", "_");
+					AccountType type = AccountType.valueOf(rawType);
+					Account acc;
 
-				AccountType type = AccountType.valueOf(rawType);
-				Account acc = null;
+					if (type == AccountType.SAVINGS) {
+						acc = new SavingsAccount(id, owner, balance, iban, 0, "");
+					} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
+						acc = new FixedTermDeposit(id, owner, balance, iban, "");
+					} else {
+						acc = new CheckingAccount(id, owner, balance, iban, "");
+					}
 
-				if (type == AccountType.SAVINGS) {
-					acc = new SavingsAccount(id, owner, balance, iban, 0, "");
-				} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
-					acc = new FixedTermDeposit(id, owner, balance, iban, "");
-				} else {
-					acc = new CheckingAccount(id, owner, balance, iban, "");
+					accountList.add(acc);
+
 				}
-
-				accountList.add(acc);
-
 			}
-
-			conn.close();
 
 		} catch (Exception e) {
 			System.out.println("❌ Show Dashboard Error: " + e.getMessage());
@@ -266,34 +258,31 @@ public class MainController extends HttpServlet {
 	private void showDetails(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String accountId = request.getParameter("accountId");
+		String dbPassword = System.getenv("DB_PASSWORD");
+		String sql = "SELECT id, balance, iban, owner_name, co_owner_name, account_type FROM accounts WHERE id = ?";
 
 		if (accountId == null) {
 			response.sendRedirect("index.html");
 			return;
 		}
 
-		try {
-			String dbPassword = System.getenv("DB_PASSWORD");
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
-					dbPassword);
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
+				dbPassword);) {
 
-			String sql = "SELECT id, balance, iban, owner_name, co_owner_name, account_type FROM accounts WHERE id = ?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setInt(1, Integer.parseInt(accountId));
 
-			ResultSet rs = st.executeQuery();
+			try (ResultSet rs = st.executeQuery();) {
+				if (rs.next()) {
+					request.setAttribute("accountId", rs.getInt("id"));
+					request.setAttribute("balance", rs.getDouble("balance"));
+					request.setAttribute("iban", rs.getString("iban"));
+					request.setAttribute("titular", rs.getString("owner_name"));
+					request.setAttribute("cotitular", rs.getString("co_owner_name"));
+					request.setAttribute("accountName", rs.getString("account_type"));
+				}
 
-			if (rs.next()) {
-				request.setAttribute("accountId", rs.getInt("id"));
-				request.setAttribute("balance", rs.getDouble("balance"));
-				request.setAttribute("iban", rs.getString("iban"));
-				request.setAttribute("titular", rs.getString("owner_name"));
-				request.setAttribute("cotitular", rs.getString("co_owner_name"));
-				request.setAttribute("accountName", rs.getString("account_type"));
 			}
-
-			conn.close();
 
 		} catch (Exception e) {
 			System.out.println("❌ Show Details Error: " + e.getMessage());
@@ -427,6 +416,7 @@ public class MainController extends HttpServlet {
 				throw e;
 			}
 		} catch (Exception e) {
+			System.out.println("❌ Handle Transfer Error: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -438,37 +428,33 @@ public class MainController extends HttpServlet {
 
 		String user = request.getParameter("username");
 		String pass = request.getParameter("password");
-
 		String dbPassword = System.getenv("DB_PASSWORD");
 
-		try {
+		String sql = "SELECT * FROM accounts WHERE owner_name = ? AND password = ?";
 
-			Class.forName("com.mysql.cj.jdbc.Driver");
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
+				dbPassword);) {
 
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
-					dbPassword);
-
-			String sql = "SELECT * FROM accounts WHERE owner_name = ? AND password = ?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, user);
 			st.setString(2, pass);
 
-			ResultSet rs = st.executeQuery();
+			try (ResultSet rs = st.executeQuery();) {
+				if (rs.next()) {
+					request.getSession().setAttribute("user", user);
+					response.sendRedirect("bank?action=dashboard");
 
-			if (rs.next()) {
-				request.getSession().setAttribute("user", user);
-				response.sendRedirect("bank?action=dashboard");
+				} else {
 
-			} else {
-
-				response.getWriter().println("<script>alert('Invalid Login!'); window.location='index.html';</script>");
+					response.getWriter()
+							.println("<script>alert('Invalid Login!'); window.location='index.html';</script>");
+				}
 			}
-			conn.close();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.getWriter().println("Database error: " + e.getMessage());
 		}
-
 	}
 
 }
