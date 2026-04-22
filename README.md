@@ -44,7 +44,7 @@ Clone the Repository:
 
 Bash
 
-git clone [https://github.com/Anuska86/MyFirstProject]
+- git clone [https://github.com/Anuska86/MyFirstProject]
 
 Database Configuration:
 
@@ -60,8 +60,9 @@ Run:
 
 - Deploy the project onto an Apache Tomcat 10.1 server.
 
-## 🛠️ Future Roadmap (To-Do)
-I am constantly looking to improve this project. My next steps include:
+## 🛠️ Future Roadmap (To-Do):
+
+I am constantly looking to improve my projects. My next steps include:
 - **Financial Products:** Adding options for users to manage investments, stocks, and high-yield savings plans.
 - **Framework Migration:** Transitioning the backend from Vanilla Servlets to **Spring Boot** to implement industry-standard dependency injection and security.
 - **UX/UI Enhancement:** Improving the user interface with more advanced Bootstrap components, charts for spending habits, and a dark mode toggle.
