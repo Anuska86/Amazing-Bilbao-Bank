@@ -76,18 +76,24 @@
 			</div>
 
 
-		</div>
-
-		<%-- Quick Actions Section --%>
-		<div class='quick-actions-main-container'>
-			<h2 class='section-title'>Quick Actions</h2>
-			<div class='quick-actions-container'>
-				<a href='bank?action=transfer' class='btn btn-primary px-4'>New
-					Transfer</a> <a href='bank?action=bizum'
-					class='btn btn-outline-primary px-4'>Send Bizum</a>
+			<%-- Quick Actions Section --%>
+			<div class='quick-actions-card mt-5 mb-5'>
+				<h2 class='section-title text-center mb-4'>Quick Actions</h2>
+				<div class='quick-actions-card'>
+					<div class='actions-grid'>
+						<a href='bank?action=transfer' class='action-item primary'> <span
+							class="action-icon"> <i class="bi bi-arrow-left-right"></i>
+						</span> <span>New Transfer</span>
+						</a> <a href='bank?action=bizum' class='action-item secondary'> <span
+							class="action-icon"> <i class="bi bi-phone-fill"></i>
+						</span> <span>Send Bizum</span>
+						</a>
+					</div>
+				</div>
 			</div>
-
 		</div>
+
+
 	</main>
 
 	<jsp:include page="/WEB-INF/footer.jsp" />
