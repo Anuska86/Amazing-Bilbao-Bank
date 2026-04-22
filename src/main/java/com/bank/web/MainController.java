@@ -109,6 +109,7 @@ public class MainController extends HttpServlet {
 
 	private void applyInterest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String dbPassword = System.getenv("DB_PASSWORD");
+		String sessionUser = (String) request.getSession().getAttribute("user");
 
 		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
 				dbPassword)) {
@@ -145,9 +146,10 @@ public class MainController extends HttpServlet {
 				String updateSQL = "UPDATE accounts SET balance = ROUND(CASE "
 						+ "WHEN account_type = 'SAVINGS' THEN balance * 1.02 "
 						+ "WHEN account_type = 'FIXED-TERM DEPOSIT' THEN balance * 1.05 "
-						+ "ELSE balance * 1.001 END, 2)";
+						+ "ELSE balance * 1.001 END, 2) " + "WHERE owner_name = ?";
 
 				PreparedStatement psUpdate = conn.prepareStatement(updateSQL);
+				psUpdate.setString(1, sessionUser);
 				int rowsUpdated = psUpdate.executeUpdate();
 
 				// Log the transaction + calculate interest
@@ -156,9 +158,10 @@ public class MainController extends HttpServlet {
 						+ "SELECT CONCAT('INTEREST PAYMENT (', account_type, ')'), "
 						+ "ROUND(CASE WHEN account_type = 'SAVINGS' THEN balance * 0.02 "
 						+ "      WHEN account_type = 'FIXED-TERM DEPOSIT' THEN balance * 0.05 "
-						+ "      ELSE balance * 0.001 END, 2), " + "NOW(), id FROM accounts";
+						+ "      ELSE balance * 0.001 END, 2), " + "NOW(), id FROM accounts WHERE owner_name = ?";
 
 				PreparedStatement psLog = conn.prepareStatement(logSQL);
+				psLog.setString(1, sessionUser);
 				psLog.executeUpdate();
 
 				// Save the last_interest_date

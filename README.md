@@ -2,6 +2,13 @@
 
 Welcome to my first major Java project! This application is a full-stack banking system that I built while learning the fundamentals of the language and moving into web development.
 
+
+![Dashboard Preview](screenshots/dashboard.png)
+![Details Preview](screenshots/details.png)
+![History Preview](screenshots/history.png)
+![Transfer Preview](screenshots/transfer.png)
+
+
 ## 🎓 The Learning Journey:
 
 This project represents my progression through the Java ecosystem:
