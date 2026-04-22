@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +31,11 @@
 
 
 		<div class="details-container">
-			<h1>Details for ${accountName} account</h1>
+			<div class='welcome-section mb-4'>
+				<h1>${fn:toUpperCase(accountName)}Account</h1>
+				<p class="text-secondary">Viewing details for account ID:
+					#${accountId}</p>
+			</div>
 
 			<div class="detail-card">
 				<div class="account-info-header">

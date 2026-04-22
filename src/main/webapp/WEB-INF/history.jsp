@@ -31,34 +31,45 @@
 				<div class="d-flex justify-content-center">
 					<div class="card shadow border-0"
 						style="width: 100%; max-width: 600px;">
-						<div class="table-responsive">
-							<table class="table table-hover mb-0">
-								<thead class="table-bilbao-dark">
-									<tr>
-										<th>Date</th>
-										<th>Description</th>
-										<th class="text-end">Amount</th>
-									</tr>
-								</thead>
-								<tbody>
-									<c:forEach var="t" items="${transactions}">
-										<tr>
-											<td class="align-middle"><fmt:formatDate
-													value="${t.date}" pattern="dd MMM yyyy HH:mm" /></td>
-											<td class="align-middle">${t.type}</td>
-											<td
-												class="text-end align-middle fw-bold ${t.amount < 0 ? 'text-danger' : 'text-success'}">
-												<fmt:formatNumber value="${t.amount}" type="currency"
-													currencySymbol="€" />
-											</td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-						</div>
+						<c:choose>
+							<c:when test="${not empty transactions}">
+								<div class="table-responsive">
+									<table class="table table-hover mb-0">
+										<thead class="table-bilbao-dark">
+											<tr>
+												<th>Date</th>
+												<th>Description</th>
+												<th class="text-end">Amount</th>
+											</tr>
+										</thead>
+										<tbody>
+											<c:forEach var="t" items="${transactions}">
+												<tr>
+													<td class="align-middle"><fmt:formatDate
+															value="${t.date}" pattern="dd MMM yyyy HH:mm" /></td>
+													<td class="align-middle">${t.type}</td>
+													<td
+														class="text-end align-middle fw-bold ${t.amount < 0 ? 'text-danger' : 'text-success'}">
+														<fmt:formatNumber value="${t.amount}" type="currency"
+															currencySymbol="€" />
+													</td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+							</c:when>
+							<c:otherwise>
+								<div class="text-center py-5">
+									<i class="bi bi-cash-stack display-1 text-muted"></i>
+									<p class="mt-3 text-secondary">No transactions found for
+										this account yet.</p>
+								</div>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
 			</div>
+		</div>
 		</div>
 	</main>
 
