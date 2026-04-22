@@ -39,7 +39,7 @@
 
 			<div class="detail-card">
 				<div class="account-info-header">
-					<span class="type-badge">Active Account</span>
+					<span class="type-badge">${fn:toUpperCase(accountName)}</span>
 					<p class="label">Available Balance:</p>
 				</div>
 
@@ -48,7 +48,15 @@
 					<fmt:formatNumber value="${balance}" type="currency" />
 				</h2>
 
-				<p class="iban-display">ES91 2100 0412 8802 0103 ****</p>
+				<div
+					class="iban-container d-flex align-items-center justify-content-center bg-light p-2 rounded mb-4">
+					<p class="iban-display mb-0 me-2" id="ibanText">ES91 2100 0412
+						8802 0103 ****</p>
+					<button class="btn btn-sm btn-link p-0 text-primary"
+						onclick="copyIban()" title="Copy to clipboard">
+						<i class="bi bi-clipboard"></i>
+					</button>
+				</div>
 
 				<div class="ownership-info">
 					<div class="info-group">
@@ -80,4 +88,14 @@
 
 	<jsp:include page="/WEB-INF/footer.jsp" />
 </body>
+
+<script>
+function copyIban() {
+    const iban = document.getElementById('ibanText').innerText;
+    navigator.clipboard.writeText(iban).then(() => {
+        alert("IBAN copied to clipboard!");
+    });
+}
+</script>
+
 </html>
