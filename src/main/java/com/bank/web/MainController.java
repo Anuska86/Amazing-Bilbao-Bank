@@ -94,6 +94,10 @@ public class MainController extends HttpServlet {
 			showHistory(request, response);
 			break;
 
+		case "applyInterest":
+			applyInterest(request, response);
+			break;
+
 		default:
 			response.sendRedirect("index.html");
 			break;
@@ -101,7 +105,31 @@ public class MainController extends HttpServlet {
 
 	}
 
-	// Fetch history methog
+	// Apply Interest method
+
+	private void applyInterest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String dbPassword = System.getenv("DB_PASSWORD");
+
+		// Update the balance
+
+		String sql = "UPDATE accounts SET balance = CASE " + "WHEN account_type = 'SAVINGS' THEN balance * 1.02 "
+				+ "WHEN account_type = 'FIXED-TERM DEPOSIT' THEN balance * 1.05 " + "ELSE balance * 1.001 END";
+
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
+				dbPassword); PreparedStatement st = conn.prepareStatement(sql)) {
+
+			int rowsUpdated = st.executeUpdate();
+
+			response.sendRedirect("bank?action=dashboard&msg=interest_applied&count=" + rowsUpdated);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.sendRedirect("bank?action=dashboard&msg=error");
+		}
+
+	}
+
+	// Fetch history method
 
 	private void showHistory(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
