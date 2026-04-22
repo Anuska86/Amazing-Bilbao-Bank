@@ -32,7 +32,8 @@
 					<div class="card shadow border-0"
 						style="width: 100%; max-width: 600px;">
 						<c:choose>
-							<c:when test="${not empty transactions}">
+							<c:when
+								test="${not empty internalTransactions or not empty externalTransactions}">
 								<div class="table-responsive">
 									<table class="table table-hover mb-0">
 										<thead class="table-bilbao-dark">
@@ -43,18 +44,37 @@
 											</tr>
 										</thead>
 										<tbody>
-											<c:forEach var="t" items="${transactions}">
+
+											<%-- Show Internal (Interest and Internal Transfers) --%>
+
+											<c:forEach var="it" items="${internalTransactions}">
 												<tr>
 													<td class="align-middle"><fmt:formatDate
-															value="${t.date}" pattern="dd MMM yyyy HH:mm" /></td>
-													<td class="align-middle">${t.type}</td>
+															value="${it.date}" pattern="dd MMM yyyy HH:mm" /></td>
+													<td class="align-middle">${it.type}</td>
 													<td
-														class="text-end align-middle fw-bold ${t.amount < 0 ? 'text-danger' : 'text-success'}">
-														<fmt:formatNumber value="${t.amount}" type="currency"
+														class="text-end align-middle fw-bold ${it.amount < 0 ? 'text-danger' : 'text-success'}">
+														<fmt:formatNumber value="${it.amount}" type="currency"
 															currencySymbol="€" />
 													</td>
 												</tr>
 											</c:forEach>
+
+											<%-- External Transfers)--%>
+											<c:forEach var="et" items="${externalTransactions}">
+												<tr>
+													<td class="align-middle"><fmt:formatDate
+															value="${et.date}" pattern="dd MMM yyyy HH:mm" /></td>
+													<td class="align-middle">${et.type}</td>
+													<td
+														class="text-end align-middle fw-bold ${et.amount < 0 ? 'text-danger' : 'text-success'}">
+														<fmt:formatNumber value="${et.amount}" type="currency"
+															currencySymbol="€" />
+													</td>
+												</tr>
+											</c:forEach>
+
+
 										</tbody>
 									</table>
 								</div>
@@ -71,7 +91,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 
 	</main>
 

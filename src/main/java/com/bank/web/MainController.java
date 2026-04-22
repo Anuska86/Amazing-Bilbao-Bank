@@ -169,7 +169,7 @@ public class MainController extends HttpServlet {
 				}
 
 				conn.commit(); // Save
-				response.sendRedirect("bank?action=dashboard&msg=interest_applied&count=" + rowsUpdated);
+				response.sendRedirect("bank?action=dashboard&msg=success_interest&count=" + rowsUpdated);
 
 			} catch (Exception e) {
 				conn.rollback();
@@ -210,7 +210,7 @@ public class MainController extends HttpServlet {
 					String desc = trans.getType();
 					// Categorize by checking if the session user is the one mentioned in the
 					// description
-					if (desc.contains("TRANSFER TO: " + sessionUser)
+					if (desc.contains("INTEREST PAYMENT") || desc.contains("TRANSFER TO: " + sessionUser)
 							|| desc.contains("TRANSFER FROM: " + sessionUser)) {
 						internalTrans.add(trans);
 					} else {

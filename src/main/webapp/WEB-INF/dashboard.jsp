@@ -45,7 +45,7 @@
 					class="alert alert-success alert-dismissible fade show shadow-sm"
 					role="alert">
 					<i class="bi bi-check-circle-fill me-2"></i> <strong>Success!</strong>
-					Monthly interest has been applied to all accounts.
+					Monthly interest has been applied to <strong>${param.count}</strong> accounts.
 					<button type="button" class="btn-close" data-bs-dismiss="alert"
 						aria-label="Close"></button>
 				</div>
