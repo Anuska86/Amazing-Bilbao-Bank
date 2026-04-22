@@ -30,7 +30,7 @@
 
 				<div class="d-flex justify-content-center">
 					<div class="card shadow border-0"
-						style="width: 100%; max-width: 600px;">
+						style="width: 100%; max-width: 600px; height: auto;">
 						<c:choose>
 							<c:when
 								test="${not empty internalTransactions or not empty externalTransactions}">
@@ -38,41 +38,53 @@
 									<table class="table table-hover mb-0">
 										<thead class="table-bilbao-dark">
 											<tr>
-												<th>Date</th>
-												<th>Description</th>
-												<th class="text-end">Amount</th>
+												<th style="width: 25%;">Date</th>
+												<th style="width: 50%;">Description</th>
+												<th style="width: 25%;" class="text-end">Amount</th>
 											</tr>
 										</thead>
 										<tbody>
 
 											<%-- Show Internal (Interest and Internal Transfers) --%>
 
-											<c:forEach var="it" items="${internalTransactions}">
-												<tr>
-													<td class="align-middle"><fmt:formatDate
-															value="${it.date}" pattern="dd MMM yyyy HH:mm" /></td>
-													<td class="align-middle">${it.type}</td>
-													<td
-														class="text-end align-middle fw-bold ${it.amount < 0 ? 'text-danger' : 'text-success'}">
-														<fmt:formatNumber value="${it.amount}" type="currency"
-															currencySymbol="€" />
-													</td>
+											<c:if test="${not empty internalTransactions}">
+												<tr class="table-light">
+													<td colspan="3" class="fw-bold text-muted small uppercase">Internal
+														Actions & Interest</td>
 												</tr>
-											</c:forEach>
+												<c:forEach var="it" items="${internalTransactions}">
+													<tr>
+														<td class="align-middle"><fmt:formatDate
+																value="${it.date}" pattern="dd MMM yyyy HH:mm" /></td>
+														<td class="align-middle">${it.type}</td>
+														<td
+															class="text-end align-middle fw-bold ${it.amount < 0 ? 'text-danger' : 'text-success'}">
+															<fmt:formatNumber value="${it.amount}" type="currency"
+																currencySymbol="€" />
+														</td>
+													</tr>
+												</c:forEach>
+											</c:if>
 
 											<%-- External Transfers)--%>
-											<c:forEach var="et" items="${externalTransactions}">
-												<tr>
-													<td class="align-middle"><fmt:formatDate
-															value="${et.date}" pattern="dd MMM yyyy HH:mm" /></td>
-													<td class="align-middle">${et.type}</td>
-													<td
-														class="text-end align-middle fw-bold ${et.amount < 0 ? 'text-danger' : 'text-success'}">
-														<fmt:formatNumber value="${et.amount}" type="currency"
-															currencySymbol="€" />
-													</td>
+											<c:if test="${not empty externalTransactions}">
+												<tr class="table-light">
+													<td colspan="3" class="fw-bold text-muted small uppercase">External
+														Transfers</td>
 												</tr>
-											</c:forEach>
+												<c:forEach var="et" items="${externalTransactions}">
+													<tr>
+														<td class="align-middle"><fmt:formatDate
+																value="${et.date}" pattern="dd MMM yyyy HH:mm" /></td>
+														<td class="align-middle">${et.type}</td>
+														<td
+															class="text-end align-middle fw-bold ${et.amount < 0 ? 'text-danger' : 'text-success'}">
+															<fmt:formatNumber value="${et.amount}" type="currency"
+																currencySymbol="€" />
+														</td>
+													</tr>
+												</c:forEach>
+											</c:if>
 
 
 										</tbody>
