@@ -52,7 +52,7 @@
 			<div class='accounts-grid'>
 				<c:forEach var="acc" items="${accounts}">
 					<div class="card-container">
-						<a href="bank?action=details&type=${acc.type}"
+						<a href="bank?action=details&accountId=${acc.id}"
 							class="card clickable-card card-${fn:replace(fn:toLowerCase(acc.type), ' ', '-')}">
 							<span class="account-holder"> Account Holder: <strong>${acc.owner}</strong>
 						</span> <span class="account-type">${acc.displayName}</span> <span
