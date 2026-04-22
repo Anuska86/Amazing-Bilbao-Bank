@@ -43,12 +43,18 @@
 }
 
 .card {
+	display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
 	background: #ffffff;
 	padding: 3rem;
 	border-radius: 15px;
 	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-	width: 450px;
-	text-align: center;
+	width: 430px;
+	height: 360px;
+	
 }
 
 .card.card-checking {
@@ -88,6 +94,8 @@
 
 /*ACCOUNT HOLDER*/
 .account-holder {
+	display: block;
+	width: 100%;
 	font-size: 1.1rem;
 	color: #2c3e50;
 	margin-bottom: 5px;
@@ -95,23 +103,27 @@
 
 /*ACCOUNT TYPE*/
 .account-type {
+	display: block;
+	width: 100%;
 	text-transform: uppercase;
 	letter-spacing: 2px;
 	color: #95a5a6;
 	font-weight: bold;
 	font-size: 0.85rem;
-	margin-top: 10px;
+	margin-top: 2px;
 }
 
 /*BALANCE*/
 .balance {
+	display: block;
+	width: 100%;
 	color: #27ae60;
-	font-size: 3.5rem;
+	font-size: 3.2rem;
 	letter-spacing: 2px;
 	font-weight: 800;
-	margin: 20px 0;
+	margin: auto 0;
 	white-space: nowrap;
-	display: inline-block;
+	
 }
 
 /*QUICK ACTIONS SECTION*/

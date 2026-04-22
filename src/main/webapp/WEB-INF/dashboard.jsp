@@ -55,7 +55,8 @@
 						<a href="bank?action=details&accountId=${acc.id}"
 							class="card clickable-card card-${fn:replace(fn:toLowerCase(acc.type), ' ', '-')}">
 							<span class="account-holder"> Account Holder: <strong>${acc.owner}</strong>
-						</span> <span class="account-type">${acc.displayName}</span> <span
+						</span> 
+						<span class="account-type">${acc.displayName}</span> <span
 							class="balance"> <fmt:setLocale value="es_ES" /> <fmt:formatNumber
 									value="${acc.balance}" type="currency" />
 
@@ -77,7 +78,7 @@
 
 
 			<%-- Quick Actions Section --%>
-			<div class='quick-actions-card mt-5 mb-5'>
+			<div class='section mt-5 mb-5'>
 				<h2 class='section-title text-center mb-4'>Quick Actions</h2>
 				<div class='quick-actions-card'>
 					<div class='actions-grid'>
