@@ -30,6 +30,15 @@ public class MainController extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
+
+	static {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public MainController() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -105,6 +114,7 @@ public class MainController extends HttpServlet {
 
 		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
 				dbPassword);
+
 				PreparedStatement st = conn.prepareStatement(
 						"SELECT * FROM transactions WHERE account_id = ? ORDER BY transaction_date DESC")) {
 
