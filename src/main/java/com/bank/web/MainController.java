@@ -131,6 +131,7 @@ public class MainController extends HttpServlet {
 			conn.close();
 
 		} catch (Exception e) {
+			System.out.println("❌ History Error: " + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -188,6 +189,7 @@ public class MainController extends HttpServlet {
 			conn.close();
 
 		} catch (Exception e) {
+			System.out.println("❌ Transfer Form Error: " + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -219,7 +221,7 @@ public class MainController extends HttpServlet {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
 					dbPassword);
 
-			String sql = "SELECT id, balance, account_type, owner_name FROM accounts WHERE owner_name = ?";
+			String sql = "SELECT id, balance,iban, account_type, owner_name FROM accounts WHERE owner_name = ?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, sessionUser);
 
@@ -250,6 +252,7 @@ public class MainController extends HttpServlet {
 			conn.close();
 
 		} catch (Exception e) {
+			System.out.println("❌ Show Dashboard Error: " + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -293,6 +296,7 @@ public class MainController extends HttpServlet {
 			conn.close();
 
 		} catch (Exception e) {
+			System.out.println("❌ Show Details Error: " + e.getMessage());
 			e.printStackTrace();
 
 		}
