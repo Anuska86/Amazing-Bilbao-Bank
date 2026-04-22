@@ -63,6 +63,8 @@ Run:
 ## 🛠️ Future Roadmap (To-Do):
 
 I am constantly looking to improve my projects. My next steps include:
+- **User Onboarding:** Implement a registration system to allow new users to **open an account** directly from the landing page.
+- **Modern Payments:** Implement **Bizum transfers**, allowing quick payments using just a phone number.
 - **Financial Products:** Adding options for users to manage investments, stocks, and high-yield savings plans.
 - **Framework Migration:** Transitioning the backend from Vanilla Servlets to **Spring Boot** to implement industry-standard dependency injection and security.
 - **UX/UI Enhancement:** Improving the user interface with more advanced Bootstrap components, charts for spending habits, and a dark mode toggle.
