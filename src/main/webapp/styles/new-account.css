@@ -1,1 +1,37 @@
 @charset "UTF-8";
+
+/*Card*/
+.card {
+	border-radius: 15px;
+	overflow: hidden;
+}
+
+.card-header {
+	background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+	border-bottom: none;
+}
+
+/*Form*/
+.form-label {
+	color: #495057;
+	margin-bottom: 0.5rem;
+}
+
+.form-control:focus, .form-select:focus {
+	border-color: #212529;
+	box-shadow: 0 0 0 0.25rem rgba(33, 37, 41, 0.1);
+}
+
+.form-text {
+	font-style: italic;
+	font-size: 0.85rem;
+}
+
+/*Buttons*/
+.btn-dark {
+	transition: transform 0.2s ease;
+}
+
+.btn-dark:hover {
+	transform: translateY(-2px);
+}

@@ -5,7 +5,8 @@
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
 	rel="stylesheet">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
 <link rel="stylesheet" type="text/css" href="styles/index.css">
 
@@ -24,7 +25,10 @@
 		<div class="header-right">
 			<nav>
 				<a href="bank?action=dashboard">Dashboard</a> <a
-					href="bank?action=transfer">Transfer</a>
+					href="bank?action=transfer">Transfer</a> <a
+					href="bank?action=createAccount" class="new-account-link"> <i
+					class="bi bi-plus-circle-fill"></i> New Account
+				</a>
 			</nav>
 
 			<div class="user-menu">
