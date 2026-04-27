@@ -45,28 +45,64 @@
 										</thead>
 										<tbody>
 
-											<%-- Show Internal (Interest and Internal Transfers) --%>
+											<%--  INTERNAL ACTIONS SECTION --%>
 
 											<c:if test="${not empty internalTransactions}">
 												<tr class="table-light">
 													<td colspan="3" class="fw-bold text-muted small uppercase">Internal
-														Actions & Interest</td>
+														Actions</td>
+												</tr>
+
+												<%-- Subtitle: Internal Transfers --%>
+
+												<tr class="table-light">
+													<td colspan="3"
+														class="ps-4 fw-bold text-secondary small italic"
+														style="font-size: 0.85rem;">↳ Internal Transfers</td>
 												</tr>
 												<c:forEach var="it" items="${internalTransactions}">
-													<tr>
-														<td class="align-middle"><fmt:formatDate
-																value="${it.date}" pattern="dd MMM yyyy HH:mm" /></td>
-														<td class="align-middle">${it.type}</td>
-														<td
-															class="text-end align-middle fw-bold ${it.amount < 0 ? 'text-danger' : 'text-success'}">
-															<fmt:formatNumber value="${it.amount}" type="currency"
-																currencySymbol="€" />
-														</td>
-													</tr>
+													<c:if test="${not it.type.contains('INTEREST')}">
+														<tr>
+															<td class="ps-5 align-middle"><fmt:formatDate
+																	value="${it.date}" pattern="dd MMM yyyy HH:mm" /></td>
+															<td class="align-middle">${it.type}</td>
+															<td
+																class="text-end align-middle fw-bold ${it.amount < 0 ? 'text-danger' : 'text-success'}">
+																<fmt:formatNumber value="${it.amount}" type="currency"
+																	currencySymbol="€" />
+															</td>
+														</tr>
+
+
+
+													</c:if>
+												</c:forEach>
+
+												<%-- Subtitle: Interest Payment --%>
+
+												<tr class="table-light">
+													<td colspan="3"
+														class="ps-4 fw-bold text-secondary small italic"
+														style="font-size: 0.85rem;">↳ Interest Payment</td>
+												</tr>
+												<c:forEach var="it" items="${internalTransactions}">
+													<c:if test="${it.type.contains('INTEREST')}">
+														<tr>
+															<td class="ps-5 align-middle"><fmt:formatDate
+																	value="${it.date}" pattern="dd MMM yyyy HH:mm" /></td>
+															<td class="align-middle">${it.type}</td>
+															<td
+																class="text-end align-middle fw-bold ${it.amount < 0 ? 'text-danger' : 'text-success'}">
+																<fmt:formatNumber value="${it.amount}" type="currency"
+																	currencySymbol="€" />
+															</td>
+														</tr>
+													</c:if>
 												</c:forEach>
 											</c:if>
 
-											<%-- External Transfers)--%>
+
+											<%-- EXTERNAL TRANSFERS SECTION --%>
 											<c:if test="${not empty externalTransactions}">
 												<tr class="table-light">
 													<td colspan="3" class="fw-bold text-muted small uppercase">External
@@ -85,7 +121,6 @@
 													</tr>
 												</c:forEach>
 											</c:if>
-
 
 										</tbody>
 									</table>
