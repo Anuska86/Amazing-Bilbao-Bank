@@ -98,6 +98,10 @@ public class MainController extends HttpServlet {
 			applyInterest(request, response);
 			break;
 
+		case "createAccount":
+			request.getRequestDispatcher("/WEB-INF/create-account.jsp").forward(request, response);
+			break;
+
 		default:
 			response.sendRedirect("index.html");
 			break;
