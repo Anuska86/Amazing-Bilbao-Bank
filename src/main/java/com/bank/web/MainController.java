@@ -99,7 +99,7 @@ public class MainController extends HttpServlet {
 			break;
 
 		case "createAccount":
-			handleCreateAccount(request, response);
+			request.getRequestDispatcher("/WEB-INF/create-account.jsp").forward(request, response);
 			break;
 
 		default:
@@ -402,6 +402,8 @@ public class MainController extends HttpServlet {
 		} else if ("processTransfer".equals(action)) {
 			handleTransfer(request, response);
 
+		} else if ("processCreateAccount".equals(action)) {
+			handleCreateAccount(request, response);
 		}
 	}
 
@@ -416,6 +418,14 @@ public class MainController extends HttpServlet {
 		String type = request.getParameter("accountType");
 		String depositRaw = request.getParameter("initialDeposit");
 
+		double initialDeposit = 0.0;
+
+		if (depositRaw != null && !depositRaw.isEmpty()) {
+			initialDeposit = Double.parseDouble(depositRaw);
+		} else {
+			initialDeposit = 10.0;
+		}
+
 		// Random IBAN
 
 		String iban = "ES" + (int) (Math.random() * 100000000);
@@ -429,7 +439,7 @@ public class MainController extends HttpServlet {
 
 			try (PreparedStatement ps = conn.prepareStatement(sql)) {
 				ps.setString(1, sessionUser);
-				ps.setDouble(2, Double.parseDouble(depositRaw));
+				ps.setDouble(2, (initialDeposit));
 				ps.setString(3, iban);
 				ps.setString(4, type);
 				ps.setString(5, sessionUser);
