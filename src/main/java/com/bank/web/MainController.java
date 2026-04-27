@@ -99,7 +99,7 @@ public class MainController extends HttpServlet {
 			break;
 
 		case "createAccount":
-			request.getRequestDispatcher("/WEB-INF/create-account.jsp").forward(request, response);
+			handleCreateAccount(request, response);
 			break;
 
 		default:
@@ -403,6 +403,51 @@ public class MainController extends HttpServlet {
 			handleTransfer(request, response);
 
 		}
+	}
+
+	// Create new account
+
+	private void handleCreateAccount(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String sessionUser = (String) request.getSession().getAttribute("user");
+		String dbPassword = System.getenv("DB_PASSWORD");
+
+		// Form data
+
+		String type = request.getParameter("accountType");
+		String depositRaw = request.getParameter("initialDeposit");
+
+		// Random IBAN
+
+		String iban = "ES" + (int) (Math.random() * 100000000);
+
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
+				dbPassword)) {
+
+			// Insert new account into MySQL
+
+			String sql = "INSERT INTO accounts (owner_name, balance, iban, account_type, password) VALUES (?, ?, ?, ?, (SELECT password FROM (SELECT password FROM accounts WHERE owner_name = ? LIMIT 1) as temp))";
+
+			try (PreparedStatement ps = conn.prepareStatement(sql)) {
+				ps.setString(1, sessionUser);
+				ps.setDouble(2, Double.parseDouble(depositRaw));
+				ps.setString(3, iban);
+				ps.setString(4, type);
+				ps.setString(5, sessionUser);
+
+				int rows = ps.executeUpdate();
+
+				if (rows > 0) {
+					response.sendRedirect("bank?action=dashboard&msg=account_created");
+				} else {
+					response.sendRedirect("bank?action=dashboard&msg=error");
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.sendRedirect("bank?action=dashboard&msg=error");
+		}
+
 	}
 
 	// Handle Transfer
