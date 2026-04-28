@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import bank.db.AccountDAO;
 import bank.models.Account;
 import bank.models.AccountType;
 import bank.models.CheckingAccount;
@@ -413,51 +414,18 @@ public class MainController extends HttpServlet {
 	// Create new account
 
 	private void handleCreateAccount(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
 		String sessionUser = (String) request.getSession().getAttribute("user");
-		String dbPassword = System.getenv("DB_PASSWORD");
-
-		// Form data
-
 		String type = request.getParameter("accountType");
-		String depositRaw = request.getParameter("initialDeposit");
-
-		double initialDeposit = 0.0;
-
-		if (depositRaw != null && !depositRaw.isEmpty()) {
-			initialDeposit = Double.parseDouble(depositRaw);
-		} else {
-			initialDeposit = 10.0;
-		}
-
-		// Random IBAN
-
+		double deposit = Double.parseDouble(request.getParameter("initialDeposit"));
 		String iban = "ES" + (int) (Math.random() * 100000000);
 
-		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
-				dbPassword)) {
+		AccountDAO accountDAO = new AccountDAO();
+		boolean success = accountDAO.insertAccount(sessionUser, type, iban, deposit);
 
-			// Insert new account into MySQL
-
-			String sql = "INSERT INTO accounts (owner_name, balance, iban, account_type, password) VALUES (?, ?, ?, ?, (SELECT password FROM (SELECT password FROM accounts WHERE owner_name = ? LIMIT 1) as temp))";
-
-			try (PreparedStatement ps = conn.prepareStatement(sql)) {
-				ps.setString(1, sessionUser);
-				ps.setDouble(2, (initialDeposit));
-				ps.setString(3, iban);
-				ps.setString(4, type);
-				ps.setString(5, sessionUser);
-
-				int rows = ps.executeUpdate();
-
-				if (rows > 0) {
-					response.sendRedirect("bank?action=dashboard&msg=account_created");
-				} else {
-					response.sendRedirect("bank?action=dashboard&msg=error");
-				}
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (success) {
+			response.sendRedirect("bank?action=dashboard&msg=account_created");
+		} else {
 			response.sendRedirect("bank?action=dashboard&msg=error");
 		}
 
