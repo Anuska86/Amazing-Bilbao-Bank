@@ -21,12 +21,14 @@ public class AccountDAO {
 			ps.setDouble(4, balance);
 			ps.setString(5, owner);
 
+			int rowsAffected = ps.executeUpdate();
+			return rowsAffected > 0;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 
-		return false;
 	}
 
 }
