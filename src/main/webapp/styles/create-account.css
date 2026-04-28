@@ -32,7 +32,17 @@ body {
 	border-bottom: none;
 }
 
+.col-md-6 .card {
+	width: 460px; 
+    height: auto; 
+}
+
 /*Form*/
+
+#create-account-form{
+	width: 100%;
+}
+
 .form-label {
 	color: #495057;
 	margin-bottom: 0.5rem;
