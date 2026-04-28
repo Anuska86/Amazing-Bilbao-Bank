@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import bank.db.AccountDAO;
 import bank.models.Account;
 import bank.models.AccountType;
 import bank.models.CheckingAccount;
@@ -83,45 +84,27 @@ public class Bank {
 
 	public void addAccountWithSpecificType(String name, double balance, String iban, AccountType type,
 			String password) {
-		String sql = "INSERT INTO accounts (owner_name, balance,iban, account_type, password) VALUES (?, ?, ?, ?,?)";
 
-		int generatedId = 0;
-		Account newAcc = null;
+		AccountDAO dao = new AccountDAO();
 
-		try (Connection conn = connect();
-				PreparedStatement pstmt = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+		int newId = dao.insertAccount(name, type.name(), iban, balance, password);
 
-			pstmt.setString(1, name);
-			pstmt.setDouble(2, balance);
-			pstmt.setString(3, iban);
-			pstmt.setString(4, type.name());
-			pstmt.setString(5, password);
-
-			pstmt.executeUpdate();
-			System.out.println("✅ " + type + " account created for " + name);
-
-			try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-				if (generatedKeys.next()) {
-					generatedId = generatedKeys.getInt(1);
-				}
-			}
+		if (newId != -1) {
+			Account newAcc = null;
 
 			if (type == AccountType.SAVINGS) {
-				newAcc = new SavingsAccount(generatedId, name, balance, iban, password);
+				newAcc = new SavingsAccount(newId, name, balance, iban, password);
 			} else if (type == AccountType.CHECKING) {
-				newAcc = new CheckingAccount(generatedId, name, balance, iban, password);
+				newAcc = new CheckingAccount(newId, name, balance, iban, password);
 			} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
-				newAcc = new FixedTermDeposit(generatedId, name, balance, iban, password);
+				newAcc = new FixedTermDeposit(newId, name, balance, iban, password);
 			}
 
 			if (newAcc != null) {
 				accountsByName.put(name.toLowerCase(), newAcc);
-				accountsById.put(generatedId, newAcc);
+				accountsById.put(newId, newAcc);
 			}
 
-		} catch (SQLException e) {
-			System.out.println("❌ Error: Could not create account.");
-			e.printStackTrace();
 		}
 
 	}
