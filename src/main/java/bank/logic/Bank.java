@@ -85,27 +85,30 @@ public class Bank {
 	public void addAccountWithSpecificType(String name, double balance, String iban, AccountType type,
 			String password) {
 
-		AccountDAO dao = new AccountDAO();
+		Account newAcc = null;
 
-		int newId = dao.insertAccount(name, type.name(), iban, balance, password);
+		if (type == AccountType.SAVINGS) {
+			newAcc = SavingsAccount.builder().owner(name).balance(balance).iban(iban).password(password)
+					.interestRate(2.0).build();
+		} else if (type == AccountType.CHECKING) {
+			newAcc = CheckingAccount.builder().owner(name).balance(balance).iban(iban).password(password).build();
+		} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
+			newAcc = FixedTermDeposit.builder().owner(name).balance(balance).iban(iban).password(password).build();
+		}
 
-		if (newId != -1) {
-			Account newAcc = null;
+		if (newAcc != null) {
 
-			if (type == AccountType.SAVINGS) {
-				newAcc = SavingsAccount.builder().id(newId).owner(name).balance(balance).iban(iban).password(password)
-						.build();
-			} else if (type == AccountType.CHECKING) {
-				newAcc = CheckingAccount.builder().id(newId).owner(name).balance(balance).iban(iban).password(password)
-						.build();
-			} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
-				newAcc = FixedTermDeposit.builder().id(newId).owner(name).balance(balance).iban(iban).password(password)
-						.build();
-			}
+			AccountDAO dao = new AccountDAO();
 
-			if (newAcc != null) {
+			boolean success = dao.insertAccount(newAcc);
+
+			if (success) {
+
 				accountsByName.put(name.toLowerCase(), newAcc);
-				accountsById.put(newId, newAcc);
+				accountsById.put(newAcc.getId(), newAcc);
+				System.out.println("✅ " + type + " created successfully for " + name);
+			} else {
+				System.out.println("❌ Database failed to save the account.");
 			}
 
 		}
