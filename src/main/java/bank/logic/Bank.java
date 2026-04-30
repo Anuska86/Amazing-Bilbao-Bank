@@ -93,11 +93,14 @@ public class Bank {
 			Account newAcc = null;
 
 			if (type == AccountType.SAVINGS) {
-				newAcc = new SavingsAccount(newId, name, balance, iban, password);
+				newAcc = SavingsAccount.builder().id(newId).owner(name).balance(balance).iban(iban).password(password)
+						.build();
 			} else if (type == AccountType.CHECKING) {
-				newAcc = new CheckingAccount(newId, name, balance, iban, password);
+				newAcc = CheckingAccount.builder().id(newId).owner(name).balance(balance).iban(iban).password(password)
+						.build();
 			} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
-				newAcc = new FixedTermDeposit(newId, name, balance, iban, password);
+				newAcc = FixedTermDeposit.builder().id(newId).owner(name).balance(balance).iban(iban).password(password)
+						.build();
 			}
 
 			if (newAcc != null) {
@@ -169,11 +172,14 @@ public class Bank {
 				String passFromDB = rs.getString("password");
 
 				if (typeFromDB.equalsIgnoreCase("Fixed-Term Deposit") || typeFromDB.equalsIgnoreCase("FIXED_TERM")) {
-					return new FixedTermDeposit(id, name, balance, iban, passFromDB);
+					return FixedTermDeposit.builder().id(id).owner(name).balance(balance).iban(iban)
+							.password(passFromDB).build();
 				} else if (typeFromDB.equalsIgnoreCase("Savings") || typeFromDB.equalsIgnoreCase("SAVINGS")) {
-					return new SavingsAccount(id, name, balance, iban, passFromDB);
+					return SavingsAccount.builder().id(id).owner(name).balance(balance).iban(iban).password(passFromDB)
+							.build();
 				} else {
-					return new CheckingAccount(id, name, balance, iban, passFromDB);
+					return CheckingAccount.builder().id(id).owner(name).balance(balance).iban(iban).password(passFromDB)
+							.build();
 				}
 
 			}
