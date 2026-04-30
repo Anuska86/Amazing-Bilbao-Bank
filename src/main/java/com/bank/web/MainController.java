@@ -273,11 +273,14 @@ public class MainController extends HttpServlet {
 					Account acc = null;
 
 					if (type == AccountType.SAVINGS) {
-						acc = new SavingsAccount(id, owner, balance, iban, 0, "");
+						acc = SavingsAccount.builder().id(id).owner(owner).balance(balance).iban(iban).password("")
+								.interestRate(2.0).build();
 					} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
-						acc = new FixedTermDeposit(id, owner, balance, iban, "");
+						acc = FixedTermDeposit.builder().id(id).owner(owner).balance(balance).iban(iban).password("")
+								.build();
 					} else {
-						acc = new CheckingAccount(id, owner, balance, iban, "");
+						acc = CheckingAccount.builder().id(id).owner(owner).balance(balance).iban(iban).password("")
+								.build();
 					}
 
 					accountList.add(acc);
@@ -333,11 +336,14 @@ public class MainController extends HttpServlet {
 					Account acc;
 
 					if (type == AccountType.SAVINGS) {
-						acc = new SavingsAccount(id, owner, balance, iban, 0, "");
+						acc = SavingsAccount.builder().id(id).owner(owner).balance(balance).iban(iban).password("")
+								.interestRate(2.0).build();
 					} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
-						acc = new FixedTermDeposit(id, owner, balance, iban, "");
+						acc = FixedTermDeposit.builder().id(id).owner(owner).balance(balance).iban(iban).password("")
+								.build();
 					} else {
-						acc = new CheckingAccount(id, owner, balance, iban, "");
+						acc = CheckingAccount.builder().id(id).owner(owner).balance(balance).iban(iban).password("")
+								.build();
 					}
 
 					accountList.add(acc);
@@ -417,11 +423,31 @@ public class MainController extends HttpServlet {
 
 		String sessionUser = (String) request.getSession().getAttribute("user");
 		String type = request.getParameter("accountType");
-		double deposit = Double.parseDouble(request.getParameter("initialDeposit"));
+		String depositStr = request.getParameter("initialDeposit");
+
+		double deposit = 0;
+
+		try {
+			deposit = Double.parseDouble(depositStr);
+		} catch (Exception e) {
+			response.sendRedirect("bank?action=dashboard&msg=error");
+			return;
+		}
+
 		String iban = "ES" + (int) (Math.random() * 100000000);
+		Account newAcc;
+
+		if ("SAVINGS".equalsIgnoreCase(type)) {
+			newAcc = SavingsAccount.builder().owner(sessionUser).balance(deposit).iban(iban).password("")
+					.interestRate(2.0).build();
+		} else if ("FIXED_TERM_DEPOSIT".equalsIgnoreCase(type) || "FIXED-TERM DEPOSIT".equalsIgnoreCase(type)) {
+			newAcc = FixedTermDeposit.builder().owner(sessionUser).balance(deposit).iban(iban).password("").build();
+		} else {
+			newAcc = CheckingAccount.builder().owner(sessionUser).balance(deposit).iban(iban).password("").build();
+		}
 
 		AccountDAO accountDAO = new AccountDAO();
-		boolean success = accountDAO.insertAccount(sessionUser, type, iban, deposit, iban);
+		boolean success = accountDAO.insertAccount(newAcc);
 
 		if (success) {
 			response.sendRedirect("bank?action=dashboard&msg=account_created");
