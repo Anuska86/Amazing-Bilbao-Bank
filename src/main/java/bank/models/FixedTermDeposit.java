@@ -1,9 +1,16 @@
 package bank.models;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+@Data
+@NoArgsConstructor
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+
 public class FixedTermDeposit extends Account {
-	public FixedTermDeposit(int id, String owner, double balance, String iban, String password) {
-		super(id, owner, balance, iban, password);
-	}
 
 	@Override
 	public void printMonthlyReport() {

@@ -1,27 +1,21 @@
 package bank.models;
 
 import bank.logic.InterestBearing;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+@Data
+@NoArgsConstructor
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 
 public class SavingsAccount extends Account implements InterestBearing {
 
+	@Builder.Default
 	private double interestRate;
-
-	// CONSTRUCTOR
-
-	public SavingsAccount(int id, String owner, double balance, String iban, double interestRate, String password) {
-
-		// super calls the constructor of Account (parent)
-		super(id, owner, balance, iban, password);
-		// TODO Auto-generated constructor stub
-		this.interestRate = interestRate;
-	}
-
-	// 2nd CONSTRUCTOR (default interest rate)
-
-	public SavingsAccount(int id, String owner, double balance, String iban, String password) {
-		super(id, owner, balance, iban, password);
-		this.interestRate = 2.0;
-	}
 
 	// OVERRIDES
 

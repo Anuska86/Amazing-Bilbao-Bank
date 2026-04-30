@@ -4,15 +4,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 
 public abstract class Account {
 
@@ -23,19 +22,9 @@ public abstract class Account {
 	private double balance;
 	private String iban;
 	private String password;
-	protected ArrayList<String> transactionHistory;
 
-	// CONSTRUCTOR
-
-	public Account(int id, String owner, double balance, String iban, String password) {
-		this.id = id;
-		this.owner = owner;
-		this.balance = balance;
-		this.iban = iban;
-		this.password = password;
-		this.transactionHistory = new ArrayList<>();
-		transactionHistory.add("Account created with " + balance + "€");
-	}
+	@Builder.Default
+	protected ArrayList<String> transactionHistory = new ArrayList<>();
 
 	// Methods (Actions)
 

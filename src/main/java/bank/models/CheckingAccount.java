@@ -1,10 +1,16 @@
 package bank.models;
 
-public class CheckingAccount extends Account {
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-	public CheckingAccount(int id, String owner, double balance, String iban, String password) {
-		super(id, owner, balance, iban, password);
-	}
+@Data
+@NoArgsConstructor
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+
+public class CheckingAccount extends Account {
 
 	@Override
 	public void printMonthlyReport() {
