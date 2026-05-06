@@ -20,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 public class SavingsAccount extends Account implements InterestBearing {
 
 	@Builder.Default
-	private double interestRate = 2.0;
+	private Double interestRate = 2.0;
 
 	// OVERRIDES
 
