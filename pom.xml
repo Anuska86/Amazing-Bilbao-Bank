@@ -55,5 +55,19 @@
     <version>9.0.0</version>
 </dependency>
 
+<!-- Hibernate Core -->
+<dependency>
+    <groupId>org.hibernate.orm</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>6.5.2.Final</version>
+</dependency>
+
+<!-- Hibernate Validator (Optional but recommended) -->
+<dependency>
+    <groupId>org.hibernate.validator</groupId>
+    <artifactId>hibernate-validator</artifactId>
+    <version>8.0.1.Final</version>
+</dependency>
+
 </dependencies>
 </project>
