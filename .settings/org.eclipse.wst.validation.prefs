@@ -6,5 +6,7 @@ disabled=06target
 eclipse.preferences.version=1
 override=true
 suspend=false
+vals/org.eclipse.jst.jsp.core.JSPBatchValidator/global=FF01
+vals/org.eclipse.jst.jsp.core.JSPContentValidator/global=FF01
 vals/org.eclipse.jst.jsp.core.JSPContentValidator/groups=0107include09111contentType134org.eclipse.jst.jsp.core.jspsourceT111contentType142org.eclipse.jst.jsp.core.jspfragmentsourceT07fileext03jspF07fileext04jspfF07fileext03jsfF07fileext03tagF07fileext04tagfF07fileext03jsvF07fileext04jtplF0107exclude00
 vf.version=3
