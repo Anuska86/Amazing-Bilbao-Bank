@@ -3,6 +3,7 @@ package bank.models;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -43,6 +44,11 @@ public abstract class Account {
 	@Column(name = "interestRate")
 	protected Double interestRate; 
 
+	
+	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@Builder.Default
+	protected List<Transaction> transactions = new ArrayList<>();
+	
 	@Builder.Default
 	@Transient
 	protected ArrayList<String> transactionHistory = new ArrayList<>();
@@ -191,6 +197,12 @@ public abstract class Account {
 	// GET Balance with currency
 	public String getBalanceWithCurrency() {
 		return balance + "€";
+	}
+	
+	//GET transactions
+	
+	public List<Transaction> getTransactions() {
+	    return transactions;
 	}
 
 	// Method to display the name of the account type nicely

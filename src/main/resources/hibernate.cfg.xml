@@ -27,6 +27,8 @@
 <mapping class="bank.models.CheckingAccount"/>
 <mapping class="bank.models.SavingsAccount"/>
 <mapping class="bank.models.FixedTermDeposit"/>
+
+<mapping class="bank.models.Transaction"/>
         
     </session-factory>
 </hibernate-configuration>

@@ -8,7 +8,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Session;
+
 import bank.db.AccountDAO;
+import bank.db.HibernateUtil;
 import bank.models.Account;
 import bank.models.AccountType;
 import bank.models.CheckingAccount;
@@ -197,37 +200,37 @@ public class MainController extends HttpServlet {
 
 	private void showHistory(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		String accountId = request.getParameter("accountId");
+		String accountIdStr = request.getParameter("accountId");
 		String sessionUser = (String) request.getSession().getAttribute("user");
 
 		List<Transaction> internalTrans = new ArrayList<>();
 		List<Transaction> externalTrans = new ArrayList<>();
-		String dbPassword = System.getenv("DB_PASSWORD");
+		
 
-		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
-				dbPassword);
-
-				PreparedStatement st = conn.prepareStatement(
-						"SELECT * FROM transactions WHERE account_id = ? ORDER BY transaction_date DESC")) {
-
-			st.setInt(1, Integer.parseInt(accountId));
-
-			try (ResultSet rs = st.executeQuery()) {
-				while (rs.next()) {
-					Transaction trans = new Transaction(rs.getInt("id"), rs.getString("type"), rs.getDouble("amount"),
-							rs.getTimestamp("transaction_date"), rs.getInt("account_id"));
-
-					String desc = trans.getType();
-					// Categorize by checking if the session user is the one mentioned in the
-					// description
-					if (desc.contains("INTEREST PAYMENT") || desc.contains("TRANSFER TO: " + sessionUser)
-							|| desc.contains("TRANSFER FROM: " + sessionUser)) {
-						internalTrans.add(trans);
-					} else {
-						externalTrans.add(trans);
-					}
-				}
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			int id = Integer.parseInt(accountIdStr);
+			Account account = session.get(Account.class, id);
+			
+			if(account != null) {
+				List<Transaction> allTransactions = account.getTransactions();
+		
+			
+			for (Transaction trans : allTransactions) {
+                String desc = trans.getType();
+                
+              
+                if (desc.contains("INTEREST PAYMENT") || 
+                    desc.contains("TRANSFER TO: " + sessionUser) || 
+                    desc.contains("TRANSFER FROM: " + sessionUser)) {
+                    internalTrans.add(trans);
+                } else {
+                    externalTrans.add(trans);
+                }
+              }
 			}
+        
+	
+			
 		} catch (Exception e) {
 			System.out.println("❌ Show History Error: " + e.getMessage());
 			e.printStackTrace();

@@ -1,61 +1,33 @@
 package bank.models;
 
+import jakarta.persistence.*;
+import lombok.*;
 import java.sql.Timestamp;
 
+
+@Entity
+@Table(name="transactions")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+
 public class Transaction {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	
 	private String type;
 	private double amount;
+	
+	@Column(name="transaction_date")
 	private Timestamp date;
-	private int accountId;
+	
+	@ManyToOne
+	@JoinColumn(name = "account_id")
+	private Account account; 
 
-	public Transaction(int id, String type, double amount, Timestamp date, int accountId) {
-		super();
-		this.id = id;
-		this.type = type;
-		this.amount = amount;
-		this.date = date;
-		this.accountId = accountId;
-	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-
-	public Timestamp getDate() {
-		return date;
-	}
-
-	public void setDate(Timestamp date) {
-		this.date = date;
-	}
-
-	public int getAccountId() {
-		return accountId;
-	}
-
-	public void setAccountId(int accountId) {
-		this.accountId = accountId;
-	}
 
 }
