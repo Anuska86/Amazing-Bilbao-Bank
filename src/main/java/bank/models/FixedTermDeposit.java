@@ -22,9 +22,4 @@ public class FixedTermDeposit extends Account {
 		System.out.println("Monthly Report for Fixed-Term Deposit: " + getOwner());
 	}
 
-	@Override
-
-	public double getInterestRate() {
-		return 5.0;
-	}
 }

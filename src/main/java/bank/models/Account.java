@@ -39,6 +39,9 @@ public abstract class Account {
 	private double balance;
 	private String iban;
 	private String password;
+	
+	@Column(name = "interestRate")
+	protected Double interestRate; 
 
 	@Builder.Default
 	@Transient
@@ -99,6 +102,16 @@ public abstract class Account {
 			System.out.println("Transfer failed, put in contact with your bank ");
 		}
 	}
+	
+	//Method to apply interest
+	
+	public void applyInterest() {
+		if(getInterestRate() !=null && getInterestRate()>0) {
+			double interest = getBalance()*(getInterestRate()/100);
+			deposit(interest);
+			System.out.println("Interest applied: " + interest + "€");
+		}
+	}
 
 	// Method to print the account history
 
@@ -112,7 +125,7 @@ public abstract class Account {
 
 	// Method to default interest rate
 
-	public double getInterestRate() {
+	public Double getInterestRate() {
 		return 0.0;
 	}
 

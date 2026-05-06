@@ -30,7 +30,7 @@ public class CheckingAccount extends Account {
 
 	@Override
 
-	public double getInterestRate() {
+	public Double getInterestRate() {
 		return 0.0;
 	}
 

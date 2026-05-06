@@ -3,7 +3,6 @@ package bank.models;
 import bank.logic.InterestBearing;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -19,8 +18,7 @@ import lombok.experimental.SuperBuilder;
 
 public class SavingsAccount extends Account implements InterestBearing {
 
-	@Builder.Default
-	private Double interestRate = 2.0;
+	
 
 	// OVERRIDES
 
@@ -30,9 +28,11 @@ public class SavingsAccount extends Account implements InterestBearing {
 
 	public void applyInterest() {
 
-		double interest = getBalance() * (interestRate / 100);
-		deposit(interest);
-		System.out.println("Interest applied: " + interest + "€");
+		if (getInterestRate() != null && getInterestRate() > 0) {
+	        double interest = getBalance() * (getInterestRate() / 100);
+	        deposit(interest);
+	        System.out.println("Interest applied: " + interest + "€");
+	    }
 
 	}
 
@@ -53,7 +53,7 @@ public class SavingsAccount extends Account implements InterestBearing {
 
 	@Override
 
-	public double getInterestRate() {
+	public Double getInterestRate() {
 		return this.interestRate;
 	}
 
