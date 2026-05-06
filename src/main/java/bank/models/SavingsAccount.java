@@ -59,20 +59,32 @@ public class SavingsAccount extends Account implements InterestBearing {
 
 	@Override
 	public boolean withdraw(double amount) {
+		double fee = 2.0;
 		double totalWithFee = amount + 2.0;
 
 		if (totalWithFee <= getBalance()) {
 			boolean success = super.withdraw(totalWithFee);
 
 			if (success) {
-				transactionHistory.add("Savings Fee applied: 2.0€");
+				
+				// Subtract the fee from the balance
+	            setBalance(getBalance() - fee);
+				
+	            this.getTransactions().add(Transaction.builder()
+	                    .type("SAVINGS FEE")
+	                    .amount(-fee)
+	                    .date(new java.sql.Timestamp(System.currentTimeMillis()))
+	                    .account(this)
+	                    .build());
+	            
 				System.out.println("Note: A 2€ saving fee was applied");
 			}
 			return success;
+			
 		} else {
-
+			System.out.println("❌ Savings Error: Insufficient funds for amount + 2€ fee.");
 			return false;
-		}
+		} 
 	}
 
 	@Override

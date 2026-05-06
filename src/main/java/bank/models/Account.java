@@ -1,7 +1,7 @@
 package bank.models;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,9 +49,7 @@ public abstract class Account {
 	@Builder.Default
 	protected List<Transaction> transactions = new ArrayList<>();
 	
-	@Builder.Default
-	@Transient
-	protected ArrayList<String> transactionHistory = new ArrayList<>();
+
 
 	// Methods (Actions)
 
@@ -74,7 +72,16 @@ public abstract class Account {
 			return false;
 		}
 		this.balance += amount;
-		this.transactionHistory.add(String.format("Deposited: %.2f€", amount));
+		
+		
+		this.transactions.add(Transaction.builder()
+				.type("DEPOSIT")
+				.amount(amount)
+				.date(new java.sql.Timestamp(System.currentTimeMillis()))
+				.account(this)
+				.build());
+		
+		
 		return true;
 	}
 
@@ -90,7 +97,14 @@ public abstract class Account {
 
 		if (amount > 0 && amount <= balance) {
 			balance -= amount;
-			transactionHistory.add(getTimestamp() + "Withdraw: " + amount + "€");
+		
+			this.transactions.add(Transaction.builder()
+		            .type("WITHDRAWAL")
+		            .amount(-amount) // Negative 
+		            .date(new java.sql.Timestamp(System.currentTimeMillis()))
+		            .account(this)
+		            .build());
+			
 			return true;
 		} else {
 			System.out.println("FAILED Withdrawal: " + amount + "€ (Insufficient funds)");
@@ -123,8 +137,12 @@ public abstract class Account {
 
 	public void printHistory() {
 		System.out.println("--- Transaction History for " + owner + " ---");
-		for (String record : transactionHistory) {
-			System.out.println("- " + record);
+		
+		for (Transaction t : transactions) {
+			System.out.printf("- [%s] %-20s : %.2f€%n", 
+		            t.getDate(), 
+		            t.getType(), 
+		            t.getAmount());
 		}
 		System.out.printf("Current Balance: %.2f€%n", balance);
 	}
@@ -132,7 +150,7 @@ public abstract class Account {
 	// Method to default interest rate
 
 	public Double getInterestRate() {
-		return 0.0;
+		return (this.interestRate != null) ? this.interestRate : 0.0;
 	}
 
 	// Method to verify the password
@@ -153,46 +171,7 @@ public abstract class Account {
 		}
 	}
 
-	// SETTERS & GETTERS
-
-	// Owner group
-	public void setOwner(String name) {
-		owner = name;
-
-	}
-
-	public String getOwner() {
-		return owner;
-	}
-
-	// Balance group
-	public void setBalance(double amount) {
-		balance = amount;
-	}
-
-	public double getBalance() {
-		return balance;
-	}
-
-	// IBAN group
-
-	public String getIban() {
-		return iban;
-	}
-
-	public void setIban(String iban) {
-		this.iban = iban;
-	}
-
-	// Id Group
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getId() {
-		return id;
-	}
+	
 
 	// GET Balance with currency
 	public String getBalanceWithCurrency() {
@@ -223,12 +202,5 @@ public abstract class Account {
 		return this.getClass().getSimpleName().replace("Account", "").toUpperCase();
 	}
 
-	// HELPERS
-
-	private String getTimestamp() {
-		LocalDateTime now = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-		return "[" + now.format(formatter) + "]";
-	}
 
 }
