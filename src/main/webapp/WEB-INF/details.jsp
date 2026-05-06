@@ -46,7 +46,7 @@
 
 				<h2 class="detail-balance">
 					<fmt:setLocale value="es_ES" />
-					<fmt:formatNumber value="${balance}" type="currency" />
+					<fmt:formatNumber value="${account.balance}" type="currency" />
 				</h2>
 
 				<div

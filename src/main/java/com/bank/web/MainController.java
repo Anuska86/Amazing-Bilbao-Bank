@@ -341,32 +341,19 @@ public class MainController extends HttpServlet {
 	private void showDetails(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String accountId = request.getParameter("accountId");
-		String dbPassword = System.getenv("DB_PASSWORD");
-		String sql = "SELECT id, balance, iban, owner_name, co_owner_name, account_type FROM accounts WHERE id = ?";
+		
 
 		if (accountId == null) {
 			response.sendRedirect("index.html");
 			return;
 		}
 
-		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
-				dbPassword);) {
-
-			PreparedStatement st = conn.prepareStatement(sql);
-			st.setInt(1, Integer.parseInt(accountId));
-
-			try (ResultSet rs = st.executeQuery();) {
-				if (rs.next()) {
-					request.setAttribute("accountId", rs.getInt("id"));
-					request.setAttribute("balance", rs.getDouble("balance"));
-					request.setAttribute("iban", rs.getString("iban"));
-					request.setAttribute("titular", rs.getString("owner_name"));
-					request.setAttribute("cotitular", rs.getString("co_owner_name"));
-					request.setAttribute("accountName", rs.getString("account_type"));
-				}
-
-			}
-
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			Account acc = session.get(Account.class, Integer.parseInt(accountId))
+			
+					
+					if (acc != null) {request.setAttribute("account", acc);}
+					
 		} catch (Exception e) {
 			System.out.println("❌ Show Details Error: " + e.getMessage());
 			e.printStackTrace();
