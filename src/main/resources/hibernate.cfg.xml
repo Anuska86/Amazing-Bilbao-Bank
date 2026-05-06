@@ -19,5 +19,14 @@
 
         <!-- Update database schema on startup -->
         <property name="hbm2ddl.auto">update</property>
+        
+        <!-- The Parent Class -->
+<mapping class="bank.models.Account"/>
+
+<!-- The Children Classes -->
+<mapping class="bank.models.CheckingAccount"/>
+<mapping class="bank.models.SavingsAccount"/>
+<mapping class="bank.models.FixedTermDeposit"/>
+        
     </session-factory>
 </hibernate-configuration>
