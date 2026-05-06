@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,17 +14,34 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 
+@Entity
+@Table(name = "accounts")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "account_type")
+
+
+
+
 public abstract class Account {
+	
+	
+	
 
 	// Variables (Attributes)
 
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	
+	@Column(name = "owner_name")
 	private String owner;
+	
 	private double balance;
 	private String iban;
 	private String password;
 
 	@Builder.Default
+	@Transient
 	protected ArrayList<String> transactionHistory = new ArrayList<>();
 
 	// Methods (Actions)

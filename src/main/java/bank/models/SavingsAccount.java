@@ -1,6 +1,8 @@
 package bank.models;
 
 import bank.logic.InterestBearing;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,6 +13,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
+
+@Entity //Registers the child class.
+@DiscriminatorValue("SAVINGS") //Matches the text in account_type column.
 
 public class SavingsAccount extends Account implements InterestBearing {
 

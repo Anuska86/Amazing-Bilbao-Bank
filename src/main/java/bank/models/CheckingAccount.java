@@ -1,5 +1,7 @@
 package bank.models;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
+
+@Entity
+@DiscriminatorValue("CHECKING")
 
 public class CheckingAccount extends Account {
 
