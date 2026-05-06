@@ -253,52 +253,21 @@ public class MainController extends HttpServlet {
 			return;
 		}
 
-		// Data
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-		List<Account> accountList = new ArrayList<>();
-		String dbPassword = System.getenv("DB_PASSWORD");
-		String sql = "SELECT id, balance,iban, account_type, owner_name FROM accounts WHERE owner_name = ?";
-
-		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
-				dbPassword);) {
-
-			PreparedStatement st = conn.prepareStatement(sql);
-			st.setString(1, sessionUser);
-
-			try (ResultSet rs = st.executeQuery();) {
-				while (rs.next()) {
-					int id = rs.getInt("id");
-					double balance = rs.getDouble("balance");
-					String iban = rs.getString("iban");
-					String owner = rs.getString("owner_name");
-					String rawType = rs.getString("account_type").toUpperCase().replace("-", "_").replace(" ", "_");
-
-					AccountType type = AccountType.valueOf(rawType);
-					Account acc = null;
-
-					if (type == AccountType.SAVINGS) {
-						acc = SavingsAccount.builder().id(id).owner(owner).balance(balance).iban(iban).password("")
-								.interestRate(2.0).build();
-					} else if (type == AccountType.FIXED_TERM_DEPOSIT) {
-						acc = FixedTermDeposit.builder().id(id).owner(owner).balance(balance).iban(iban).password("")
-								.build();
-					} else {
-						acc = CheckingAccount.builder().id(id).owner(owner).balance(balance).iban(iban).password("")
-								.build();
-					}
-
-					accountList.add(acc);
-
-				}
-
-			}
+			List<Account> accountList = session.createQuery("FROM Account WHERE owner = :user", Account.class)
+					.setParameter("user", sessionUser)
+	                .list();
+			
+			request.setAttribute("user", sessionUser);
+	        request.setAttribute("accounts", accountList);
 
 		} catch (Exception e) {
 			System.out.println("❌ Transfer Form Error: " + e.getMessage());
 			e.printStackTrace();
 		}
 
-		request.setAttribute("accounts", accountList);
+		
 		request.getRequestDispatcher("/WEB-INF/transfer.jsp").forward(request, response);
 
 	}
@@ -349,7 +318,7 @@ public class MainController extends HttpServlet {
 		}
 
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			Account acc = session.get(Account.class, Integer.parseInt(accountId))
+			Account acc = session.get(Account.class, Integer.parseInt(accountId));
 			
 					
 					if (acc != null) {request.setAttribute("account", acc);}
