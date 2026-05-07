@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Session;
 
@@ -24,6 +25,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 
 /**
  * Servlet implementation class MainController
@@ -355,6 +360,8 @@ public class MainController extends HttpServlet {
 		String sessionUser = (String) request.getSession().getAttribute("user");
 		String type = request.getParameter("accountType");
 		String depositStr = request.getParameter("initialDeposit");
+		
+		String password= request.getParameter("password"); 
 
 		double deposit = 0;
 
@@ -369,14 +376,28 @@ public class MainController extends HttpServlet {
 		Account newAcc;
 
 		if ("SAVINGS".equalsIgnoreCase(type)) {
-			newAcc = SavingsAccount.builder().owner(sessionUser).balance(deposit).iban(iban).password("")
+			newAcc = SavingsAccount.builder().owner(sessionUser).balance(deposit).iban(iban).password(password)
 					.interestRate(2.0).build();
 		} else if ("FIXED_TERM_DEPOSIT".equalsIgnoreCase(type) || "FIXED-TERM DEPOSIT".equalsIgnoreCase(type)) {
-			newAcc = FixedTermDeposit.builder().owner(sessionUser).balance(deposit).iban(iban).password("").build();
+			newAcc = FixedTermDeposit.builder().owner(sessionUser).balance(deposit).iban(iban).password(password).build();
 		} else {
-			newAcc = CheckingAccount.builder().owner(sessionUser).balance(deposit).iban(iban).password("").build();
+			newAcc = CheckingAccount.builder().owner(sessionUser).balance(deposit).iban(iban).password(password).build();
 		}
 
+		
+		//VALIDATION
+		
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+	    Validator validator = factory.getValidator();
+	    Set<ConstraintViolation<Account>> violations = validator.validate(newAcc);
+		
+		
+	    if(!violations.isEmpty()) {
+	    	String message = violations.iterator().next().getMessage(); 
+	    	response.sendRedirect("bank?action=createAccount&msg=" + java.net.URLEncoder.encode(message, "UTF-8"));;
+	    }
+	    
+	    
 		AccountDAO accountDAO = new AccountDAO();
 		boolean success = accountDAO.insertAccount(newAcc);
 
