@@ -34,12 +34,12 @@
 			<div class='welcome-section mb-4'>
 				<h1>Account Details</h1>
 				<p class="text-secondary">Viewing details for account ID:
-					#${accountId}</p>
+					#${account.id}</p>
 			</div>
 
 			<div class="detail-card">
 				<div class="account-info-header">
-					<span class="type-badge">${fn:toUpperCase(accountName)}
+					<span class="type-badge">${account.type}
 						ACCOUNT</span>
 					<p class="label">Available Balance:</p>
 				</div>
@@ -53,9 +53,9 @@
 					class="iban-wrapper d-flex align-items-center justify-content-center mb-4">
 					<p class="iban-display mb-0 me-3" id="ibanText"
 						style="letter-spacing: 1px; font-family: monospace;">
-						${fn:substring(iban, 0, 4)} ${fn:substring(iban, 4, 8)}
-						${fn:substring(iban, 8, 12)} ${fn:substring(iban, 12, 16)}
-						${fn:substring(iban, 16, 20)} ${fn:substring(iban, 20, 24)}</p>
+						${fn:substring(account.iban, 0, 4)} ${fn:substring(account.iban, 4, 8)}
+						${fn:substring(account.iban, 8, 12)} ${fn:substring(account.iban, 12, 16)}
+						${fn:substring(account.iban, 16, 20)} ${fn:substring(account.iban, 20, 24)}</p>
 					<button class="btn btn-sm btn-outline-primary border-0"
 						onclick="copyIban()" title="Copy IBAN">
 						<i class="bi bi-clipboard"></i>
@@ -65,20 +65,20 @@
 				<div class="ownership-info">
 					<div class="info-group">
 						<span class="small-label">Main Titular:</span> <span
-							class="info-value">${titular}</span>
+							class="info-value">${account.owner}</span>
 					</div>
 
-					<c:if test="${not empty cotitular}">
+					<c:if test="${not empty account.coOwner}">
 						<div class="info-group">
 							<span class="small-label">Cotitular:</span> <span
-								class="info-value">${cotitular}</span>
+								class="info-value">${account.coOwner}</span>
 						</div>
 					</c:if>
 
 				</div>
 
 				<div class="mt-4 pt-3 border-top text-center">
-					<a href="bank?action=history&accountId=${accountId}"
+					<a href="bank?action=history&accountId=${account.id}"
 						class="btn btn-outline-primary btn-sm"> <i
 						class="bi bi-clock-history me-1"></i> View Transaction History
 					</a>
