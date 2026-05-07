@@ -2,10 +2,6 @@ package com.bank.web;
 
 import java.io.IOException;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,11 +11,11 @@ import org.hibernate.Session;
 import bank.db.AccountDAO;
 import bank.db.HibernateUtil;
 import bank.models.Account;
-import bank.models.AccountType;
 import bank.models.CheckingAccount;
 import bank.models.FixedTermDeposit;
 import bank.models.SavingsAccount;
 import bank.models.Transaction;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -124,26 +120,26 @@ public class MainController extends HttpServlet {
 	// Apply Interest method
 
 	private void applyInterest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String dbPassword = System.getenv("DB_PASSWORD");
+
 		String sessionUser = (String) request.getSession().getAttribute("user");
 
-		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
-				dbPassword)) {
-			conn.setAutoCommit(false);
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			org.hibernate.Transaction tx = session.beginTransaction();
 
 			// Check it the interest it has been applied this month
 
-			String checkSQL = "SELECT last_interest_date FROM system_config WHERE id = 1";
+			java.sql.Timestamp lastDate = (java.sql.Timestamp) session.createNativeQuery(
+	                "SELECT last_interest_date FROM system_config WHERE id = 1", java.sql.Timestamp.class)
+	                .uniqueResult();
 
-			try (PreparedStatement psCheck = conn.prepareStatement(checkSQL); ResultSet rs = psCheck.executeQuery()) {
 
-				if (rs.next()) {
-					java.sql.Date lastDate = rs.getDate("last_interest_date");
+				if (lastDate != null) {
 					java.util.Calendar cal = java.util.Calendar.getInstance();
-					int currentMonth = cal.get(java.util.Calendar.MONTH);
-					int currentYear = cal.get(java.util.Calendar.YEAR);
+		            int currentMonth = cal.get(java.util.Calendar.MONTH);
+		            int currentYear = cal.get(java.util.Calendar.YEAR);
 
 					cal.setTime(lastDate);
+					
 					if (cal.get(java.util.Calendar.MONTH) == currentMonth
 							&& cal.get(java.util.Calendar.YEAR) == currentYear) {
 
@@ -153,47 +149,28 @@ public class MainController extends HttpServlet {
 					}
 				}
 
-			}
-
-			try {
-
-				// Update the balance
-
-				String updateSQL = "UPDATE accounts SET balance = ROUND(CASE "
-						+ "WHEN account_type = 'SAVINGS' THEN balance * 1.02 "
-						+ "WHEN account_type = 'FIXED-TERM DEPOSIT' THEN balance * 1.05 "
-						+ "ELSE balance * 1.001 END, 2) " + "WHERE owner_name = ?";
-
-				PreparedStatement psUpdate = conn.prepareStatement(updateSQL);
-				psUpdate.setString(1, sessionUser);
-				int rowsUpdated = psUpdate.executeUpdate();
-
-				// Log the transaction + calculate interest
-
-				String logSQL = "INSERT INTO transactions (type, amount, transaction_date, account_id) "
-						+ "SELECT CONCAT('INTEREST PAYMENT (', account_type, ')'), "
-						+ "ROUND(CASE WHEN account_type = 'SAVINGS' THEN balance * 0.02 "
-						+ "      WHEN account_type = 'FIXED-TERM DEPOSIT' THEN balance * 0.05 "
-						+ "      ELSE balance * 0.001 END, 2), " + "NOW(), id FROM accounts WHERE owner_name = ?";
-
-				PreparedStatement psLog = conn.prepareStatement(logSQL);
-				psLog.setString(1, sessionUser);
-				psLog.executeUpdate();
-
-				// Save the last_interest_date
-				String updateDateSQL = "UPDATE system_config SET last_interest_date = NOW() WHERE id = 1";
-
-				try (PreparedStatement psDate = conn.prepareStatement(updateDateSQL)) {
-					psDate.executeUpdate();
+				
+				//Fetch all the accounts for the user
+				
+				List<Account> accounts = session.createQuery("FROM Account WHERE owner = :user", Account.class)
+		                .setParameter("user", sessionUser)
+		                .list();
+				
+				//Loop and apply interest
+				
+				for(Account acc: accounts) {
+					acc.applyInterest();
+					session.merge(acc);
 				}
+				
+				//Update the interest rate
+				
+				session.createNativeQuery("UPDATE system_config SET last_interest_date = NOW() WHERE id = 1", Object.class)
+	               .executeUpdate();
 
-				conn.commit(); // Save
-				response.sendRedirect("bank?action=dashboard&msg=success_interest&count=" + rowsUpdated);
-
-			} catch (Exception e) {
-				conn.rollback();
-				throw e;
-			}
+	        tx.commit();
+	        response.sendRedirect("bank?action=dashboard&msg=success_interest&count=" + accounts.size());
+	
 		} catch (Exception e) {
 			System.out.println("❌ Interest Error: " + e.getMessage());
 			e.printStackTrace();
