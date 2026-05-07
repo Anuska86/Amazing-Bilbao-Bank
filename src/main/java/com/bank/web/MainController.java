@@ -530,29 +530,26 @@ public class MainController extends HttpServlet {
 			throws ServletException, IOException {
 
 		String user = request.getParameter("username");
-		String pass = request.getParameter("password");
-		String dbPassword = System.getenv("DB_PASSWORD");
+		String password = request.getParameter("password");
+		
 
-		String sql = "SELECT * FROM accounts WHERE owner_name = ? AND password = ?";
+		
 
-		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
-				dbPassword);) {
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-			PreparedStatement st = conn.prepareStatement(sql);
-			st.setString(1, user);
-			st.setString(2, pass);
-
-			try (ResultSet rs = st.executeQuery();) {
-				if (rs.next()) {
-					request.getSession().setAttribute("user", user);
-					response.sendRedirect("bank?action=dashboard");
-
-				} else {
-
-					response.getWriter()
-							.println("<script>alert('Invalid Login!'); window.location='index.html';</script>");
-				}
+			Account acc = session.createQuery("FROM Account WHERE owner = :user AND password = :password", Account.class).addQueryHint(password)
+					.setParameter("user", user)
+					.setParameter("password", password)
+					.uniqueResult(); 
+			
+			if (acc !=null) {
+				request.getSession().setAttribute("user", user);
+				response.sendRedirect("bank?action=dashboard");
+			} else {
+response.getWriter().print("<script>alert('Invalid Login!'); window.location='index.html';</script>");
 			}
+
+		
 
 		} catch (Exception e) {
 			e.printStackTrace();
