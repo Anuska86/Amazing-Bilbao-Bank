@@ -29,8 +29,9 @@
 					role="alert">
 					<c:choose>
 						<c:when test="${param.msg == 'user_not_found'}">
-                ⚠️ <strong>Recipient not found!</strong> Please check the name.
-            </c:when>
+    ⚠️ <strong>Recipient not found!</strong> Please check the name.
+</c:when>
+
 						<c:when test="${param.msg == 'low_funds'}">
                 💸 <strong>Insufficient funds</strong> for this transfer.
             </c:when>

@@ -211,32 +211,26 @@ public class MainController extends HttpServlet {
 
 		List<Transaction> internalTrans = new ArrayList<>();
 		List<Transaction> externalTrans = new ArrayList<>();
-		
 
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			int id = Integer.parseInt(accountIdStr);
 			Account account = session.get(Account.class, id);
-			
-			if(account != null) {
+
+			if (account != null) {
 				List<Transaction> allTransactions = account.getTransactions();
-		
-			
-			for (Transaction trans : allTransactions) {
-                String desc = trans.getType();
-                
-              
-                if (desc.contains("INTEREST PAYMENT") || 
-                    desc.contains("TRANSFER TO: " + sessionUser) || 
-                    desc.contains("TRANSFER FROM: " + sessionUser)) {
-                    internalTrans.add(trans);
-                } else {
-                    externalTrans.add(trans);
-                }
-              }
+
+				for (Transaction trans : allTransactions) {
+					String desc = trans.getType();
+
+					if (desc.contains("INTEREST PAYMENT") || desc.contains("TRANSFER TO: " + sessionUser)
+							|| desc.contains("TRANSFER FROM: " + sessionUser)) {
+						internalTrans.add(trans);
+					} else {
+						externalTrans.add(trans);
+					}
+				}
 			}
-        
-	
-			
+
 		} catch (Exception e) {
 			System.out.println("❌ Show History Error: " + e.getMessage());
 			e.printStackTrace();
@@ -261,18 +255,16 @@ public class MainController extends HttpServlet {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
 			List<Account> accountList = session.createQuery("FROM Account WHERE owner = :user", Account.class)
-					.setParameter("user", sessionUser)
-	                .list();
-			
+					.setParameter("user", sessionUser).list();
+
 			request.setAttribute("user", sessionUser);
-	        request.setAttribute("accounts", accountList);
+			request.setAttribute("accounts", accountList);
 
 		} catch (Exception e) {
 			System.out.println("❌ Transfer Form Error: " + e.getMessage());
 			e.printStackTrace();
 		}
 
-		
 		request.getRequestDispatcher("/WEB-INF/transfer.jsp").forward(request, response);
 
 	}
@@ -291,22 +283,18 @@ public class MainController extends HttpServlet {
 			return;
 		}
 
-	
-
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			List<Account> accountList = session.createQuery("FROM Account WHERE owner = :user", Account.class)
-	                .setParameter("user", sessionUser)
-	                .list();
+					.setParameter("user", sessionUser).list();
 
-	        request.setAttribute("user", sessionUser);
-	        request.setAttribute("accounts", accountList);
+			request.setAttribute("user", sessionUser);
+			request.setAttribute("accounts", accountList);
 
 		} catch (Exception e) {
 			System.out.println("❌ Show Dashboard Error: " + e.getMessage());
 			e.printStackTrace();
 		}
 
-		
 		request.getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
 	}
 
@@ -315,7 +303,6 @@ public class MainController extends HttpServlet {
 	private void showDetails(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String accountId = request.getParameter("accountId");
-		
 
 		if (accountId == null) {
 			response.sendRedirect("index.html");
@@ -324,10 +311,11 @@ public class MainController extends HttpServlet {
 
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			Account acc = session.get(Account.class, Integer.parseInt(accountId));
-			
-					
-					if (acc != null) {request.setAttribute("account", acc);}
-					
+
+			if (acc != null) {
+				request.setAttribute("account", acc);
+			}
+
 		} catch (Exception e) {
 			System.out.println("❌ Show Details Error: " + e.getMessage());
 			e.printStackTrace();
@@ -360,8 +348,8 @@ public class MainController extends HttpServlet {
 		String sessionUser = (String) request.getSession().getAttribute("user");
 		String type = request.getParameter("accountType");
 		String depositStr = request.getParameter("initialDeposit");
-		
-		String password= request.getParameter("password"); 
+
+		String password = request.getParameter("password");
 
 		double deposit = 0;
 
@@ -379,25 +367,25 @@ public class MainController extends HttpServlet {
 			newAcc = SavingsAccount.builder().owner(sessionUser).balance(deposit).iban(iban).password(password)
 					.interestRate(2.0).build();
 		} else if ("FIXED_TERM_DEPOSIT".equalsIgnoreCase(type) || "FIXED-TERM DEPOSIT".equalsIgnoreCase(type)) {
-			newAcc = FixedTermDeposit.builder().owner(sessionUser).balance(deposit).iban(iban).password(password).build();
+			newAcc = FixedTermDeposit.builder().owner(sessionUser).balance(deposit).iban(iban).password(password)
+					.build();
 		} else {
-			newAcc = CheckingAccount.builder().owner(sessionUser).balance(deposit).iban(iban).password(password).build();
+			newAcc = CheckingAccount.builder().owner(sessionUser).balance(deposit).iban(iban).password(password)
+					.build();
 		}
 
-		
-		//VALIDATION
-		
+		// VALIDATION
+
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-	    Validator validator = factory.getValidator();
-	    Set<ConstraintViolation<Account>> violations = validator.validate(newAcc);
-		
-		
-	    if(!violations.isEmpty()) {
-	    	String message = violations.iterator().next().getMessage(); 
-	    	response.sendRedirect("bank?action=createAccount&msg=" + java.net.URLEncoder.encode(message, "UTF-8"));;
-	    }
-	    
-	    
+		Validator validator = factory.getValidator();
+		Set<ConstraintViolation<Account>> violations = validator.validate(newAcc);
+
+		if (!violations.isEmpty()) {
+			String message = violations.iterator().next().getMessage();
+			response.sendRedirect("bank?action=createAccount&msg=" + java.net.URLEncoder.encode(message, "UTF-8"));
+			;
+		}
+
 		AccountDAO accountDAO = new AccountDAO();
 		boolean success = accountDAO.insertAccount(newAcc);
 
@@ -413,115 +401,60 @@ public class MainController extends HttpServlet {
 
 	private void handleTransfer(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String user = (String) request.getSession().getAttribute("user");
-		String fromAcc = request.getParameter("fromAccount");
-		String amountRaw = request.getParameter("amount");
-		String type = request.getParameter("transferType");
+		String fromAccType = request.getParameter("fromAccount");
+		double amount = Double.parseDouble(request.getParameter("amount"));
+		String transferType = request.getParameter("transferType"); // internal or external
 
-		double amount = 0;
-		try {
-			amount = Double.parseDouble(amountRaw);
-			if (amount <= 0) {
-				response.sendRedirect("bank?action=transfer&msg=invalid_amount&transferType=" + type);
-				return;
-			}
-		} catch (NumberFormatException | NullPointerException e) {
-			response.sendRedirect("bank?action=transfer&msg=invalid_amount&transferType=" + type);
-			return;
-		}
+		// Connection
 
-		String dbPassword = System.getenv("DB_PASSWORD");
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			org.hibernate.Transaction tx = session.beginTransaction();
 
-		// 1. OPEN CONNECTION FIRST
-		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amazing_bilbao_bank", "root",
-				dbPassword)) {
-			conn.setAutoCommit(false);
+			// Source Account
 
-			String recipient;
-			String toAcc = ""; // Initialize it
+			Account fromAccount = session
+					.createQuery("FROM Account WHERE owner = :user AND account_type = :type", Account.class)
+					.setParameter("user", user).setParameter("type", fromAccType).uniqueResult();
 
-			// 2. NOW PERFORM THE LOOKUP INSIDE THE CONNECTION SCOPE
-			if ("external".equals(type)) {
-				recipient = request.getParameter("recipientName");
-				String findAccSQL = "SELECT account_type FROM accounts WHERE owner_name = ? LIMIT 1";
+			// Recipient
 
-				try (PreparedStatement psFind = conn.prepareStatement(findAccSQL)) {
-					psFind.setString(1, recipient);
-					try (ResultSet rsFind = psFind.executeQuery()) {
-						if (rsFind.next()) {
-							toAcc = rsFind.getString("account_type");
-						} else {
-							// User doesn't exist at all
-							response.sendRedirect("bank?action=transfer&msg=user_not_found&transferType=external");
-							return;
-						}
-					}
-				}
+			Account toAccount = null;
+
+			if ("external".equals(transferType)) {
+				String targetIban = request.getParameter("recipientIBAN");
+				toAccount = session.createQuery("FROM Account WHERE iban = :iban", Account.class)
+						.setParameter("iban", targetIban).uniqueResult();
 			} else {
-				recipient = user;
-				toAcc = request.getParameter("toAccountInternal");
+				// Internal
+
+				String toType = request.getParameter("toAccountInternal");
+				toAccount = session.createQuery("FROM Account WHERE owner = :user AND type = :type", Account.class)
+						.setParameter("user", user).setParameter("type", toType).uniqueResult();
 			}
 
-			// 3. PROCEED WITH THE TRANSACTION
-			try {
-				String subSQL = "UPDATE accounts SET balance = balance - ? WHERE owner_name = ? AND account_type = ? AND balance >= ?";
-				PreparedStatement psSub = conn.prepareStatement(subSQL);
-				psSub.setDouble(1, amount);
-				psSub.setString(2, user);
-				psSub.setString(3, fromAcc);
-				psSub.setDouble(4, amount);
+			// Validate & Execution
 
-				if (psSub.executeUpdate() > 0) {
-					// Add money
-					String addSQL = "UPDATE accounts SET balance = balance + ? WHERE owner_name = ? AND account_type = ?";
-					PreparedStatement psAdd = conn.prepareStatement(addSQL);
-					psAdd.setDouble(1, amount);
-					psAdd.setString(2, recipient);
-					psAdd.setString(3, toAcc);
+			if (fromAccount != null && toAccount != null && fromAccount.getBalance() >= amount) {
+				fromAccount.transfer(amount, toAccount);
 
-					if (psAdd.executeUpdate() == 0) {
-						conn.rollback();
-						response.sendRedirect("bank?action=transfer&msg=user_not_found&transferType=" + type);
-						return;
-					}
+				session.merge(fromAccount);
+				session.merge(toAccount);
 
-					// Log Transaction
-
-					// Log for the SENDER (The "From" Account) - negative amount
-					String logSenderSQL = "INSERT INTO transactions (type, amount, transaction_date, account_id) "
-							+ "VALUES (?, ?, NOW(), (SELECT id FROM accounts WHERE owner_name = ? AND account_type = ?))";
-					PreparedStatement psLogSender = conn.prepareStatement(logSenderSQL);
-					psLogSender.setString(1, "TRANSFER TO: " + recipient + " (" + toAcc + ")");
-					psLogSender.setDouble(2, -amount); // Notice the minus sign!
-					psLogSender.setString(3, user);
-					psLogSender.setString(4, fromAcc);
-					psLogSender.executeUpdate();
-
-					// Log for the RECIPIENT (The "To" Account) - positive amount
-					String logRecipientSQL = "INSERT INTO transactions (type, amount, transaction_date, account_id) "
-							+ "VALUES (?, ?, NOW(), (SELECT id FROM accounts WHERE owner_name = ? AND account_type = ?))";
-					PreparedStatement psLogRec = conn.prepareStatement(logRecipientSQL);
-					psLogRec.setString(1, "TRANSFER FROM: " + user + " (" + fromAcc + ")");
-					psLogRec.setDouble(2, amount); // Positive amount
-					psLogRec.setString(3, recipient);
-					psLogRec.setString(4, toAcc);
-					psLogRec.executeUpdate();
-
-					conn.commit();
-					String encodedRecipient = java.net.URLEncoder.encode(recipient, "UTF-8");
-					response.sendRedirect(
-							"bank?action=dashboard&success=transfer&to=" + encodedRecipient + "&amt=" + amount);
-				} else {
-					conn.rollback();
-					response.sendRedirect("bank?action=transfer&msg=low_funds");
-				}
-			} catch (Exception e) {
-				conn.rollback();
-				throw e;
+				tx.commit();
+				response.sendRedirect("bank?action=dashboard&success=transfer");
+			} else {
+				if (tx != null)
+					tx.rollback();
+				String errorMsg = (toAccount == null) ? "user_not_found" : "low_funds";
+				response.sendRedirect("bank?action=transfer&msg=error" + errorMsg);
 			}
+
 		} catch (Exception e) {
-			System.out.println("❌ Handle Transfer Error: " + e.getMessage());
+			System.out.println("❌ Transfer Error: " + e.getMessage());
 			e.printStackTrace();
+			response.sendRedirect("bank?action=transfer&msg=error");
 		}
+
 	}
 
 	// Login
@@ -531,25 +464,20 @@ public class MainController extends HttpServlet {
 
 		String user = request.getParameter("username");
 		String password = request.getParameter("password");
-		
-
-		
 
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-			Account acc = session.createQuery("FROM Account WHERE owner = :user AND password = :password", Account.class).addQueryHint(password)
-					.setParameter("user", user)
-					.setParameter("password", password)
-					.uniqueResult(); 
-			
-			if (acc !=null) {
+			Account acc = session
+					.createQuery("FROM Account WHERE owner = :user AND password = :password", Account.class)
+					.addQueryHint(password).setParameter("user", user).setParameter("password", password)
+					.uniqueResult();
+
+			if (acc != null) {
 				request.getSession().setAttribute("user", user);
 				response.sendRedirect("bank?action=dashboard");
 			} else {
-           response.getWriter().print("<script>alert('Invalid Login!'); window.location='index.html';</script>");
+				response.getWriter().print("<script>alert('Invalid Login!'); window.location='index.html';</script>");
 			}
-
-		
 
 		} catch (Exception e) {
 			e.printStackTrace();
