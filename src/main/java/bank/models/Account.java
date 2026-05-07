@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,11 +36,23 @@ public abstract class Account {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
+	@NotBlank(message = "Owner name is required")
 	@Column(name = "owner_name")
 	private String owner;
 	
+	@Column(name = "co_owner_name")
+	private String coOwner;
+	
+	@PositiveOrZero(message = "Balance cannot be negative")
 	private double balance;
+	
+	@NotBlank(message ="IBAN number is required")
 	private String iban;
+	
+	@NotBlank(message = "Password is required")
+	@Size(min = 6, max = 60, message = "Password must be between 6 and 60 characters")
+	@Pattern(regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=\\S+$).+$",
+		    message = "Password must be at least 6 characters, contain one number, one uppercase letter, and one special character (!@#$%^&*)")
 	private String password;
 	
 	@Column(name = "interestRate")
