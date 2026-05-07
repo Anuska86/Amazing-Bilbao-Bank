@@ -97,9 +97,9 @@
 
 
 				<div id="externalFields" class="mb-3" style="display: none;">
-					<label for="recipientName" class="form-label fw-bold">Recipient
-						Name:</label> <input type="text" name="recipientName" id="recipientName"
-						class="form-control" placeholder="Enter owner name">
+					<label for="recipientIBAN" class="form-label fw-bold">Recipient
+						IBAN:</label> <input type="text" name="recipientIBAN" id="recipientIBAN"
+						class="form-control" placeholder="Enter owner IBAN">
 				</div>
 
 

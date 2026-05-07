@@ -546,7 +546,7 @@ public class MainController extends HttpServlet {
 				request.getSession().setAttribute("user", user);
 				response.sendRedirect("bank?action=dashboard");
 			} else {
-response.getWriter().print("<script>alert('Invalid Login!'); window.location='index.html';</script>");
+           response.getWriter().print("<script>alert('Invalid Login!'); window.location='index.html';</script>");
 			}
 
 		
