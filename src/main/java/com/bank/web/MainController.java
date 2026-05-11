@@ -423,7 +423,7 @@ public class MainController extends HttpServlet {
 				if (tx != null)
 					tx.rollback();
 				String errorMsg = (toAccount == null) ? "user_not_found" : "low_funds";
-				response.sendRedirect("bank?action=transfer&msg=error" + errorMsg);
+				response.sendRedirect("bank?action=transfer&msg=" + errorMsg);
 			}
 
 		} catch (Exception e) {
@@ -444,12 +444,12 @@ public class MainController extends HttpServlet {
 
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-			Account acc = session
+			List<Account> accounts = session
 					.createQuery("FROM Account WHERE owner = :user AND password = :password", Account.class)
-					.addQueryHint(password).setParameter("user", user).setParameter("password", password)
-					.uniqueResult();
+					.setParameter("user", user).setParameter("password", password)
+					.list();
 
-			if (acc != null) {
+			if (!accounts.isEmpty()) {
 				request.getSession().setAttribute("user", user);
 				response.sendRedirect("bank?action=dashboard");
 			} else {
