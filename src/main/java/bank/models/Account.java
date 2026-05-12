@@ -13,6 +13,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * Represents a generic bank account.
+ * This is the base class for specialized accounts like Savings and Checking.
+ * Uses Hibernate Single Table inheritance strategy.
+ */
+
 @Data
 @SuperBuilder
 @NoArgsConstructor
@@ -32,9 +38,13 @@ public abstract class Account {
 
 	// Variables (Attributes)
 
+	/** Unique database identifier for the account. */
+	
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	
+	/** Full name of the primary account holder. */
 	
 	@NotBlank(message = "Owner name is required")
 	@Column(name = "owner_name")
@@ -43,11 +53,18 @@ public abstract class Account {
 	@Column(name = "co_owner_name")
 	private String coOwner;
 	
+	/** The current amount of money available in the account. */
+	
 	@PositiveOrZero(message = "Balance cannot be negative")
 	private double balance;
 	
+	/** International Bank Account Number (Unique). */
+	
 	@NotBlank(message ="IBAN number is required")
 	private String iban;
+	
+	
+	/** Encrypted or plain-text password for account access. */
 	
 	@NotBlank(message = "Password is required")
 	@Size(min = 6, max = 60, message = "Password must be between 6 and 60 characters")
@@ -78,7 +95,13 @@ public abstract class Account {
 		return "Account Owner: " + owner + " | Balance " + balance + "€";
 	}
 
-	// Method to do a deposit
+	
+	
+	/**
+     * Increases the account balance and logs a DEPOSIT transaction.
+     * @param amount The sum of money to add. Must be greater than zero.
+     * @return true if the deposit was successful, false otherwise.
+     */
 
 	public boolean deposit(double amount) {
 		if (amount <= 0) {
@@ -99,7 +122,12 @@ public abstract class Account {
 		return true;
 	}
 
-	// Method to do a withdraw
+	/**
+     * Decreases the account balance and logs a WITHDRAWAL transaction.
+     * Note: FixedTermDeposit accounts will always return false.
+     * @param amount The sum of money to remove.
+     * @return true if funds were sufficient and account type allows withdrawal.
+     */
 
 	public boolean withdraw(double amount) {
 
@@ -126,7 +154,13 @@ public abstract class Account {
 		}
 	}
 
-	// Method to do a transfer
+	/**
+     * Moves money from this account to another.
+     * This is an atomic operation involving a withdrawal and a deposit.
+     * @param amount The sum to transfer.
+     * @param destinationAccount The recipient Account object.
+     */
+	
 	public void transfer(double amount, Account destinationAccount) {
 		if (amount <= balance) {
 			this.withdraw(amount);
@@ -137,7 +171,11 @@ public abstract class Account {
 		}
 	}
 	
-	//Method to apply interest
+	
+	/**
+     * Calculates interest based on the specific account type's rate 
+     * and deposits it into the balance.
+     */
 	
 	public void applyInterest() {
 		if(getInterestRate() !=null && getInterestRate()>0) {
