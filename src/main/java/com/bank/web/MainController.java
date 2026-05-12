@@ -28,7 +28,9 @@ import jakarta.validation.ValidatorFactory;
 
 /**
  * Servlet implementation class MainController
+ * Handles all banking operations including dashboard, transfers, and account management.
  */
+
 @WebServlet("/bank")
 public class MainController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -51,9 +53,14 @@ public class MainController extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	 * 
+     * Handles HTTP GET requests by routing to specific view-rendering methods.
+     * @param request  The HttpServletRequest object containing client request data.
+     * @param response The HttpServletResponse object for sending the view to the client.
+     * @throws ServletException If a servlet-specific error occurs.
+     * @throws IOException If an input or output error occurs during routing.
+     */
+	 
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -117,6 +124,15 @@ public class MainController extends HttpServlet {
 
 	}
 
+	
+	/**
+     * Calculates and applies monthly interest to all accounts owned by the session user.
+     * Uses system_config to ensure interest is only applied once per month.
+     * @param request  The HttpServletRequest containing the user session.
+     * @param response The HttpServletResponse for redirection with success/error messages.
+     * @throws IOException If a redirection error occurs.
+     */
+	
 	// Apply Interest method
 
 	private void applyInterest(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -179,6 +195,16 @@ public class MainController extends HttpServlet {
 
 	}
 
+	
+	/**
+     * Fetches and displays the transaction history for a specific account.
+     * Segregates transactions into internal (interest/self-transfers) and external categories.
+     * @param request  Request containing 'accountId' parameter.
+     * @param response Response object to forward to the history JSP.
+     * @throws IOException      If forwarding fails.
+     * @throws ServletException If a servlet error occurs.
+     */
+	
 	// Fetch history method
 
 	private void showHistory(HttpServletRequest request, HttpServletResponse response)
@@ -246,6 +272,15 @@ public class MainController extends HttpServlet {
 
 	}
 
+	
+	/**
+     * Prepares and displays the main dashboard with all accounts belonging to the user.
+     * @param request  Request containing the session user.
+     * @param response Response object to forward to dashboard.jsp.
+     * @throws ServletException If forwarding fails.
+     * @throws IOException      If an I/O error occurs.
+     */
+	
 	// Show Dashboard
 
 	private void showDashboard(HttpServletRequest request, HttpServletResponse response)
@@ -374,6 +409,15 @@ public class MainController extends HttpServlet {
 
 	}
 
+	
+	/**
+     * Executes funds transfer between accounts using Hibernate transactions.
+     * Supports both internal (own accounts) and external (via IBAN) transfers.
+     * @param request  Contains 'fromAccount', 'amount', 'transferType', and 'recipientIBAN'.
+     * @param response Redirects to dashboard on success or transfer form on failure.
+     * @throws IOException If redirection fails.
+     */
+	
 	// Handle Transfer
 
 	private void handleTransfer(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -434,6 +478,16 @@ public class MainController extends HttpServlet {
 
 	}
 
+	
+	/**
+     * Authenticates the user by checking the username and password against the database.
+     * @param request  Contains 'username' and 'password' parameters.
+     * @param response Redirects to dashboard on success or returns an alert on failure.
+     * @throws ServletException If authentication logic fails.
+     * @throws IOException If redirection or writer access fails.
+     */
+	
+	
 	// Login
 
 	private void handleLogin(HttpServletRequest request, HttpServletResponse response)
