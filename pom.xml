@@ -84,6 +84,12 @@
 
 <dependency>
     <groupId>org.glassfish.jersey.ext</groupId>
+    <artifactId>jersey-mvc</artifactId>
+    <version>3.1.3</version>
+</dependency>
+
+<dependency>
+    <groupId>org.glassfish.jersey.ext</groupId>
     <artifactId>jersey-mvc-jsp</artifactId>
     <version>3.1.3</version>
 </dependency>
