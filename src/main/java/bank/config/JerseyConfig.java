@@ -4,8 +4,6 @@
 package bank.config;
 
 import jakarta.ws.rs.ApplicationPath;
-
-import jakarta.ws.rs.ApplicationPath;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 

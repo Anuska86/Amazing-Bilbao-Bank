@@ -2,6 +2,7 @@ package com.bank.web;
 
 import java.io.IOException;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,14 +26,18 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 /**
  * Servlet implementation class MainController
  * Handles all banking operations including dashboard, transfers, and account management.
  */
 
-@WebServlet("/bank")
-public class MainController extends HttpServlet {
+@Path("/bank")
+@Produces(MediaType.TEXT_HTML)
+public class MainController {
 	private static final long serialVersionUID = 1L;
 
 	/**
